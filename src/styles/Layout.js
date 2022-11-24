@@ -20,10 +20,10 @@ module.exports = StyleSheet.create({
   layoutShadowGrey: {
     shadowColor: Colors.grey,
     shadowOpacity: 0,
-    shadowRadius: 30,
+    shadowRadius: 50,
     shadowOffset: {
-      height: 10,
-      width: 5,
+      height: 0,
+      width: 0,
     },
     elevation: Sizes.sizeLarge,
   },
@@ -31,9 +31,9 @@ module.exports = StyleSheet.create({
   layoutShadowRed: {
     shadowColor: Colors.primary,
     shadowOpacity: 0,
-    shadowRadius: 30,
+    shadowRadius: 50,
     shadowOffset: {
-      height: 20,
+      height: 0,
       width: 0,
     },
     elevation: Sizes.sizeLarge,
