@@ -1,11 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 import React from 'react';
+
+//Import screens
+import { HomeScreen } from './src/screens';
 
 const App = () => {
   return (
-    <View>
-      <Text>App</Text>
-    </View>
+    <SafeAreaView>
+      <HomeScreen />
+    </SafeAreaView>
   );
 };
 

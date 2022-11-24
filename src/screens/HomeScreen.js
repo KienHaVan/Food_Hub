@@ -1,15 +1,38 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import LoginFooter from '../modules/Login/LoginFooter';
+
+import Sizes from '../constants/Size';
+import LayoutStyles from '../styles/Layout';
+import TextStyles from '../styles/TextStyles';
+
+import HomeHeader from '../modules/Home/HomeHeader';
+
+import InputField from '../components/InputField';
 
 const LoginScreen = () => {
   return (
-    <View>
-      <Text>This is a home screen</Text>
+    <View style={[LayoutStyles.layoutScreen, styles.screen]}>
+      <HomeHeader />
+      <Text style={[TextStyles.h2, styles.screenHeading]}>What would you like to order</Text>
+
+      <InputField
+        placeholder='Find for food or restaurant...'
+        isPassword={false}
+        preIcon={<Image source={require('../../assets/icons/icon_search.png')} />}
+      />
     </View>
   );
 };
 
 export default LoginScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  screen: {
+    paddingVertical: Sizes.sizeLargeH,
+    paddingHorizontal: Sizes.sizeBig,
+  },
+  screenHeading: {
+    width: '80%',
+    marginBottom: Sizes.sizeBig,
+  },
+});
