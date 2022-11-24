@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Text, TextInput, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
 import TextStyles from '../styles/TextStyles';
 import LayoutStyles from '../styles/Layout';
+import { Images } from '../../assets';
 
 const InputField = ({ placeholder, label, preIcon, isPassword }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(isPassword);
@@ -32,7 +32,7 @@ const InputField = ({ placeholder, label, preIcon, isPassword }) => {
         </View>
         {isPassword ? (
           <TouchableOpacity onPress={() => setIsPasswordShown(!isPasswordShown)}>
-            <Image source={require('../../assets/icons/icon_eye.png')} />
+            <Image source={Images.ICON.EYE} />
           </TouchableOpacity>
         ) : null}
       </View>

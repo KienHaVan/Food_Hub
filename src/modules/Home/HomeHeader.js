@@ -1,29 +1,25 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
-
-import Sizes from '../../constants/Size';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Images } from '../../../assets';
+import CornerButton from '../../components/CornerButton';
 import Colors from '../../constants/Color';
-import TextStyles from '../../styles/TextStyles';
+import Sizes from '../../constants/Size';
 import LayoutStyles from '../../styles/Layout';
+import TextStyles from '../../styles/TextStyles';
 
 const HomeHeader = () => {
   return (
     <View style={[LayoutStyles.layoutStretch, styles.header]}>
-      <TouchableOpacity
-        style={[LayoutStyles.layoutCenter, LayoutStyles.layoutShadowGrey, styles.headerIcon]}
-      >
-        <Image source={require('../../../assets/icons/icon_burger.png')} />
-      </TouchableOpacity>
-
+      <CornerButton sourceImage={Images.ICON.BURGER} />
       <TouchableOpacity style={styles.headerAddress}>
         <Text style={TextStyles.textSmall}>
-          Deliver to <Image source={require('../../../assets/icons/icon_arrow_down.png')} />
+          Deliver to <Image source={Images.ICON.ARROW_DOWN} />
         </Text>
         <Text style={[TextStyles.textMain, styles.addressText]}>4102 Pretty View Lane</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={LayoutStyles.layoutShadowRed}>
-        <Image source={require('../../../assets/images/image_avatar.png')} />
+        <Image source={Images.IMAGES.AVATAR} />
       </TouchableOpacity>
     </View>
   );
@@ -32,9 +28,6 @@ const HomeHeader = () => {
 const styles = StyleSheet.create({
   header: {
     marginBottom: Sizes.sizeLargeH,
-  },
-  headerIcon: {
-    padding: Sizes.sizeModerate,
   },
   headerAddress: {
     alignItems: 'center',

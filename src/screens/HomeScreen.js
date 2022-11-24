@@ -4,10 +4,9 @@ import React from 'react';
 import Sizes from '../constants/Size';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
-
 import HomeHeader from '../modules/Home/HomeHeader';
-
 import InputField from '../components/InputField';
+import { Images } from '../../assets';
 
 const LoginScreen = () => {
   return (
@@ -18,7 +17,7 @@ const LoginScreen = () => {
       <InputField
         placeholder='Find for food or restaurant...'
         isPassword={false}
-        preIcon={<Image source={require('../../assets/icons/icon_search.png')} />}
+        preIcon={<Image source={Images.ICON.SEARCH} />}
       />
     </View>
   );
