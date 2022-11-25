@@ -18,7 +18,7 @@ const HomeHeader = () => {
         <Text style={[TextStyles.textMain, styles.addressText]}>4102 Pretty View Lane</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={LayoutStyles.layoutShadowRed}>
+      <TouchableOpacity style={[LayoutStyles.layoutShadowRed, styles.avatar]}>
         <Image source={Images.IMAGES.AVATAR} />
       </TouchableOpacity>
     </View>
@@ -34,6 +34,11 @@ const styles = StyleSheet.create({
   },
   addressText: {
     color: Colors.primary,
+  },
+  avatar: {
+    width: Sizes.sizeLarge + Sizes.sizeSmaller,
+    height: Sizes.sizeLarge + Sizes.sizeSmaller,
+    borderRadius: Sizes.sizeSmall,
   },
 });
 

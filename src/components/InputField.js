@@ -5,15 +5,18 @@ import Sizes from '../constants/Size';
 import TextStyles from '../styles/TextStyles';
 import LayoutStyles from '../styles/Layout';
 import { Images } from '../../assets';
+import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const InputField = ({ placeholder, label, preIcon, isPassword }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(isPassword);
 
   return (
-    <View>
+    <View style={styles.inputField}>
       {label ? <Text style={[TextStyles.textMain, styles.label]}>{label}</Text> : null}
 
-      <View style={[LayoutStyles.layoutStretch, styles.inputContainer]}>
+      <View
+        style={[LayoutStyles.layoutStretch, LayoutStyles.layoutShadowGrey, styles.inputContainer]}
+      >
         <View
           style={[
             LayoutStyles.layoutStretch,
@@ -44,14 +47,18 @@ const styles = StyleSheet.create({
   label: {
     marginBottom: Sizes.sizeSmallH,
   },
+  inputField: {
+    flex: 1,
+  },
   inputContainer: {
+    height: scaleSizeUI(51),
     borderWidth: 2,
     borderColor: Colors.greyLighter,
     borderRadius: Sizes.sizeSmall,
     paddingHorizontal: Sizes.sizeModerate,
-    paddingVertical: Sizes.sizeSmallH,
     color: Colors.primary,
     fontFamily: 'Poppins-Regular',
+    backgroundColor: Colors.white,
   },
   input: {
     flex: 1,
