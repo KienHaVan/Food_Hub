@@ -18,5 +18,11 @@ export const Images = {
     CART: require('./icons/icon_cart.png'),
     NOTIFICATION: require('./icons/icon_notification.png'),
     FAVORITE: require('./icons/icon_favorite.png'),
+    FILTER: require('./icons/icon_filter.png'),
+    ARROW_RIGHT: require('./icons/icon_arrow_right.png'),
+    DELIVERY: require('./icons/icon_delivery.png'),
+    TIME: require('./icons/icon_time.png'),
+    STAR: require('./icons/icon_star.png'),
+    HEART: require('./icons/icon_heart.png'),
   },
 };
