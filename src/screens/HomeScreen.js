@@ -1,25 +1,37 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 
+//region Import styling
 import Sizes from '../constants/Size';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
+//endregion
+
+//region Import components
 import HomeHeader from '../modules/Home/HomeHeader';
-import InputField from '../components/InputField';
-import { Images } from '../../assets';
+import HomeSearch from '../modules/Home/HomeSearch';
+import HomeCategories from '../modules/Home/HomeCategories';
+import HomeFeatured from '../modules/Home/HomeFeatured';
+import HomePopularList from '../modules/Home/HomePopularList';
+//endregion
 
 const LoginScreen = () => {
   return (
-    <View style={[LayoutStyles.layoutScreen, styles.screen]}>
-      <HomeHeader />
-      <Text style={[TextStyles.h2, styles.screenHeading]}>What would you like to order</Text>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={[LayoutStyles.layoutScreen, styles.screen]}>
+        <HomeHeader />
 
-      <InputField
-        placeholder='Find for food or restaurant...'
-        isPassword={false}
-        preIcon={<Image source={Images.ICON.SEARCH} />}
-      />
-    </View>
+        <Text style={[TextStyles.h2, styles.screenHeading]}>What would you like to order</Text>
+
+        <HomeSearch />
+
+        <HomeCategories />
+
+        <HomeFeatured />
+
+        <HomePopularList />
+      </View>
+    </ScrollView>
   );
 };
 
