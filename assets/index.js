@@ -1,6 +1,7 @@
 export const Images = {
   IMAGES: {
     AVATAR: require('./images/image_avatar.png'),
+    AVATAR_LARGE: require('./images/image_avatar_large.png'),
     PROFILE_BACKGROUND: require('./images/image_profile_background.png'),
   },
   ICON: {
@@ -15,5 +16,12 @@ export const Images = {
     TIME: require('./icons/icon_time.png'),
     STAR: require('./icons/icon_star.png'),
     HEART: require('./icons/icon_heart.png'),
+    PROFILE: require('./icons/icon_profile.png'),
+    ORDERS: require('./icons/icon_order.png'),
+    ADDRESS: require('./icons/icon_address.png'),
+    PAYMENT: require('./icons/icon_payment.png'),
+    CONTACT: require('./icons/icon_contact.png'),
+    SETTING: require('./icons/icon_setting.png'),
+    HELP: require('./icons/icon_help.png'),
   },
 };

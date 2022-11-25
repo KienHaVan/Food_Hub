@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Image, TouchableOpacity, StyleSheet } from 'react-native';
 
+//region Import styling
 import LayoutStyles from '../styles/Layout';
 import Sizes from '../constants/Size';
 import Colors from '../constants/Color';
+//endregion
 
 import { Images } from '../../assets';
 
@@ -35,7 +37,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     padding: Sizes.sizeSmaller,
     borderRadius: 100,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   favoriteActive: {
     backgroundColor: Colors.primary,
