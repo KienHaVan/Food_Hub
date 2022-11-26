@@ -10,6 +10,7 @@ export const Images = {
   },
   ICON: {
     ARROW_DOWN: require('./icons/icon_arrow_down.png'),
+    ARROW_LEFT: require('./icons/icon_arrow_left.png'),
     BURGER: require('./icons/icon_burger.png'),
     CAMERA: require('./icons/icon_camera.png'),
     EYE: require('./icons/icon_eye.png'),

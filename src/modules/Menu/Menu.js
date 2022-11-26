@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image, FlatList } from 'react-native';
+import { Text, View, StyleSheet, Image, FlatList, ScrollView } from 'react-native';
 
 //region Import styling
 import Sizes from '../../constants/Size';
@@ -22,7 +22,7 @@ const Menu = () => {
   };
 
   return (
-    <View style={styles.menu}>
+    <ScrollView style={styles.menu}>
       <View style={LayoutStyles.layoutShadowRed}>
         <Image source={Images.IMAGES.AVATAR} style={styles.avatar} />
       </View>
@@ -30,7 +30,7 @@ const Menu = () => {
       <Text style={TextStyles.textMain}>farionwick@gmail.com</Text>
 
       <View style={styles.menuItemGroup}>{MenuItems.map((item) => renderItem(item))}</View>
-    </View>
+    </ScrollView>
   );
 };
 

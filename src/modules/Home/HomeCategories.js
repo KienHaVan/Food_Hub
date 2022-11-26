@@ -24,9 +24,6 @@ const HomeCategories = () => {
           styles.card,
           activeCard === item.id ? LayoutStyles.layoutShadowRed : LayoutStyles.layoutShadowGrey,
           activeCard === item.id ? styles.cardActive : null,
-          {
-            marginLeft: item.id === 0 ? Sizes.sizeBig : 0,
-          },
         ]}
       >
         <Image source={item.image} style={styles.cardImage} />
@@ -41,11 +38,21 @@ const HomeCategories = () => {
     <View>
       <FlatList
         style={styles.cardList}
+        contentContainerStyle={{ alignItems: 'center' }}
         data={Categories}
         keyExtractor={(cat) => cat.id}
         renderItem={renderCard}
         horizontal
         showsHorizontalScrollIndicator={false}
+        ListHeaderComponent={
+          <TouchableOpacity>
+            <Text style={[TextStyles.textMain, styles.listLink]}>View All</Text>
+          </TouchableOpacity>
+        }
+        ListHeaderComponentStyle={{
+          width: '8%',
+          marginHorizontal: Sizes.sizeBig,
+        }}
       />
     </View>
   );
@@ -56,6 +63,10 @@ export default HomeCategories;
 const styles = StyleSheet.create({
   cardList: {
     marginHorizontal: -Sizes.sizeBig,
+  },
+  listLink: {
+    textAlign: 'center',
+    color: Colors.primary,
   },
   card: {
     minWidth: scaleSizeUI(70),
