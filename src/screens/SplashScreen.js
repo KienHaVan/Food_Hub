@@ -1,10 +1,16 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Color from '../constants/Color';
 import LayoutStyles from '../styles/Layout';
 import { Images } from '../../assets';
 
-const SplashScreen = () => {
+const SplashScreen = ({ navigation }) => {
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.navigate('SignUp');
+    }, 1000);
+  }, []);
+
   return (
     <View style={[styles.container, LayoutStyles.layoutCenter]}>
       <Image source={Images.IMAGES.SPLASH} />

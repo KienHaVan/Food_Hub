@@ -21,7 +21,7 @@ const WelcomeScreen = () => {
         </View>
         <View style={styles.center}></View>
         <View style={styles.bottom}>
-          <LogWithFacebookAndGoogle text={'Sign up with'} />
+          <LogWithFacebookAndGoogle text={'Sign in with'} />
           <TouchableOpacity style={styles.bottomButton}>
             <Text style={[TextStyles.textMain, styles.bottomButtonText]}>
               Start with email or phone

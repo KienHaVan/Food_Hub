@@ -4,6 +4,7 @@ export const Images = {
     GOOGLE: require('./images/GOOGLE.png'),
     FACEBOOK: require('./images/FACEBOOK.png'),
     WELCOME_BACKGROUND: require('./images/WELCOME_BACKGROUND.png'),
+    LOGIN_BACKGROUND: require('./images/LOGIN_BACKGROUND.png'),
     AVATAR: require('./images/image_avatar.png'),
     PROFILE_BACKGROUND: require('./images/image_profile_background.png'),
   },
