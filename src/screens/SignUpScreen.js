@@ -1,4 +1,12 @@
-import { Button, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Button,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
@@ -35,12 +43,27 @@ const SignUpScreen = () => {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    reset,
+    setFocus,
+    formState: { errors, isValid, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    if (!isValid) return;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+        console.log(data);
+        reset({
+          fullname: '',
+          email: '',
+          password: '',
+        });
+      }, 3000);
+    });
+  };
   return (
     <ImageBackground
       source={Images.IMAGES.LOGIN_BACKGROUND}
@@ -65,24 +88,32 @@ const SignUpScreen = () => {
 
         <View style={styles.inputField}>
           <Text style={TextStyles.textMain}>Password</Text>
-          <MyInput control={control} placeholder='Enter your password' name='password' />
+          <MyInput control={control} placeholder='Enter your password' name='password' isPassword />
         </View>
         {errors?.password && <Text style={styles.error}>{errors?.password?.message}</Text>}
 
         <View style={{ height: scaleSizeUI(30, true) }}></View>
 
-        <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
-          <Text
-            style={{
-              fontWeight: '700',
-              fontSize: 24,
-              lineHeight: 30,
-              color: '#fff',
-              alignSelf: 'center',
-            }}
-          >
-            Sign Up
-          </Text>
+        <TouchableOpacity
+          disabled={isSubmitting}
+          style={styles.button}
+          onPress={handleSubmit(onSubmit)}
+        >
+          {!isSubmitting ? (
+            <Text
+              style={{
+                fontWeight: '700',
+                fontSize: 24,
+                lineHeight: 30,
+                color: '#fff',
+                alignSelf: 'center',
+              }}
+            >
+              Sign Up
+            </Text>
+          ) : (
+            <ActivityIndicator size={'large'} color={Color.primary}></ActivityIndicator>
+          )}
         </TouchableOpacity>
 
         <View style={styles.quote}>
@@ -138,5 +169,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: '#28a745',
     borderRadius: 8,
+    marginBottom: 10,
   },
 });
