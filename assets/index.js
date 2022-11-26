@@ -15,6 +15,7 @@ export const Images = {
     DELIVERY: require('./icons/icon_delivery.png'),
     TIME: require('./icons/icon_time.png'),
     STAR: require('./icons/icon_star.png'),
+    STAR_LARGE: require('./icons/icon_star_large.png'),
     HEART: require('./icons/icon_heart.png'),
     PROFILE: require('./icons/icon_profile.png'),
     ORDERS: require('./icons/icon_order.png'),

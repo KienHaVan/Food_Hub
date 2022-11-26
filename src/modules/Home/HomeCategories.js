@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     marginHorizontal: -Sizes.sizeBig,
   },
   card: {
+    minWidth: scaleSizeUI(70),
     backgroundColor: Colors.white,
     borderRadius: 100,
     marginTop: Sizes.sizeLargeH,

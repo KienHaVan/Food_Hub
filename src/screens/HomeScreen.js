@@ -46,7 +46,7 @@ const HomeScreen = () => {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false} scrollEnabled={!showMenu}>
       <Menu />
 
       <Animated.View
