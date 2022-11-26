@@ -1,20 +1,24 @@
 import { StyleSheet, SafeAreaView } from 'react-native';
 import React from 'react';
-
+import { NavigationContainer } from '@react-navigation/native';
 //Import screens
-import { HomeScreen, FoodDetailScreen } from './src/screens';
-
-import { Food } from './src/api/fakeData/Food';
+import { HomeScreen } from './src/screens';
+import MainStackNavigator from './src/navigation/MainStackNavigator';
 
 const App = () => {
   return (
-    <SafeAreaView>
-      {/*<HomeScreen />*/}
-      <FoodDetailScreen data={Food[0]} />
-    </SafeAreaView>
+    <NavigationContainer>
+      <SafeAreaView style={styles.container}>
+        <MainStackNavigator />
+      </SafeAreaView>
+    </NavigationContainer>
   );
 };
 
 export default App;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
