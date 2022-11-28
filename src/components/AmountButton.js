@@ -1,12 +1,20 @@
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Images } from '../../assets';
 import Colors from '../constants/Color';
+import Sizes from '../constants/Size';
+import LayoutStyles from '../styles/Layout';
 
-const AmountButton = ({ isIncreased }) => {
+const AmountButton = ({ isIncreased, handlePress }) => {
   return (
     <TouchableOpacity
-      style={[styles.amountButton, isIncreased ? styles.increaseButton : styles.decreaseButton]}
+      onPress={handlePress}
+      style={[
+        LayoutStyles.layoutCenter,
+        styles.amountButton,
+        isIncreased ? styles.increaseButton : styles.decreaseButton,
+        isIncreased ? LayoutStyles.layoutShadowRed : LayoutStyles.layoutShadowGrey,
+      ]}
     >
       {isIncreased ? (
         <Image source={Images.ICON.INCREASE} />
@@ -21,14 +29,13 @@ export default AmountButton;
 
 const styles = StyleSheet.create({
   amountButton: {
-    width: 30,
-    height: 30,
+    width: Sizes.sizeLarge,
+    height: Sizes.sizeLarge,
     borderRadius: 99999,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   decreaseButton: {
     borderWidth: 1,
+    backgroundColor: Colors.white,
     borderColor: Colors.primary,
   },
   increaseButton: {

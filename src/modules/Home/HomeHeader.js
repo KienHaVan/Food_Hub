@@ -7,10 +7,10 @@ import Sizes from '../../constants/Size';
 import LayoutStyles from '../../styles/Layout';
 import TextStyles from '../../styles/TextStyles';
 
-const HomeHeader = () => {
+const HomeHeader = ({ handleShowMenu }) => {
   return (
     <View style={[LayoutStyles.layoutStretch, styles.header]}>
-      <CornerButton sourceImage={Images.ICON.BURGER} />
+      <CornerButton sourceImage={Images.ICON.BURGER} handlePress={handleShowMenu} />
       <TouchableOpacity style={styles.headerAddress}>
         <Text style={TextStyles.textSmall}>
           Deliver to <Image source={Images.ICON.ARROW_DOWN} />
