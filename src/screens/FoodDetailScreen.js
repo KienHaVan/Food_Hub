@@ -1,29 +1,22 @@
 import React from 'react';
 import {
-  Text,
-  ScrollView,
-  View,
-  StyleSheet,
   Image,
-  TouchableOpacity,
   ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-
-//region Import styling
-import TextStyles from '../styles/TextStyles';
-import LayoutStyles from '../styles/Layout';
-import Colors from '../constants/Color';
-import Sizes from '../constants/Size';
-//endregion
-
-//region Import components
+import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
-import FavoriteButton from '../components/FavoriteButton';
 import Counter from '../components/Counter';
 import CustomButton from '../components/CustomButton';
-//endregion
-
-import { Images } from '../../assets';
+import FavoriteButton from '../components/FavoriteButton';
+import Colors from '../constants/Color';
+import Sizes from '../constants/Size';
+import LayoutStyles from '../styles/Layout';
+import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const FoodDetailScreen = ({ navigation, route }) => {
@@ -71,7 +64,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
       </ScrollView>
 
       <View style={styles.buttonContainer}>
-        <CustomButton text='ADD TO CART' iconSource={Images.ICON.CART} />
+        <CustomButton text='ADD TO CART' iconSource={Images.ICON.CART_BUTTON} />
       </View>
     </View>
   );

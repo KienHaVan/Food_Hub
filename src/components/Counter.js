@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-
-//region Import styling
-import LayoutStyles from '../styles/Layout';
-import TextStyles from '../styles/TextStyles';
-import Sizes from '../constants/Size';
+import { StyleSheet, Text, View } from 'react-native';
 import Colors from '../constants/Color';
-//endregion
-
+import Sizes from '../constants/Size';
+import TextStyles from '../styles/TextStyles';
 import AmountButton from './AmountButton';
 
 const Counter = () => {
@@ -29,11 +24,9 @@ const Counter = () => {
   return (
     <View style={styles.container}>
       <AmountButton handlePress={() => handlePress(-1)} />
-
       <View style={styles.counterText}>
         <Text style={TextStyles.textMain}>{calculateCount(count)}</Text>
       </View>
-
       <AmountButton isIncreased handlePress={() => handlePress(1)} />
     </View>
   );
