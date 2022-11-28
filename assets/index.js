@@ -24,5 +24,6 @@ export const Images = {
     TIME: require('./icons/icon_time.png'),
     STAR: require('./icons/icon_star.png'),
     HEART: require('./icons/icon_heart.png'),
+    ARROW_LEFT: require('./icons/icon_arrow_left.png'),
   },
 };

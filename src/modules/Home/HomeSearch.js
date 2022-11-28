@@ -9,12 +9,14 @@ import { scaleSizeUI } from '../../utils/scaleSizeUI';
 
 const HomeSearch = () => {
   return (
-    <View style={LayoutStyles.layoutStretch}>
-      <InputField
-        placeholder='Find for food or restaurant...'
-        isPassword={false}
-        preIcon={<Image source={Images.ICON.SEARCH} />}
-      />
+    <View style={styles.homeSearch}>
+      <View style={styles.inputContainer}>
+        <InputField
+          placeholder='Find for food or restaurant...'
+          isPassword={false}
+          preIcon={Images.ICON.SEARCH}
+        />
+      </View>
       <TouchableOpacity
         style={[LayoutStyles.layoutShadowGrey, LayoutStyles.layoutCenter, styles.buttonFilter]}
       >
@@ -27,6 +29,13 @@ const HomeSearch = () => {
 export default HomeSearch;
 
 const styles = StyleSheet.create({
+  homeSearch: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  inputContainer: {
+    width: '80%',
+  },
   buttonFilter: {
     width: scaleSizeUI(51),
     height: scaleSizeUI(51),

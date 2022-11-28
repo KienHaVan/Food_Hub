@@ -9,13 +9,20 @@ import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const InputField = ({ placeholder, label, preIcon, isPassword }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(isPassword);
+  const [isFocus, setIsFocus] = useState(false);
 
   return (
     <View style={styles.inputField}>
       {label ? <Text style={[TextStyles.textMain, styles.label]}>{label}</Text> : null}
 
       <View
-        style={[LayoutStyles.layoutStretch, LayoutStyles.layoutShadowGrey, styles.inputContainer]}
+        style={[
+          LayoutStyles.layoutStretch,
+          LayoutStyles.layoutShadowGrey,
+          styles.inputContainer,
+          preIcon !== undefined ? styles.inputWithIcon : null,
+          isFocus ? styles.inputFocus : styles.inputOnBlur,
+        ]}
       >
         <View
           style={[
@@ -25,12 +32,14 @@ const InputField = ({ placeholder, label, preIcon, isPassword }) => {
             },
           ]}
         >
-          {preIcon}
+          {preIcon && <Image source={preIcon} />}
           <TextInput
             style={styles.input}
             placeholder={placeholder}
             secureTextEntry={isPasswordShown}
             cursorColor={Colors.grey}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
           />
         </View>
         {isPassword ? (
@@ -48,21 +57,29 @@ const styles = StyleSheet.create({
     marginBottom: Sizes.sizeSmallH,
   },
   inputField: {
-    flex: 1,
+    width: '100%',
   },
   inputContainer: {
     height: scaleSizeUI(51),
     borderWidth: 2,
-    borderColor: Colors.greyLighter,
     borderRadius: Sizes.sizeSmall,
-    paddingHorizontal: Sizes.sizeModerate,
-    color: Colors.primary,
-    fontFamily: 'Poppins-Regular',
     backgroundColor: Colors.white,
+  },
+  inputFocus: {
+    borderColor: Colors.primary,
+  },
+  inputOnBlur: {
+    borderColor: Colors.greyLighter,
+  },
+  inputWithIcon: {
+    paddingHorizontal: Sizes.sizeModerate,
   },
   input: {
     flex: 1,
     marginLeft: Sizes.sizeSmall,
+    color: Colors.black,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 17,
   },
 });
 
