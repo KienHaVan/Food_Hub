@@ -22,7 +22,9 @@ const CustomButton = ({ isPrimary = true, iconSource, text = 'Click here', onPre
           <Image source={iconSource} style={styles.icon} />
         </View>
       )}
-      <Text style={[TextStyles.h3, isPrimary ? styles.primaryButtonText : styles.secondaryButton]}>
+      <Text
+        style={[TextStyles.textMain, isPrimary ? styles.primaryButtonText : styles.secondaryButton]}
+      >
         {text}
       </Text>
     </TouchableOpacity>

@@ -1,13 +1,11 @@
 import React from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
-
 //region Import styling
 import TextStyles from '../../styles/TextStyles';
 import LayoutStyles from '../../styles/Layout';
 import Colors from '../../constants/Color';
 import Sizes from '../../constants/Size';
 //endregion
-
 import RestaurantCard from '../../components/RestaurantCard';
 import { Restaurants } from '../../api/fakeData/Restaurants';
 import { Images } from '../../../assets';
@@ -35,6 +33,8 @@ const HomeFeatured = () => {
           data={Restaurants}
           keyExtractor={(res) => res.id}
           renderItem={renderCard}
+          ListFooterComponent={<View />}
+          ListFooterComponentStyle={{ width: Sizes.sizeBig }}
         />
       </View>
     </View>
