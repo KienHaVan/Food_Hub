@@ -18,7 +18,6 @@ const WelcomeScreen = () => {
         <View>
           <CornerButton
             sourceImage={Images.ICON.ARROW_RIGHT}
-            end
             onPress={() => {
               SignInAnonymously();
               navigation.navigate('HomeStack');

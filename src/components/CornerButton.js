@@ -24,7 +24,4 @@ const styles = StyleSheet.create({
     height: Sizes.sizeLarge + Sizes.sizeSmaller,
     borderRadius: Sizes.sizeSmall,
   },
-  buttonEnd: {
-    alignSelf: 'flex-end',
-  },
 });
