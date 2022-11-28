@@ -1,13 +1,13 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect } from 'react';
+import { Image, StyleSheet, View } from 'react-native';
+import { Images } from '../../assets';
 import Color from '../constants/Color';
 import LayoutStyles from '../styles/Layout';
-import { Images } from '../../assets';
 
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('SignUp');
+      navigation.navigate('Welcome');
     }, 1000);
   }, []);
 

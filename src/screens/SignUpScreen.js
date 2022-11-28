@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import TextStyles from '../styles/TextStyles';
@@ -18,6 +18,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
+import Toast from 'react-native-toast-message';
+import { SignUpWithEmailAndPassword } from '../utils/authentication';
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
@@ -52,25 +55,21 @@ const SignUpScreen = () => {
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
-  const onSubmit = async (data) => {
+
+  const onSubmit = (data) => {
     if (!isValid) return;
-    await createUserWithEmailAndPassword(auth, values.email, values.password);
+    console.log(data);
+    SignUpWithEmailAndPassword(data.email, data.password);
     Toast.show({
       type: 'success',
-      text: 'Create user successfully',
+      text1: 'Create user successfully',
+    });
+    reset({
+      fullname: '',
+      email: '',
+      password: '',
     });
     navigation.navigate('HomeStack');
-    // return new Promise((resolve) => {
-    //   setTimeout(() => {
-    //     resolve();
-    //     console.log(data);
-    //     reset({
-    //       fullname: '',
-    //       email: '',
-    //       password: '',
-    //     });
-    //   }, 3000);
-    // });
   };
   return (
     <ImageBackground
