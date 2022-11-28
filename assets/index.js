@@ -27,6 +27,8 @@ export const Images = {
     STAR: require('./icons/icon_star.png'),
     STAR_LARGE: require('./icons/icon_star_large.png'),
     HEART: require('./icons/icon_heart.png'),
+    INCREASE: require('./icons/icon_increase.png'),
+    DECREASE: require('./icons/icon_decrease.png'),
     PROFILE: require('./icons/icon_profile.png'),
     ORDERS: require('./icons/icon_order.png'),
     ADDRESS: require('./icons/icon_address.png'),
