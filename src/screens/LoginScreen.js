@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import LoginFooter from '../modules/Login/LoginFooter';
 
 const LoginScreen = () => {
@@ -9,7 +9,5 @@ const LoginScreen = () => {
     </View>
   );
 };
-
 export default LoginScreen;
-
 const styles = StyleSheet.create({});
