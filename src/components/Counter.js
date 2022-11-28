@@ -8,23 +8,12 @@ import Sizes from '../constants/Size';
 import Colors from '../constants/Color';
 //endregion
 
-const counterButtons = [
-  {
-    id: 0,
-    text: '-',
-  },
-  {
-    id: 1,
-    text: '+',
-  },
-];
+import AmountButton from './AmountButton';
 
 const Counter = () => {
-  const [activeButton, setActiveButton] = useState(-1);
   const [count, setCount] = useState(0);
 
-  const handlePress = (buttonId, amount) => {
-    setActiveButton(counterButtons[buttonId].id);
+  const handlePress = (amount) => {
     setCount(count + amount);
   };
 
@@ -39,53 +28,13 @@ const Counter = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => handlePress(0, -1)}
-        style={[
-          LayoutStyles.layoutCenter,
-          activeButton === counterButtons[0].id
-            ? LayoutStyles.layoutShadowRed
-            : LayoutStyles.layoutShadowGrey,
-          styles.counterButton,
-          activeButton === counterButtons[0].id ? styles.counterButtonActive : null,
-        ]}
-      >
-        <Text
-          style={[
-            TextStyles.textMain,
-            styles.counterButtonInner,
-            activeButton === counterButtons[0].id ? styles.counterButtonInnerActive : null,
-          ]}
-        >
-          {counterButtons[0].text}
-        </Text>
-      </TouchableOpacity>
+      <AmountButton handlePress={() => handlePress(-1)} />
 
       <View style={styles.counterText}>
         <Text style={TextStyles.textMain}>{calculateCount(count)}</Text>
       </View>
 
-      <TouchableOpacity
-        onPress={() => handlePress(1, 1)}
-        style={[
-          LayoutStyles.layoutCenter,
-          activeButton === counterButtons[1].id
-            ? LayoutStyles.layoutShadowRed
-            : LayoutStyles.layoutShadowGrey,
-          styles.counterButton,
-          activeButton === counterButtons[1].id ? styles.counterButtonActive : null,
-        ]}
-      >
-        <Text
-          style={[
-            TextStyles.textMain,
-            styles.counterButtonInner,
-            activeButton === counterButtons[1].id ? styles.counterButtonInnerActive : null,
-          ]}
-        >
-          {counterButtons[1].text}
-        </Text>
-      </TouchableOpacity>
+      <AmountButton isIncreased handlePress={() => handlePress(1)} />
     </View>
   );
 };

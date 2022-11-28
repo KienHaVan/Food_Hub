@@ -1,5 +1,13 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
+import {
+  Text,
+  ScrollView,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ImageBackground,
+} from 'react-native';
 
 //region Import styling
 import TextStyles from '../styles/TextStyles';
@@ -12,6 +20,7 @@ import Sizes from '../constants/Size';
 import CornerButton from '../components/CornerButton';
 import FavoriteButton from '../components/FavoriteButton';
 import Counter from '../components/Counter';
+import CustomButton from '../components/CustomButton';
 //endregion
 
 import { Images } from '../../assets';
@@ -37,25 +46,33 @@ const FoodDetailScreen = ({ navigation, route }) => {
         <FavoriteButton />
       </ImageBackground>
 
-      <Text style={TextStyles.h2}>{data.name}</Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.contentWrapper}>
+          <Text style={TextStyles.h2}>{data.name}</Text>
 
-      <View style={styles.rating}>
-        <Image source={Images.ICON.STAR_LARGE} style={styles.ratingIcon} />
-        <Text style={[TextStyles.textMain, styles.ratingText]}>{data.ratings}</Text>
-        <Text style={TextStyles.textMain}>({data.ratingCount})</Text>
-        <TouchableOpacity style={styles.ratingLink}>
-          <Text style={[TextStyles.textMain, styles.ratingLinkText]}>See Reviews</Text>
-        </TouchableOpacity>
+          <View style={styles.rating}>
+            <Image source={Images.ICON.STAR_LARGE} style={styles.ratingIcon} />
+            <Text style={[TextStyles.textMain, styles.ratingText]}>{data.ratings}</Text>
+            <Text style={TextStyles.textMain}>({data.ratingCount})</Text>
+            <TouchableOpacity style={styles.ratingLink}>
+              <Text style={[TextStyles.textMain, styles.ratingLinkText]}>See Reviews</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={LayoutStyles.layoutStretch}>
+            <Text style={[TextStyles.textMain, styles.foodPrice]}>
+              $<Text style={[TextStyles.h2, styles.foodPrice]}>{data.price}</Text>
+            </Text>
+            <Counter />
+          </View>
+
+          <Text style={TextStyles.textMain}>{data.description}</Text>
+        </View>
+      </ScrollView>
+
+      <View style={styles.buttonContainer}>
+        <CustomButton text='ADD TO CART' iconSource={Images.ICON.CART} />
       </View>
-
-      <View style={LayoutStyles.layoutStretch}>
-        <Text style={[TextStyles.textMain, styles.foodPrice]}>
-          $<Text style={[TextStyles.h2, styles.foodPrice]}>{data.price}</Text>
-        </Text>
-        <Counter />
-      </View>
-
-      <Text style={TextStyles.textMain}>{data.description}</Text>
     </View>
   );
 };
@@ -65,7 +82,10 @@ export default FoodDetailScreen;
 const styles = StyleSheet.create({
   screen: {
     paddingVertical: Sizes.sizeBigH,
-    paddingHorizontal: Sizes.sizeBig,
+    //paddingHorizontal: Sizes.sizeBig,
+  },
+  contentWrapper: {
+    marginHorizontal: Sizes.sizeBig,
   },
   backButton: {
     position: 'absolute',
@@ -74,9 +94,9 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   foodThumbnail: {
-    width: '100%',
     height: scaleSizeUI(206, true),
     marginBottom: Sizes.sizeBigH,
+    marginHorizontal: Sizes.sizeBig,
   },
   foodThumbnailImage: {
     borderRadius: Sizes.sizeModerate,
@@ -106,5 +126,11 @@ const styles = StyleSheet.create({
   },
   foodPrice: {
     color: Colors.primary,
+  },
+  buttonContainer: {
+    width: scaleSizeUI(167),
+    height: scaleSizeUI(60, true),
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 });
