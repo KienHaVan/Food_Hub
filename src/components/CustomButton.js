@@ -5,7 +5,7 @@ import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
-const CustomButton = ({ isPrimary, iconSource, text, onPress }) => {
+const CustomButton = ({ isPrimary = true, iconSource, text = 'Click here', onPress }) => {
   return (
     <TouchableOpacity
       style={[
@@ -13,7 +13,7 @@ const CustomButton = ({ isPrimary, iconSource, text, onPress }) => {
         isPrimary
           ? [LayoutStyles.layoutShadowRed, styles.primaryButton]
           : [LayoutStyles.layoutShadowGrey, styles.secondaryButton],
-        iconSource !== undefined ? styles.buttonWithTextIcon : styles.buttonWithText,
+        iconSource ? styles.buttonWithTextIcon : styles.buttonWithText,
       ]}
       onPress={onPress}
     >
@@ -22,9 +22,7 @@ const CustomButton = ({ isPrimary, iconSource, text, onPress }) => {
           <Image source={iconSource} style={styles.icon} />
         </View>
       )}
-      <Text
-        style={[TextStyles.main, isPrimary ? styles.primaryButtonText : styles.secondaryButton]}
-      >
+      <Text style={[TextStyles.h3, isPrimary ? styles.primaryButtonText : styles.secondaryButton]}>
         {text}
       </Text>
     </TouchableOpacity>
@@ -49,6 +47,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingRight: 16,
   },
   primaryButton: {
     backgroundColor: Colors.primary,

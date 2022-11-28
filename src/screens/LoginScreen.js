@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import LoginFooter from '../modules/Login/LoginFooter';
+import { StyleSheet, View } from 'react-native';
+import { Images } from '../../assets';
+import CustomButton from '../components/CustomButton';
 
 const LoginScreen = () => {
   return (
-    <View>
-      <LoginFooter />
+    <View style={{ height: 60, alignSelf: 'center', marginTop: 30 }}>
+      <CustomButton text={'Click here!'} isPrimary />
     </View>
   );
 };
