@@ -79,6 +79,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     minWidth: 139,
+    backgroundColor: '#fff',
+    elevation: 4,
   },
   bottomMetaImage: {
     width: 28,
