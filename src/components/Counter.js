@@ -11,16 +11,16 @@ import Colors from '../constants/Color';
 import AmountButton from './AmountButton';
 
 const Counter = () => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
 
   const handlePress = (amount) => {
     setCount(count + amount);
   };
 
   const calculateCount = (number) => {
-    if (number < 0) {
-      setCount(0);
-      return '00';
+    if (number === 0) {
+      setCount(1);
+      return '01';
     }
     if (number < 10) return `0${number}`;
     return number;

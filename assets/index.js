@@ -19,7 +19,7 @@ export const Images = {
     SEARCH: require('./icons/icon_search.png'),
     HOME: require('./icons/icon_home.png'),
     MAP: require('./icons/icon_map.png'),
-    CART: require('./icons/icon_cart.png'),
+    CART: require('./icons/icon_cart_button.png'),
     NOTIFICATION: require('./icons/icon_notification.png'),
     FAVORITE: require('./icons/icon_favorite.png'),
     FILTER: require('./icons/icon_filter.png'),

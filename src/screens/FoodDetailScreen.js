@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   ScrollView,
@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
+import Toast from 'react-native-toast-message';
 
 //region Import styling
 import TextStyles from '../styles/TextStyles';
@@ -23,11 +25,23 @@ import Counter from '../components/Counter';
 import CustomButton from '../components/CustomButton';
 //endregion
 
+import { addToCart } from '../features/cartSlice';
 import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const FoodDetailScreen = ({ navigation, route }) => {
+  const dispatch = useDispatch();
+  const [foodAmount, setFoodAmount] = useState(1);
+
   const { data } = route.params;
+
+  const handleAddToCart = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Added Success!',
+    });
+    dispatch(addToCart(data));
+  };
 
   return (
     <View style={[LayoutStyles.layoutScreen, styles.screen]}>
@@ -70,8 +84,21 @@ const FoodDetailScreen = ({ navigation, route }) => {
         </View>
       </ScrollView>
 
-      <View style={styles.buttonContainer}>
-        <CustomButton text='ADD TO CART' iconSource={Images.ICON.CART} />
+      <View style={LayoutStyles.layoutCenter}>
+        <View style={[styles.buttonContainer, { marginRight: Sizes.sizeSmall }]}>
+          <CustomButton
+            text='ADD TO CART'
+            iconSource={Images.ICON.CART}
+            onPress={handleAddToCart}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            text='CHECK OUT'
+            isPrimary={false}
+            onPress={() => navigation.navigate('Cart')}
+          />
+        </View>
       </View>
     </View>
   );
@@ -130,7 +157,5 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: scaleSizeUI(167),
     height: scaleSizeUI(60, true),
-    marginLeft: 'auto',
-    marginRight: 'auto',
   },
 });
