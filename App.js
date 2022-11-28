@@ -4,12 +4,14 @@ import { NavigationContainer } from '@react-navigation/native';
 //Import screens
 import { HomeScreen } from './src/screens';
 import MainStackNavigator from './src/navigation/MainStackNavigator';
+import Toast from 'react-native-toast-message';
 
 const App = () => {
   return (
     <NavigationContainer>
       <SafeAreaView style={styles.container}>
         <MainStackNavigator />
+        <Toast />
       </SafeAreaView>
     </NavigationContainer>
   );

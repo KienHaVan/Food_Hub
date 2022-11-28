@@ -17,8 +17,10 @@ import MyInput from '../components/form/MyInput';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useNavigation } from '@react-navigation/native';
 
 const SignUpScreen = () => {
+  const navigation = useNavigation();
   const schema = yup
     .object({
       fullname: yup
@@ -50,19 +52,25 @@ const SignUpScreen = () => {
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (!isValid) return;
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-        console.log(data);
-        reset({
-          fullname: '',
-          email: '',
-          password: '',
-        });
-      }, 3000);
+    await createUserWithEmailAndPassword(auth, values.email, values.password);
+    Toast.show({
+      type: 'success',
+      text: 'Create user successfully',
     });
+    navigation.navigate('HomeStack');
+    // return new Promise((resolve) => {
+    //   setTimeout(() => {
+    //     resolve();
+    //     console.log(data);
+    //     reset({
+    //       fullname: '',
+    //       email: '',
+    //       password: '',
+    //     });
+    //   }, 3000);
+    // });
   };
   return (
     <ImageBackground
@@ -92,7 +100,7 @@ const SignUpScreen = () => {
         </View>
         {errors?.password && <Text style={styles.error}>{errors?.password?.message}</Text>}
 
-        <View style={{ height: scaleSizeUI(30, true) }}></View>
+        <View style={styles.center}></View>
 
         <TouchableOpacity
           disabled={isSubmitting}
@@ -143,6 +151,9 @@ const styles = StyleSheet.create({
   content: {
     flex: scaleSizeUI(700, true),
     marginHorizontal: 26,
+  },
+  center: {
+    height: scaleSizeUI(30, true),
   },
   quote: {
     flexDirection: 'row',
