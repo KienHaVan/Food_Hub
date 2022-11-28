@@ -1,8 +1,6 @@
-import { StyleSheet, SafeAreaView, View } from 'react-native';
-import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-//Import screens
-import { HomeScreen } from './src/screens';
+import React from 'react';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import MainStackNavigator from './src/navigation/MainStackNavigator';
 import Toast from 'react-native-toast-message';
 

@@ -28,6 +28,7 @@ export const Images = {
     STAR: require('./icons/icon_star.png'),
     STAR_LARGE: require('./icons/icon_star_large.png'),
     HEART: require('./icons/icon_heart.png'),
+    ARROW_LEFT: require('./icons/icon_arrow_left.png'),
     INCREASE: require('./icons/icon_increase.png'),
     CART_BUTTON: require('./icons/icon_cart_button.png'),
     DECREASE: require('./icons/icon_decrease.png'),
