@@ -5,6 +5,7 @@ import SplashScreen from './SplashScreen';
 import ProfileScreen from './ProfileScreen';
 import FoodDetailScreen from './FoodDetailScreen';
 import WelcomeScreen from './WelcomeScreen';
+import EditProfileScreen from './EditProfileScreen';
 
 export {
   HomeScreen,
@@ -14,4 +15,5 @@ export {
   FoodDetailScreen,
   WelcomeScreen,
   ProfileScreen,
+  EditProfileScreen,
 };

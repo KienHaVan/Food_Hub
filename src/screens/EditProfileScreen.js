@@ -25,7 +25,7 @@ const EditProfileScreen = () => {
         <View style={LayoutStyles.layoutStretch}>
           <CornerButton
             sourceImage={Images.ICON.ARROW_LEFT}
-            onPress={() => navigation.goBack('Profile')}
+            handlePress={() => navigation.goBack('Profile')}
           />
           <Text style={TextStyles.h3}>Add new address</Text>
           <View style={styles.space} />
