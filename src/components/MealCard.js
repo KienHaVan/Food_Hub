@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 //region Import styling
 import TextStyles from '../styles/TextStyles';
@@ -13,8 +14,13 @@ import { scaleSizeUI } from '../utils/scaleSizeUI';
 import FavoriteButton from './FavoriteButton';
 
 const MealCard = ({ data }) => {
+  const navigation = useNavigation();
+
   return (
-    <TouchableOpacity style={[LayoutStyles.layoutShadowGrey, styles.card]}>
+    <TouchableOpacity
+      onPress={() => navigation.navigate('FoodDetail', { data: data })}
+      style={[LayoutStyles.layoutShadowGrey, styles.card]}
+    >
       {/*Add to favorite*/}
       <FavoriteButton />
 

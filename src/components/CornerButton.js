@@ -4,16 +4,11 @@ import Sizes from '../constants/Size';
 import Colors from '../constants/Color';
 import LayoutStyles from '../styles/Layout';
 
-const CornerButton = ({ sourceImage, end = false, onPress = () => {} }) => {
+const CornerButton = ({ sourceImage, handlePress }) => {
   return (
     <TouchableOpacity
-      onPress={onPress}
-      style={[
-        LayoutStyles.layoutCenter,
-        LayoutStyles.layoutShadowGrey,
-        styles.button,
-        end ? styles.buttonEnd : null,
-      ]}
+      onPress={handlePress}
+      style={[LayoutStyles.layoutCenter, LayoutStyles.layoutShadowGrey, styles.button]}
     >
       <Image source={sourceImage} />
     </TouchableOpacity>
