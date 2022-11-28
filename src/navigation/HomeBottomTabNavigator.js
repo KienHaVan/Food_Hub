@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen, LoginScreen } from '../screens';
+import { HomeScreen, CartScreen } from '../screens';
 import Color from '../constants/Color';
 import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
@@ -18,8 +18,8 @@ const HomeBottomTabNavigator = () => {
           let iconSource;
           if (route.name === 'Home') {
             iconSource = Images.ICON.HOME;
-          } else if (route.name === 'Map') {
-            iconSource = Images.ICON.MAP;
+          } else if (route.name === 'Cart') {
+            iconSource = Images.ICON.CART;
           }
           return <Image source={iconSource} tintColor={color} style={styles.bottom} />;
         },
@@ -31,7 +31,7 @@ const HomeBottomTabNavigator = () => {
       })}
     >
       <Tab.Screen name='Home' component={HomeScreen} />
-      {/* <Tab.Screen name='Map' component={LoginScreen} /> */}
+      <Tab.Screen name='Cart' component={CartScreen} />
     </Tab.Navigator>
   );
 };

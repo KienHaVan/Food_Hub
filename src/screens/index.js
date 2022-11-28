@@ -6,6 +6,7 @@ import ProfileScreen from './ProfileScreen';
 import FoodDetailScreen from './FoodDetailScreen';
 import WelcomeScreen from './WelcomeScreen';
 import EditProfileScreen from './EditProfileScreen';
+import CartScreen from './CartScreen';
 
 export {
   HomeScreen,
@@ -16,4 +17,5 @@ export {
   WelcomeScreen,
   ProfileScreen,
   EditProfileScreen,
+  CartScreen,
 };
