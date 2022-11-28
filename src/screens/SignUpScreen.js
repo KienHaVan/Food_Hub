@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Button,
   ImageBackground,
   StyleSheet,
   Text,
@@ -7,19 +8,25 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import TextStyles from '../styles/TextStyles';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import MyInput from '../components/form/MyInput';
 import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
-import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
+import TextStyles from '../styles/TextStyles';
 import Color from '../constants/Color';
+import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
+import MyInput from '../components/form/MyInput';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen = () => {
+const SignUpScreen = () => {
+  const navigation = useNavigation();
   const schema = yup
     .object({
+      fullname: yup
+        .string()
+        .required('Please insert your name')
+        .max(20, 'Your name should be 20 charaters or less'),
       email: yup
         .string()
         .lowercase()
@@ -45,19 +52,25 @@ const LoginScreen = () => {
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (!isValid) return;
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-        console.log(data);
-        reset({
-          fullname: '',
-          email: '',
-          password: '',
-        });
-      }, 3000);
+    await createUserWithEmailAndPassword(auth, values.email, values.password);
+    Toast.show({
+      type: 'success',
+      text: 'Create user successfully',
     });
+    navigation.navigate('HomeStack');
+    // return new Promise((resolve) => {
+    //   setTimeout(() => {
+    //     resolve();
+    //     console.log(data);
+    //     reset({
+    //       fullname: '',
+    //       email: '',
+    //       password: '',
+    //     });
+    //   }, 3000);
+    // });
   };
   return (
     <ImageBackground
@@ -67,7 +80,13 @@ const LoginScreen = () => {
     >
       <View style={styles.heading}></View>
       <View style={styles.content}>
-        <Text style={TextStyles.h1}>Login</Text>
+        <Text style={TextStyles.h1}>Sign Up</Text>
+
+        <View style={styles.inputField}>
+          <Text style={TextStyles.textMain}>Full name</Text>
+          <MyInput control={control} placeholder='Enter your full name' name='fullname' />
+        </View>
+        {errors?.fullname && <Text style={styles.error}>{errors?.fullname?.message}</Text>}
 
         <View style={styles.inputField}>
           <Text style={TextStyles.textMain}>E-mail</Text>
@@ -81,11 +100,7 @@ const LoginScreen = () => {
         </View>
         {errors?.password && <Text style={styles.error}>{errors?.password?.message}</Text>}
 
-        <View style={styles.center}>
-          <TouchableOpacity>
-            <Text style={[TextStyles.textMain, styles.centerText]}>Forgot password?</Text>
-          </TouchableOpacity>
-        </View>
+        <View style={styles.center}></View>
 
         <TouchableOpacity
           disabled={isSubmitting}
@@ -118,32 +133,27 @@ const LoginScreen = () => {
 
         <View style={{ height: scaleSizeUI(30, true) }} />
 
-        <LogWithFacebookAndGoogle text={'Sign in with'} dark />
+        <LogWithFacebookAndGoogle text={'Sign up with'} dark />
       </View>
     </ImageBackground>
   );
 };
 
-export default LoginScreen;
+export default SignUpScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   heading: {
-    flex: scaleSizeUI(100, true),
+    flex: scaleSizeUI(50, true),
   },
   content: {
     flex: scaleSizeUI(700, true),
     marginHorizontal: 26,
   },
   center: {
-    marginVertical: scaleSizeUI(30, true),
-  },
-  centerText: {
-    color: Color.primary,
-    alignSelf: 'center',
-    fontWeight: '600',
+    height: scaleSizeUI(30, true),
   },
   quote: {
     flexDirection: 'row',

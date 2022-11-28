@@ -4,12 +4,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen, LoginScreen } from '../screens';
 import Color from '../constants/Color';
 import { Images } from '../../assets';
+import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const Tab = createBottomTabNavigator();
 
 const HomeBottomTabNavigator = () => {
   return (
     <Tab.Navigator
+      style={styles.container}
       defaultScreenOptions={'Home'}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color }) => {
@@ -19,12 +21,13 @@ const HomeBottomTabNavigator = () => {
           } else if (route.name === 'Map') {
             iconSource = Images.ICON.MAP;
           }
-          return <Image source={iconSource} tintColor={color} />;
+          return <Image source={iconSource} tintColor={color} style={styles.bottom} />;
         },
         tabBarActiveTintColor: Color.primary,
         tabBarInactiveTintColor: Color.grey,
         headerShown: false,
         tabBarShowLabel: false,
+        tabBarStyle: { height: scaleSizeUI(74, true) },
       })}
     >
       <Tab.Screen name='Home' component={HomeScreen} />
@@ -34,3 +37,10 @@ const HomeBottomTabNavigator = () => {
 };
 
 export default HomeBottomTabNavigator;
+
+const styles = StyleSheet.create({
+  bottom: {
+    width: 28,
+    height: 28,
+  },
+});
