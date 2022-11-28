@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: Sizes.sizeSmall,
-    color: Colors.black,
+    color: Colors.secondaryDarker,
     fontFamily: 'Poppins-Regular',
     fontSize: 17,
   },
