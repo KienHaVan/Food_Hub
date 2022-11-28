@@ -110,9 +110,9 @@ const LoginScreen = () => {
         </TouchableOpacity>
 
         <View style={styles.quote}>
-          <Text style={[TextStyles.textMain, styles.bottomQuote]}>Already have an account? </Text>
+          <Text style={[TextStyles.textMain, styles.bottomQuote]}>Don't have an account? </Text>
           <TouchableOpacity>
-            <Text style={[TextStyles.textMain, styles.bottomQuoteLink]}>Login</Text>
+            <Text style={[TextStyles.textMain, styles.bottomQuoteLink]}>Sign Up</Text>
           </TouchableOpacity>
         </View>
 
