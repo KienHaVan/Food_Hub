@@ -6,11 +6,25 @@ import LinearGradient from 'react-native-linear-gradient';
 import Color from '../constants/Color';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
+import CornerButton from '../components/CornerButton';
+import { useNavigation } from '@react-navigation/native';
+import { SignInAnonymously } from '../utils/authentication';
 
 const WelcomeScreen = () => {
+  const navigation = useNavigation();
   return (
     <ImageBackground source={Images.IMAGES.WELCOME_BACKGROUND} style={styles.container}>
       <LinearGradient colors={['transparent', '#000']} style={styles.gradient}>
+        <View>
+          <CornerButton
+            sourceImage={Images.ICON.ARROW_RIGHT}
+            end
+            onPress={() => {
+              SignInAnonymously();
+              navigation.navigate('HomeStack');
+            }}
+          />
+        </View>
         <View style={styles.slogan}>
           <Text style={TextStyles.h1}>
             Welcome to <Text style={styles.sloganAppName}>FoodHub</Text>
@@ -22,14 +36,17 @@ const WelcomeScreen = () => {
         <View style={styles.center}></View>
         <View style={styles.bottom}>
           <LogWithFacebookAndGoogle text={'Sign in with'} />
-          <TouchableOpacity style={styles.bottomButton}>
+          <TouchableOpacity
+            style={styles.bottomButton}
+            onPress={() => navigation.navigate('SignUp')}
+          >
             <Text style={[TextStyles.textMain, styles.bottomButtonText]}>
               Start with email or phone
             </Text>
           </TouchableOpacity>
           <View style={styles.quote}>
             <Text style={[TextStyles.textMain, styles.bottomQuote]}>Already have an account? </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
               <Text style={[TextStyles.textMain, styles.bottomQuoteLink]}>Sign In</Text>
             </TouchableOpacity>
           </View>
