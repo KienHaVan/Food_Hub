@@ -7,7 +7,7 @@ import { Images } from '../../assets';
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('SignUp');
+      navigation.navigate('Welcome');
     }, 1000);
   }, []);
 
