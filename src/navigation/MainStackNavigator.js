@@ -10,13 +10,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeBottomTabNavigator from './HomeBottomTabNavigator';
 import ProfileScreen from '../screens/ProfileScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
+import TestFirestore from '../screens/TestFirestore';
 
 const Stack = createNativeStackNavigator();
 
 const MainStackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName='HomeStack'
+      initialRouteName='Splash'
       defaultScreenOptions={'Splash'}
       screenOptions={{ headerShown: false }}
     >
@@ -28,6 +29,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name='FoodDetail' component={FoodDetailScreen} />
       <Stack.Screen name='Profile' component={ProfileScreen} />
       <Stack.Screen name='EditProfile' component={EditProfileScreen} />
+      <Stack.Screen name='TestFirestore' component={TestFirestore} />
     </Stack.Navigator>
   );
 };

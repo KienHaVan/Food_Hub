@@ -15,10 +15,10 @@ const WelcomeScreen = () => {
   return (
     <ImageBackground source={Images.IMAGES.WELCOME_BACKGROUND} style={styles.container}>
       <LinearGradient colors={['transparent', '#000']} style={styles.gradient}>
-        <View>
+        <View style={styles.headingButton}>
           <CornerButton
             sourceImage={Images.ICON.ARROW_RIGHT}
-            onPress={() => {
+            handlePress={() => {
               SignInAnonymously();
               navigation.navigate('HomeStack');
             }}
@@ -65,6 +65,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 28,
     paddingTop: 26,
+  },
+  headingButton: {
+    alignSelf: 'flex-end',
   },
   slogan: {
     marginTop: 50,
