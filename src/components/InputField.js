@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Text, TextInput, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Images } from '../../assets';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
-import TextStyles from '../styles/TextStyles';
 import LayoutStyles from '../styles/Layout';
-import { Images } from '../../assets';
+import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const InputField = ({ placeholder, label, preIcon, isPassword, ...props }) => {
@@ -27,6 +27,7 @@ const InputField = ({ placeholder, label, preIcon, isPassword, ...props }) => {
         <View
           style={[
             LayoutStyles.layoutStretch,
+            // eslint-disable-next-line react-native/no-inline-styles
             {
               width: isPassword ? '90%' : '100%',
             },

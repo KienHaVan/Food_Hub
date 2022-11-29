@@ -39,14 +39,15 @@ const LoginScreen = () => {
     handleSubmit,
     control,
     reset,
-    setFocus,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
   const onSubmit = (data) => {
-    if (!isValid) return;
+    if (!isValid) {
+      return;
+    }
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve();
@@ -65,7 +66,7 @@ const LoginScreen = () => {
       style={styles.container}
       resizeMode='stretch'
     >
-      <View style={styles.heading}></View>
+      <View style={styles.heading} />
       <View style={styles.content}>
         <Text style={TextStyles.h1}>Login</Text>
 
@@ -94,6 +95,7 @@ const LoginScreen = () => {
         >
           {!isSubmitting ? (
             <Text
+              // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 fontWeight: '700',
                 fontSize: 24,
@@ -105,7 +107,7 @@ const LoginScreen = () => {
               Sign Up
             </Text>
           ) : (
-            <ActivityIndicator size={'large'} color={Color.primary}></ActivityIndicator>
+            <ActivityIndicator size={'large'} color={Color.primary} />
           )}
         </TouchableOpacity>
 

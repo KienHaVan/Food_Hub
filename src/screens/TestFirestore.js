@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
-import InputField from '../components/InputField';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import CustomButton from '../components/CustomButton';
+import InputField from '../components/InputField';
 
 const TestFirestore = () => {
   const [name, setName] = useState('');
@@ -63,17 +63,17 @@ const TestFirestore = () => {
         placeholder='Enter your name...'
         onChangeText={(newName) => setName(newName)}
       />
-      <View style={{ height: 40 }}></View>
+      <View style={{ height: 40 }} />
       <InputField
         label={'email'}
         placeholder='Enter your email...'
         onChangeText={(newEmail) => setEmail(newEmail)}
       />
-      <View style={{ height: 40 }}></View>
+      <View style={{ height: 40 }} />
       <View style={{ height: 60, width: 280, alignSelf: 'center' }}>
         <CustomButton text='Save to Firestore' onPress={handleSaveFirestore} />
       </View>
-      <View style={{ height: 20 }}></View>
+      <View style={{ height: 20 }} />
       <View style={{ height: 60, width: 280, alignSelf: 'center' }}>
         <CustomButton text='Delete' onPress={handleDeleteUser} />
       </View>

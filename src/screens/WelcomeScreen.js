@@ -1,14 +1,14 @@
-import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
-import { Images } from '../../assets';
-import TextStyles from '../styles/TextStyles';
-import LinearGradient from 'react-native-linear-gradient';
-import Color from '../constants/Color';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
-import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
-import CornerButton from '../components/CornerButton';
 import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { Images } from '../../assets';
+import CornerButton from '../components/CornerButton';
+import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
+import Color from '../constants/Color';
+import TextStyles from '../styles/TextStyles';
 import { SignInAnonymously } from '../utils/authentication';
+import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const WelcomeScreen = () => {
   const navigation = useNavigation();
@@ -32,7 +32,7 @@ const WelcomeScreen = () => {
             Your favourite foods delivered fast at your door.
           </Text>
         </View>
-        <View style={styles.center}></View>
+        <View style={styles.center} />
         <View style={styles.bottom}>
           <LogWithFacebookAndGoogle text={'Sign in with'} />
           <TouchableOpacity
