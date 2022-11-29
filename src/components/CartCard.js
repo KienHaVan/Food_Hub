@@ -12,7 +12,9 @@ const CartCard = ({ item }) => {
     <View style={[LayoutStyles.layoutShadowGrey, styles.card]}>
       <Image source={item.image} style={styles.cardThumbnail} />
       <View style={styles.cardContent}>
-        <Text style={TextStyles.h3}>{item.name}</Text>
+        <Text style={TextStyles.h3}>
+          {item.name} x {item.quantity}
+        </Text>
         <Text style={TextStyles.h3}>{item.price}</Text>
       </View>
     </View>

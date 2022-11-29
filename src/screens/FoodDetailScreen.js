@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   ScrollView,
@@ -8,7 +8,13 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  increaseCurrentQuantity,
+  decreaseCurrentQuantity,
+  resetCurrentQuantity,
+  addToCart,
+} from '../features/cartSlice';
 import Toast from 'react-native-toast-message';
 
 //region Import styling
@@ -25,22 +31,26 @@ import Counter from '../components/Counter';
 import CustomButton from '../components/CustomButton';
 //endregion
 
-import { addToCart } from '../features/cartSlice';
 import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const FoodDetailScreen = ({ navigation, route }) => {
-  const dispatch = useDispatch();
-  const [foodAmount, setFoodAmount] = useState(1);
-
   const { data } = route.params;
+  const dispatch = useDispatch();
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+  const currentQuantity = useSelector((state) => state.cart.currentFoodQuantity);
+
+  //When new data is passed into the screen, the quantity of the item is reset
+  useEffect(() => {
+    dispatch(resetCurrentQuantity());
+  }, [data]);
 
   const handleAddToCart = () => {
     Toast.show({
       type: 'success',
       text1: 'Added Success!',
     });
-    dispatch(addToCart(data));
+    dispatch(addToCart({ ...data, quantity: currentQuantity }));
   };
 
   return (
@@ -77,7 +87,12 @@ const FoodDetailScreen = ({ navigation, route }) => {
             <Text style={[TextStyles.textMain, styles.foodPrice]}>
               $<Text style={[TextStyles.h2, styles.foodPrice]}>{data.price}</Text>
             </Text>
-            <Counter />
+
+            <Counter
+              defaultValue={currentQuantity}
+              onIncrease={() => dispatch(increaseCurrentQuantity(currentQuantity))}
+              onDecrease={() => dispatch(decreaseCurrentQuantity(currentQuantity))}
+            />
           </View>
 
           <Text style={TextStyles.textMain}>{data.description}</Text>
@@ -94,7 +109,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.buttonContainer}>
           <CustomButton
-            text='CHECK OUT'
+            text={`CHECK OUT (${totalQuantity >= 100 ? '99+' : totalQuantity})`}
             isPrimary={false}
             onPress={() => navigation.navigate('Cart')}
           />

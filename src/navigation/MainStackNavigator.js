@@ -25,6 +25,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name='SignUp' component={SignUpScreen} />
       <Stack.Screen name='Login' component={LoginScreen} />
       <Stack.Screen name='HomeStack' component={HomeBottomTabNavigator} />
+      <Stack.Screen name='FoodDetail' component={FoodDetailScreen} />
       <Stack.Screen name='Profile' component={ProfileScreen} />
       <Stack.Screen name='EditProfile' component={EditProfileScreen} />
     </Stack.Navigator>
