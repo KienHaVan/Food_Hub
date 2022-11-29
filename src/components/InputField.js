@@ -7,7 +7,7 @@ import LayoutStyles from '../styles/Layout';
 import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
-const InputField = ({ placeholder, label, preIcon, isPassword }) => {
+const InputField = ({ placeholder, label, preIcon, isPassword, ...props }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(isPassword);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -40,6 +40,7 @@ const InputField = ({ placeholder, label, preIcon, isPassword }) => {
             cursorColor={Colors.grey}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
+            {...props}
           />
         </View>
         {isPassword ? (
