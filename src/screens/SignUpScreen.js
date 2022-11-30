@@ -106,26 +106,15 @@ const SignUpScreen = () => {
           onPress={handleSubmit(onSubmit)}
         >
           {!isSubmitting ? (
-            <Text
-              // eslint-disable-next-line react-native/no-inline-styles
-              style={{
-                fontWeight: '700',
-                fontSize: 24,
-                lineHeight: 30,
-                color: '#fff',
-                alignSelf: 'center',
-              }}
-            >
-              Sign Up
-            </Text>
+            <Text style={styles.signupButtonText}>SIGN UP</Text>
           ) : (
-            <ActivityIndicator size={'large'} color={Color.primary} />
+            <ActivityIndicator size={'large'} color={Color.white}></ActivityIndicator>
           )}
         </TouchableOpacity>
 
         <View style={styles.quote}>
           <Text style={[TextStyles.textMain, styles.bottomQuote]}>Already have an account? </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text style={[TextStyles.textMain, styles.bottomQuoteLink]}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -161,7 +150,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   bottomQuote: {
-    color: Color.secondary,
+    color: Color.gray,
   },
   bottomQuoteLink: {
     textDecorationLine: 'underline',
@@ -175,10 +164,22 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   button: {
+    width: 280,
+    alignSelf: 'center',
     paddingHorizontal: 10,
-    paddingVertical: 8,
-    backgroundColor: '#28a745',
-    borderRadius: 8,
+    paddingVertical: 12,
+    height: 60,
+    backgroundColor: Color.primary,
+    borderRadius: 28,
     marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+
+  signupButtonText: [
+    TextStyles.h3,
+    {
+      color: Color.white,
+    },
+  ],
 });

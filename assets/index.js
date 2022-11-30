@@ -39,5 +39,12 @@ export const Images = {
     CONTACT: require('./icons/icon_contact.png'),
     SETTING: require('./icons/icon_setting.png'),
     HELP: require('./icons/icon_help.png'),
+    FACEBOOK: require('./icons/icon_fb.png'),
+    GOOGLE: require('./icons/icon_google.png'),
+    BELL: require('./icons/icon_bell.png'),
+    CART_BOTTOM: require('./icons/icon_cart_navigation.png'),
+    COMPASS: require('./icons/icon_compass.png'),
+    HEART_BOTTOM: require('./icons/icon_heart_bottom.png'),
+    LOCATION: require('./icons/icon_location.png'),
   },
 };

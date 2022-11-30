@@ -8,20 +8,30 @@ import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
 import Color from '../constants/Color';
 import TextStyles from '../styles/TextStyles';
 import { SignInAnonymously } from '../utils/authentication';
+import Toast from 'react-native-toast-message';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const WelcomeScreen = () => {
   const navigation = useNavigation();
+  const handleSignInAnonymously = () => {
+    try {
+      SignInAnonymously();
+      navigation.navigate('HomeStack');
+    } catch (error) {
+      Toast.show({
+        type: 'danger',
+        text1: 'Check your internet connection!',
+      });
+    }
+  };
   return (
     <ImageBackground source={Images.IMAGES.WELCOME_BACKGROUND} style={styles.container}>
       <LinearGradient colors={['transparent', '#000']} style={styles.gradient}>
         <View style={styles.headingButton}>
           <CornerButton
-            sourceImage={Images.ICON.ARROW_RIGHT}
-            handlePress={() => {
-              SignInAnonymously();
-              navigation.navigate('HomeStack');
-            }}
+            sourceImage={Images.ICON.ARROW_LEFT}
+            style={styles.iconFlip}
+            handlePress={handleSignInAnonymously}
           />
         </View>
         <View style={styles.slogan}>
@@ -71,6 +81,9 @@ const styles = StyleSheet.create({
   },
   slogan: {
     marginTop: 50,
+  },
+  iconFlip: {
+    transform: [{ scale: -1 }],
   },
   sloganAppName: {
     color: Color.primary,
