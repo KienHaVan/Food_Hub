@@ -1,9 +1,9 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen, CartScreen } from '../screens';
-import Color from '../constants/Color';
+import React from 'react';
+import { Image, StyleSheet } from 'react-native';
 import { Images } from '../../assets';
+import Color from '../constants/Color';
+import { CartScreen, HomeScreen } from '../screens';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const Tab = createBottomTabNavigator();

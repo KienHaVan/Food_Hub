@@ -1,14 +1,10 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
-//region Import styling
 import TextStyles from '../styles/TextStyles';
 import LayoutStyles from '../styles/Layout';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
-//endregion
-
 import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import FavoriteButton from './FavoriteButton';
@@ -21,20 +17,13 @@ const MealCard = ({ data }) => {
       onPress={() => navigation.navigate('FoodDetail', { data: data })}
       style={[LayoutStyles.layoutShadowGrey, styles.card]}
     >
-      {/*Add to favorite*/}
       <FavoriteButton />
-
-      {/*Price label*/}
       <View style={[styles.price, LayoutStyles.layoutShadowGrey]}>
         <Text style={TextStyles.textMain}>
           $ <Text style={[TextStyles.h3, styles.priceText]}>{data.price}</Text>
         </Text>
       </View>
-
-      {/*Thumbnail*/}
       <Image source={data.image} style={styles.cardThumbnail} />
-
-      {/*Card content*/}
       <View style={styles.cardContent}>
         <View style={[LayoutStyles.layoutShadowGrey, styles.rating]}>
           <Image source={Images.ICON.STAR} />

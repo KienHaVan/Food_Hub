@@ -1,26 +1,24 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
-  Button,
   ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect } from 'react';
-import { Images } from '../../assets';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
-import TextStyles from '../styles/TextStyles';
-import Color from '../constants/Color';
-import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
-import MyInput from '../components/form/MyInput';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { useNavigation } from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
 import Toast from 'react-native-toast-message';
+import * as yup from 'yup';
+import { Images } from '../../assets';
+import MyInput from '../components/form/MyInput';
+import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
+import Color from '../constants/Color';
+import TextStyles from '../styles/TextStyles';
 import { SignUpWithEmailAndPassword } from '../utils/authentication';
+import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
@@ -49,7 +47,6 @@ const SignUpScreen = () => {
     handleSubmit,
     control,
     reset,
-    setFocus,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
@@ -57,7 +54,9 @@ const SignUpScreen = () => {
   });
 
   const onSubmit = (data) => {
-    if (!isValid) return;
+    if (!isValid) {
+      return;
+    }
     console.log(data);
     SignUpWithEmailAndPassword(data.email, data.password);
     Toast.show({
@@ -77,7 +76,7 @@ const SignUpScreen = () => {
       style={styles.container}
       resizeMode='stretch'
     >
-      <View style={styles.heading}></View>
+      <View style={styles.heading} />
       <View style={styles.content}>
         <Text style={TextStyles.h1}>Sign Up</Text>
 
@@ -99,7 +98,7 @@ const SignUpScreen = () => {
         </View>
         {errors?.password && <Text style={styles.error}>{errors?.password?.message}</Text>}
 
-        <View style={styles.center}></View>
+        <View style={styles.center} />
 
         <TouchableOpacity
           disabled={isSubmitting}
@@ -108,6 +107,7 @@ const SignUpScreen = () => {
         >
           {!isSubmitting ? (
             <Text
+              // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 fontWeight: '700',
                 fontSize: 24,
@@ -119,7 +119,7 @@ const SignUpScreen = () => {
               Sign Up
             </Text>
           ) : (
-            <ActivityIndicator size={'large'} color={Color.primary}></ActivityIndicator>
+            <ActivityIndicator size={'large'} color={Color.primary} />
           )}
         </TouchableOpacity>
 

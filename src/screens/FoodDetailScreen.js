@@ -1,38 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Text,
-  ScrollView,
-  View,
-  StyleSheet,
   Image,
-  TouchableOpacity,
   ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
 import Toast from 'react-native-toast-message';
-
-//region Import styling
-import TextStyles from '../styles/TextStyles';
-import LayoutStyles from '../styles/Layout';
-import Colors from '../constants/Color';
-import Sizes from '../constants/Size';
-//endregion
-
-//region Import components
+import { useDispatch } from 'react-redux';
+import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
-import FavoriteButton from '../components/FavoriteButton';
 import Counter from '../components/Counter';
 import CustomButton from '../components/CustomButton';
-//endregion
-
+import FavoriteButton from '../components/FavoriteButton';
+import Colors from '../constants/Color';
+import Sizes from '../constants/Size';
 import { addToCart } from '../features/cartSlice';
-import { Images } from '../../assets';
+import LayoutStyles from '../styles/Layout';
+import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const FoodDetailScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const [foodAmount, setFoodAmount] = useState(1);
-
   const { data } = route.params;
 
   const handleAddToCart = () => {
