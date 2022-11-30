@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, StyleSheet, Text } from 'react-native';
+import { useSelector } from 'react-redux';
 import Sizes from '../constants/Size';
 import HomeCategories from '../modules/Home/HomeCategories';
 import HomeFeatured from '../modules/Home/HomeFeatured';
@@ -10,11 +11,27 @@ import Menu from '../modules/Menu/Menu';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
+import auth from '@react-native-firebase/auth';
+import { addCurrentUser } from '../features/userSlice';
 
 const HomeScreen = () => {
   const [showMenu, setShowMenu] = useState(false);
   const offsetValue = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
+  const currentUser = useSelector((state) => state.user.currentUser);
+  useEffect(() => {
+    auth().onAuthStateChanged((user) => {
+      if (user) {
+        console.log('User email: ', user);
+        addCurrentUser({
+          fullname: user?.displayName,
+          email: user?.email,
+          id: user.uid,
+        });
+      }
+    });
+  }, []);
+  console.log('🚀 ~ file: HomeScreen.js:22 ~ HomeScreen ~ currentUser', currentUser);
 
   const scaleScreen = () => {
     Animated.timing(scaleValue, {

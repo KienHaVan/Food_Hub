@@ -18,7 +18,7 @@ import MyInput from '../components/form/MyInput';
 import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
 import Color from '../constants/Color';
 import TextStyles from '../styles/TextStyles';
-import { SignUpWithEmailAndPassword } from '../utils/authentication';
+import { addUserToFirebase, SignUpWithEmailAndPassword } from '../utils/authentication';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const SignUpScreen = () => {
@@ -58,16 +58,14 @@ const SignUpScreen = () => {
     if (!isValid) {
       return;
     }
-    console.log(data);
+    addUserToFirebase({
+      fullname: data.fullname,
+      email: data.email,
+    });
     SignUpWithEmailAndPassword(data.email, data.password);
     Toast.show({
       type: 'success',
       text1: 'Create user successfully',
-    });
-    reset({
-      fullname: '',
-      email: '',
-      password: '',
     });
     navigation.navigate('HomeStack');
   };

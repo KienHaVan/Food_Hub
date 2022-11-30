@@ -14,15 +14,29 @@ import Toast from 'react-native-toast-message';
 
 const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
   const navigation = useNavigation();
   const handleResetPassword = () => {
-    if (!email) return;
-    passwordReset(email);
-    Toast.show({
-      type: 'success',
-      text1: 'Check your email to reset password!',
-    });
-    navigation.navigate('Login');
+    if (!email) {
+      setError('Please enter your email!');
+      return;
+    } else if (
+      email
+        .toString()
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
+    ) {
+      passwordReset(email);
+      Toast.show({
+        type: 'success',
+        text1: 'Check your email to reset password!',
+      });
+      navigation.navigate('Login');
+    } else {
+      setError('Invalid email');
+    }
   };
   return (
     <KeyBoardAvoidingWaraper>
@@ -39,6 +53,7 @@ const ForgotPasswordScreen = () => {
             placeholder={'Enter your email...'}
             onChangeText={(newText) => setEmail(newText)}
           />
+          {error && <Text style={styles.error}>{error}</Text>}
           <View style={styles.button}>
             <CustomButton text='Send Request' onPress={handleResetPassword} />
           </View>
@@ -91,5 +106,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 30,
     left: 30,
+  },
+  error: {
+    color: 'red',
+    marginTop: 2,
   },
 });

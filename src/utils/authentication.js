@@ -1,4 +1,5 @@
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 export const SignInAnonymously = () => {
   auth()
@@ -66,3 +67,8 @@ export const SignOut = () => {
 export function passwordReset(email) {
   return auth().sendPasswordResetEmail(email);
 }
+
+export const addUserToFirebase = async (props) => {
+  const usersCollection = firestore().collection('users');
+  await usersCollection.add({ ...props });
+};
