@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 //region Import styling
 import TextStyles from '../../styles/TextStyles';
@@ -7,11 +7,19 @@ import Colors from '../../constants/Color';
 import Sizes from '../../constants/Size';
 //endregion
 import RestaurantCard from '../../components/RestaurantCard';
-import { Restaurants } from '../../api/fakeData/Restaurants';
 import { Images } from '../../../assets';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllRestaurants } from '../../features/restaurantSlice';
 
 const HomeFeatured = () => {
+  const restaurants = useSelector((state) => state.restaurant.restaurants);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchAllRestaurants());
+  }, []);
+
   const renderCard = ({ item }) => {
     return <RestaurantCard data={item} />;
   };
@@ -30,7 +38,7 @@ const HomeFeatured = () => {
         <FlatList
           showsHorizontalScrollIndicator={false}
           horizontal
-          data={Restaurants}
+          data={restaurants}
           keyExtractor={(res) => res.id}
           renderItem={renderCard}
           ListFooterComponent={<View />}

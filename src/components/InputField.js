@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     marginLeft: Sizes.sizeSmall,
     color: Colors.secondaryDarker,
     fontFamily: 'Poppins-Regular',
-    fontSize: 17,
   },
   iconSearch: {
     width: 24,
