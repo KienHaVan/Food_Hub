@@ -56,3 +56,9 @@ export const SignOut = () => {
     .signOut()
     .then(() => console.log('User signed out!'));
 };
+
+export function resetPassword(email) {
+  return sendPasswordResetEmail(auth, email).then((a) => {
+    alert('Password reset email sent');
+  });
+}

@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { Images } from '../../assets';
 import TextStyles from '../styles/TextStyles';
+import Layout from '../styles/Layout';
 
 const LogWithFacebookAndGoogle = ({ text, dark = false }) => {
   return (
@@ -22,12 +23,12 @@ const LogWithFacebookAndGoogle = ({ text, dark = false }) => {
       </View>
 
       <View style={styles.bottomMeta}>
-        <TouchableOpacity style={styles.bottomMetaButton}>
-          <Image source={Images.IMAGES.FACEBOOK} style={styles.bottomMetaImage}></Image>
+        <TouchableOpacity style={[styles.bottomMetaButton, Layout.layoutShadowGrey]}>
+          <Image source={Images.ICON.FACEBOOK} style={styles.bottomMetaImage}></Image>
           <Text style={[TextStyles.textMain, styles.metaButtonText]}>FACEBOOK</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomMetaButton}>
-          <Image source={Images.IMAGES.GOOGLE} style={styles.bottomMetaImage}></Image>
+        <TouchableOpacity style={[styles.bottomMetaButton, Layout.layoutShadowGrey]}>
+          <Image source={Images.ICON.GOOGLE} style={styles.bottomMetaImage}></Image>
           <Text style={[TextStyles.textMain, styles.metaButtonText]}>GOOGLE</Text>
         </TouchableOpacity>
       </View>
@@ -78,16 +79,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 139,
+    minWidth: 150,
     backgroundColor: '#fff',
     elevation: 4,
+    height: 60,
   },
   bottomMetaImage: {
-    width: 28,
-    height: 28,
-    marginRight: 8,
+    width: 40,
+    height: 40,
+    marginRight: 10,
   },
   metaButtonText: {
     color: '#000',
+    letterSpacing: 1.2,
+    marginRight: 8,
   },
 });
