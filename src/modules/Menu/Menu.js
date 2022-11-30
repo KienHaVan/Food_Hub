@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image, FlatList, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, Image, FlatList, ScrollView, Dimensions } from 'react-native';
 
 //region Import styling
 import Sizes from '../../constants/Size';
@@ -10,6 +10,7 @@ import TextStyles from '../../styles/TextStyles';
 import { MenuItems } from '../../data/MenuItems';
 import { Images } from '../../../assets';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
+import CustomButton from '../../components/CustomButton';
 
 const Menu = () => {
   const renderItem = (item) => {
@@ -22,7 +23,7 @@ const Menu = () => {
   };
 
   return (
-    <ScrollView style={styles.menu}>
+    <View style={styles.menu}>
       <View style={LayoutStyles.layoutShadowRed}>
         <Image source={Images.IMAGES.AVATAR} style={styles.avatar} />
       </View>
@@ -30,7 +31,11 @@ const Menu = () => {
       <Text style={TextStyles.textMain}>farionwick@gmail.com</Text>
 
       <View style={styles.menuItemGroup}>{MenuItems.map((item) => renderItem(item))}</View>
-    </ScrollView>
+
+      <View style={styles.buttonContainer}>
+        <CustomButton text='Log Out' iconSource={Images.ICON.LOGOUT} />
+      </View>
+    </View>
   );
 };
 
@@ -39,6 +44,7 @@ export default Menu;
 const styles = StyleSheet.create({
   menu: {
     position: 'absolute',
+    height: Dimensions.get('screen').height,
     paddingVertical: Sizes.sizeLargeH,
     paddingHorizontal: Sizes.sizeBig,
   },
@@ -57,5 +63,12 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     marginLeft: Sizes.sizeSmall,
+  },
+  buttonContainer: {
+    width: scaleSizeUI(117),
+    height: scaleSizeUI(60, true),
+    position: 'absolute',
+    bottom: Sizes.sizeMassiveH * 3 + Sizes.sizeLargeH,
+    left: Sizes.sizeBig,
   },
 });

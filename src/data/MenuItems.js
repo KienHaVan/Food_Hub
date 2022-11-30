@@ -21,19 +21,19 @@ export const MenuItems = [
     name: 'Payment Methods',
     icon: Images.ICON.PAYMENT,
   },
-  {
-    id: 4,
-    name: 'Contact Us',
-    icon: Images.ICON.CONTACT,
-  },
-  {
-    id: 5,
-    name: 'Settings',
-    icon: Images.ICON.SETTING,
-  },
-  {
-    id: 6,
-    name: 'Helps & FAQs',
-    icon: Images.ICON.HELP,
-  },
+  // {
+  //   id: 4,
+  //   name: 'Contact Us',
+  //   icon: Images.ICON.CONTACT,
+  // },
+  // {
+  //   id: 5,
+  //   name: 'Settings',
+  //   icon: Images.ICON.SETTING,
+  // },
+  // {
+  //   id: 6,
+  //   name: 'Helps & FAQs',
+  //   icon: Images.ICON.HELP,
+  // },
 ];

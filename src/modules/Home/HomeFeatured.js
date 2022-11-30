@@ -12,13 +12,15 @@ import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllRestaurants } from '../../features/restaurantSlice';
 
-const HomeFeatured = () => {
+const HomeFeatured = ({ isScreenFocused }) => {
   const restaurants = useSelector((state) => state.restaurant.restaurants);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchAllRestaurants());
-  }, []);
+    if (isScreenFocused) {
+      dispatch(fetchAllRestaurants());
+    }
+  }, [isScreenFocused]);
 
   const renderCard = ({ item }) => {
     return <RestaurantCard data={item} />;
