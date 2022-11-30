@@ -7,7 +7,6 @@ import Colors from '../../constants/Color';
 import Sizes from '../../constants/Size';
 //endregion
 import RestaurantCard from '../../components/RestaurantCard';
-import { Restaurants } from '../../api/fakeData/Restaurants';
 import { Images } from '../../../assets';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import { useDispatch, useSelector } from 'react-redux';

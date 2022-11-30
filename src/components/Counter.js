@@ -23,7 +23,9 @@ const Counter = ({ defaultValue, onIncrease, onDecrease }) => {
     <View style={styles.container}>
       <AmountButton handlePress={onDecrease} />
       <View style={styles.counterText}>
-        <Text style={TextStyles.textMain}>{calculateCount(defaultValue)}</Text>
+        <Text style={[TextStyles.textMain, styles.counterText]}>
+          {calculateCount(defaultValue)}
+        </Text>
       </View>
       <AmountButton isIncreased handlePress={onIncrease} />
     </View>
@@ -49,7 +51,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   counterText: {
-    marginHorizontal: Sizes.sizeSmaller,
+    width: Sizes.sizeLarge,
+    textAlign: 'center',
+    fontFamily: 'Poppins-SemiBold',
+    color: Colors.secondaryDarker,
   },
   counterButtonInner: {
     color: Colors.primary,

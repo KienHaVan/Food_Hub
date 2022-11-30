@@ -15,6 +15,7 @@ export const Images = {
     BURGER: require('./icons/icon_burger.png'),
     CAMERA: require('./icons/icon_camera.png'),
     EYE: require('./icons/icon_eye.png'),
+    CLOSE: require('./icons/icon_close.png'),
     UNEYE: require('./icons/icon_uneye.png'),
     SEARCH: require('./icons/icon_search.png'),
     HOME: require('./icons/icon_home.png'),
