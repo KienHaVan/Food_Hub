@@ -13,9 +13,11 @@ import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import auth from '@react-native-firebase/auth';
 import { addCurrentUser } from '../features/userSlice';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const [isScreenFocused, setIsScreenFocused] = useState(false);
   const offsetValue = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -32,6 +34,30 @@ const HomeScreen = () => {
     });
   }, []);
   console.log('🚀 ~ file: HomeScreen.js:22 ~ HomeScreen ~ currentUser', currentUser);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsScreenFocused(true);
+      return () => {
+        setIsScreenFocused(false);
+        setShowMenu(false);
+        scaleScreen();
+        moveScreen();
+      };
+    }, [])
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsScreenFocused(true);
+      return () => {
+        setIsScreenFocused(false);
+        setShowMenu(false);
+        scaleScreen();
+        moveScreen();
+      };
+    }, [])
+  );
 
   const scaleScreen = () => {
     Animated.timing(scaleValue, {
@@ -78,8 +104,8 @@ const HomeScreen = () => {
         <HomeHeader handleShowMenu={animateShowMenu} />
         <Text style={[TextStyles.h2, styles.screenHeading]}>What would you like to order</Text>
         <HomeSearch />
-        <HomeCategories />
-        <HomeFeatured />
+        <HomeCategories isScreenFocused={isScreenFocused} />
+        <HomeFeatured isScreenFocused={isScreenFocused} />
         <HomePopularList />
       </Animated.View>
     </ScrollView>
