@@ -1,27 +1,37 @@
-import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
-import { Images } from '../../assets';
-import TextStyles from '../styles/TextStyles';
-import LinearGradient from 'react-native-linear-gradient';
-import Color from '../constants/Color';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
-import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
-import CornerButton from '../components/CornerButton';
 import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { Images } from '../../assets';
+import CornerButton from '../components/CornerButton';
+import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
+import Color from '../constants/Color';
+import TextStyles from '../styles/TextStyles';
 import { SignInAnonymously } from '../utils/authentication';
+import Toast from 'react-native-toast-message';
+import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const WelcomeScreen = () => {
   const navigation = useNavigation();
+  const handleSignInAnonymously = () => {
+    try {
+      // SignInAnonymously();
+      navigation.navigate('HomeStack');
+    } catch (error) {
+      Toast.show({
+        type: 'danger',
+        text1: 'Check your internet connection!',
+      });
+    }
+  };
   return (
     <ImageBackground source={Images.IMAGES.WELCOME_BACKGROUND} style={styles.container}>
       <LinearGradient colors={['transparent', '#000']} style={styles.gradient}>
         <View style={styles.headingButton}>
           <CornerButton
-            sourceImage={Images.ICON.ARROW_RIGHT}
-            handlePress={() => {
-              SignInAnonymously();
-              navigation.navigate('HomeStack');
-            }}
+            sourceImage={Images.ICON.ARROW_LEFT}
+            style={styles.iconFlip}
+            handlePress={handleSignInAnonymously}
           />
         </View>
         <View style={styles.slogan}>
@@ -32,7 +42,7 @@ const WelcomeScreen = () => {
             Your favourite foods delivered fast at your door.
           </Text>
         </View>
-        <View style={styles.center}></View>
+        <View style={styles.center} />
         <View style={styles.bottom}>
           <LogWithFacebookAndGoogle text={'Sign in with'} />
           <TouchableOpacity
@@ -71,6 +81,9 @@ const styles = StyleSheet.create({
   },
   slogan: {
     marginTop: 50,
+  },
+  iconFlip: {
+    transform: [{ scale: -1 }],
   },
   sloganAppName: {
     color: Color.primary,

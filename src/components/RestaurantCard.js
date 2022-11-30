@@ -1,20 +1,14 @@
-import React, { useState } from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-
-//region Import styling
-import TextStyles from '../styles/TextStyles';
-import LayoutStyles from '../styles/Layout';
+import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Images } from '../../assets';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
-//endregion
-
-import { Images } from '../../assets';
+import LayoutStyles from '../styles/Layout';
+import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import FavoriteButton from './FavoriteButton';
 
 const RestaurantCard = ({ data }) => {
-  const [fav, setFav] = useState(false);
-
   return (
     <TouchableOpacity style={[LayoutStyles.layoutShadowGrey, styles.card]}>
       {/*Rating Label*/}

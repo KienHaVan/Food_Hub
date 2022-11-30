@@ -1,8 +1,9 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
-import Color from '../../constants/Color';
 import { useController } from 'react-hook-form';
+import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { Images } from '../../../assets';
+import Layout from '../../styles/Layout';
+import Color from '../../constants/Color';
 
 const MyInput = ({ control, isPassword = false, ...props }) => {
   const [focus, setFocus] = useState(false);
@@ -29,8 +30,8 @@ const MyInput = ({ control, isPassword = false, ...props }) => {
         value={value}
         secureTextEntry={isPasswordShown}
         {...props}
-      ></TextInput>
-      {isPassword && <View style={styles.seperate}></View>}
+      />
+      {isPassword && <View style={styles.seperate} />}
       {isPassword ? (
         <TouchableOpacity
           style={styles.iconEye}
@@ -53,19 +54,21 @@ const MyInput = ({ control, isPassword = false, ...props }) => {
 export default MyInput;
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    marginTop: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#eee',
-    borderRadius: 10,
-    backgroundColor: Color.white,
-    elevation: 4,
-  },
+  inputContainer: [
+    Layout.layoutShadowGrey,
+    {
+      marginTop: 6,
+      paddingHorizontal: 10,
+      paddingVertical: 4,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      borderWidth: 2,
+      borderColor: '#eee',
+      borderRadius: 10,
+      backgroundColor: Color.white,
+    },
+  ],
   input: {
     flex: 1,
     fontSize: 16,

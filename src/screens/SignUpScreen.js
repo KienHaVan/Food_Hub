@@ -1,26 +1,25 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
-  Button,
   ImageBackground,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect } from 'react';
-import { Images } from '../../assets';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
-import TextStyles from '../styles/TextStyles';
-import Color from '../constants/Color';
-import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
-import MyInput from '../components/form/MyInput';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { useNavigation } from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
 import Toast from 'react-native-toast-message';
+import * as yup from 'yup';
+import { Images } from '../../assets';
+import MyInput from '../components/form/MyInput';
+import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
+import Color from '../constants/Color';
+import TextStyles from '../styles/TextStyles';
 import { SignUpWithEmailAndPassword } from '../utils/authentication';
+import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
@@ -49,7 +48,6 @@ const SignUpScreen = () => {
     handleSubmit,
     control,
     reset,
-    setFocus,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
@@ -57,7 +55,9 @@ const SignUpScreen = () => {
   });
 
   const onSubmit = (data) => {
-    if (!isValid) return;
+    if (!isValid) {
+      return;
+    }
     console.log(data);
     SignUpWithEmailAndPassword(data.email, data.password);
     Toast.show({
@@ -77,7 +77,7 @@ const SignUpScreen = () => {
       style={styles.container}
       resizeMode='stretch'
     >
-      <View style={styles.heading}></View>
+      <View style={styles.heading} />
       <View style={styles.content}>
         <Text style={TextStyles.h1}>Sign Up</Text>
 
@@ -99,7 +99,7 @@ const SignUpScreen = () => {
         </View>
         {errors?.password && <Text style={styles.error}>{errors?.password?.message}</Text>}
 
-        <View style={styles.center}></View>
+        <View style={styles.center} />
 
         <TouchableOpacity
           disabled={isSubmitting}
@@ -107,25 +107,15 @@ const SignUpScreen = () => {
           onPress={handleSubmit(onSubmit)}
         >
           {!isSubmitting ? (
-            <Text
-              style={{
-                fontWeight: '700',
-                fontSize: 24,
-                lineHeight: 30,
-                color: '#fff',
-                alignSelf: 'center',
-              }}
-            >
-              Sign Up
-            </Text>
+            <Text style={styles.signupButtonText}>SIGN UP</Text>
           ) : (
-            <ActivityIndicator size={'large'} color={Color.primary}></ActivityIndicator>
+            <ActivityIndicator size={'large'} color={Color.white}></ActivityIndicator>
           )}
         </TouchableOpacity>
 
         <View style={styles.quote}>
           <Text style={[TextStyles.textMain, styles.bottomQuote]}>Already have an account? </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text style={[TextStyles.textMain, styles.bottomQuoteLink]}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -161,7 +151,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   bottomQuote: {
-    color: Color.secondary,
+    color: Color.gray,
   },
   bottomQuoteLink: {
     textDecorationLine: 'underline',
@@ -175,10 +165,22 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   button: {
+    width: 280,
+    alignSelf: 'center',
     paddingHorizontal: 10,
-    paddingVertical: 8,
-    backgroundColor: '#28a745',
-    borderRadius: 8,
+    paddingVertical: 12,
+    height: 60,
+    backgroundColor: Color.primary,
+    borderRadius: 28,
     marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+
+  signupButtonText: [
+    TextStyles.h3,
+    {
+      color: Color.white,
+    },
+  ],
 });

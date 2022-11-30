@@ -1,21 +1,14 @@
-import { Animated, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useRef, useState } from 'react';
-
-//region Import styling
+import { Animated, ScrollView, StyleSheet, Text } from 'react-native';
 import Sizes from '../constants/Size';
-import LayoutStyles from '../styles/Layout';
-import TextStyles from '../styles/TextStyles';
-//endregion
-
-//region Import components
-import HomeHeader from '../modules/Home/HomeHeader';
-import HomeSearch from '../modules/Home/HomeSearch';
 import HomeCategories from '../modules/Home/HomeCategories';
 import HomeFeatured from '../modules/Home/HomeFeatured';
+import HomeHeader from '../modules/Home/HomeHeader';
 import HomePopularList from '../modules/Home/HomePopularList';
-//endregion
-
+import HomeSearch from '../modules/Home/HomeSearch';
 import Menu from '../modules/Menu/Menu';
+import LayoutStyles from '../styles/Layout';
+import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const HomeScreen = () => {
@@ -54,6 +47,7 @@ const HomeScreen = () => {
           LayoutStyles.layoutShadowGrey,
           LayoutStyles.layoutScreen,
           styles.screen,
+          // eslint-disable-next-line react-native/no-inline-styles
           {
             borderRadius: showMenu ? Sizes.sizeModerate : 0,
             transform: [
@@ -65,15 +59,10 @@ const HomeScreen = () => {
         ]}
       >
         <HomeHeader handleShowMenu={animateShowMenu} />
-
         <Text style={[TextStyles.h2, styles.screenHeading]}>What would you like to order</Text>
-
         <HomeSearch />
-
         <HomeCategories />
-
         <HomeFeatured />
-
         <HomePopularList />
       </Animated.View>
     </ScrollView>

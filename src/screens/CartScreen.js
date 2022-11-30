@@ -1,13 +1,12 @@
 import React from 'react';
-import { Text, View, StyleSheet, FlatList } from 'react-native';
-import TextStyles from '../styles/TextStyles';
-import LayoutStyles from '../styles/Layout';
-import Colors from '../constants/Color';
-import Sizes from '../constants/Size';
-import CornerButton from '../components/CornerButton';
-import CartCard from '../components/CartCard';
-import { Images } from '../../assets';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
+import { Images } from '../../assets';
+import CartCard from '../components/CartCard';
+import CornerButton from '../components/CornerButton';
+import Sizes from '../constants/Size';
+import LayoutStyles from '../styles/Layout';
+import TextStyles from '../styles/TextStyles';
 
 const CartScreen = ({ navigation }) => {
   const carts = useSelector((state) => state.cart.carts);

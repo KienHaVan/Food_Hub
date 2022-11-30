@@ -15,7 +15,9 @@ const Counter = ({ defaultValue, onIncrease, onDecrease }) => {
       dispatch(resetCurrentQuantity());
       return '01';
     }
-    if (number < 10) return `0${number}`;
+    if (number < 10) {
+      return `0${number}`;
+    }
     return number;
   };
 

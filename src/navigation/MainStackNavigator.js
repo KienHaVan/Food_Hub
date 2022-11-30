@@ -1,16 +1,16 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import {
-  SplashScreen,
+  FoodDetailScreen,
   LoginScreen,
   SignUpScreen,
+  SplashScreen,
   WelcomeScreen,
-  FoodDetailScreen,
 } from '../screens';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeBottomTabNavigator from './HomeBottomTabNavigator';
-import ProfileScreen from '../screens/ProfileScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import TestFirestore from '../screens/TestFirestore';
+import HomeBottomTabNavigator from './HomeBottomTabNavigator';
 
 const Stack = createNativeStackNavigator();
 
