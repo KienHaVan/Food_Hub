@@ -1,6 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { LoginScreen, SignUpScreen, SplashScreen, WelcomeScreen } from '../screens';
+import {
+  FoodDetailScreen,
+  LoginScreen,
+  SignUpScreen,
+  SplashScreen,
+  WelcomeScreen,
+} from '../screens';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -12,7 +18,7 @@ const Stack = createNativeStackNavigator();
 const MainStackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName='Splash'
+      initialRouteName='HomeStack'
       defaultScreenOptions={'Splash'}
       screenOptions={{ headerShown: false }}
     >
@@ -21,6 +27,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name='SignUp' component={SignUpScreen} />
       <Stack.Screen name='Login' component={LoginScreen} />
       <Stack.Screen name='HomeStack' component={HomeBottomTabNavigator} />
+      <Stack.Screen name='FoodDetail' component={FoodDetailScreen} />
       <Stack.Screen name='Profile' component={ProfileScreen} />
       <Stack.Screen name='EditProfile' component={EditProfileScreen} />
       <Stack.Screen name='ForgotPassword' component={ForgotPasswordScreen} />

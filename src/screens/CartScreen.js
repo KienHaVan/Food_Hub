@@ -23,10 +23,21 @@ const CartScreen = ({ navigation }) => {
           handlePress={() => navigation.goBack()}
         />
         <Text style={TextStyles.h3}>Cart</Text>
-        <View />
+        <View
+          style={{
+            width: Sizes.sizeLarge + Sizes.sizeSmaller,
+            height: Sizes.sizeLarge + Sizes.sizeSmaller,
+          }}
+        />
       </View>
 
-      <FlatList data={carts} keyExtractor={(item) => item.id} renderItem={renderCartItem} />
+      <FlatList
+        data={carts}
+        keyExtractor={(item) => item.id}
+        renderItem={renderCartItem}
+        ListFooterComponent={<View />}
+        ListFooterComponentStyle={{ height: Sizes.sizeMassive }}
+      />
     </View>
   );
 };
@@ -36,9 +47,9 @@ export default CartScreen;
 const styles = StyleSheet.create({
   screen: {
     paddingVertical: Sizes.sizeBigH,
-    paddingHorizontal: Sizes.sizeBig,
   },
   header: {
     marginBottom: Sizes.sizeBigH,
+    marginHorizontal: Sizes.sizeBig,
   },
 });

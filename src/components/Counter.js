@@ -4,17 +4,15 @@ import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
 import TextStyles from '../styles/TextStyles';
 import AmountButton from './AmountButton';
+import { useDispatch } from 'react-redux';
+import { resetCurrentQuantity } from '../features/cartSlice';
 
-const Counter = () => {
-  const [count, setCount] = useState(1);
-
-  const handlePress = (amount) => {
-    setCount(count + amount);
-  };
+const Counter = ({ defaultValue, onIncrease, onDecrease }) => {
+  const dispatch = useDispatch();
 
   const calculateCount = (number) => {
     if (number === 0) {
-      setCount(1);
+      dispatch(resetCurrentQuantity());
       return '01';
     }
     if (number < 10) {
@@ -25,11 +23,13 @@ const Counter = () => {
 
   return (
     <View style={styles.container}>
-      <AmountButton handlePress={() => handlePress(-1)} />
+      <AmountButton handlePress={onDecrease} />
       <View style={styles.counterText}>
-        <Text style={TextStyles.textMain}>{calculateCount(count)}</Text>
+        <Text style={[TextStyles.textMain, styles.counterText]}>
+          {calculateCount(defaultValue)}
+        </Text>
       </View>
-      <AmountButton isIncreased handlePress={() => handlePress(1)} />
+      <AmountButton isIncreased handlePress={onIncrease} />
     </View>
   );
 };
@@ -53,7 +53,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   counterText: {
-    marginHorizontal: Sizes.sizeSmaller,
+    width: Sizes.sizeLarge,
+    textAlign: 'center',
+    fontFamily: 'Poppins-SemiBold',
+    color: Colors.secondaryDarker,
   },
   counterButtonInner: {
     color: Colors.primary,

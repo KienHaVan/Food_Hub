@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, Image, Text, TouchableOpacity } from 'react-native';
 
 //region Import styling
@@ -12,9 +12,17 @@ import Sizes from '../../constants/Size';
 import { Categories } from '../../api/fakeData/Categories';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
 //endregion
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllCategories } from '../../features/categorySlice';
 
 const HomeCategories = () => {
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.category.categories);
   const [activeCard, setActiveCard] = useState(0);
+
+  useEffect(() => {
+    dispatch(fetchAllCategories());
+  }, []);
 
   const renderCard = ({ item }) => {
     return (
@@ -26,8 +34,11 @@ const HomeCategories = () => {
           activeCard === item.id ? styles.cardActive : null,
         ]}
       >
-        <Image source={item.image} style={styles.cardImage} />
-        <Text style={[TextStyles.textSmall, activeCard === item.id && TextStyles.textWhite]}>
+        <Image source={{ uri: item.image }} style={styles.cardImage} />
+        <Text
+          numberOfLines={1}
+          style={[TextStyles.textSmall, activeCard === item.id && TextStyles.textWhite]}
+        >
           {item.name}
         </Text>
       </TouchableOpacity>
@@ -39,7 +50,7 @@ const HomeCategories = () => {
       <FlatList
         style={styles.cardList}
         contentContainerStyle={{ alignItems: 'center' }}
-        data={Categories}
+        data={categories}
         keyExtractor={(cat) => cat.id}
         renderItem={renderCard}
         horizontal
@@ -86,6 +97,7 @@ const styles = StyleSheet.create({
   cardImage: {
     width: scaleSizeUI(60),
     height: scaleSizeUI(60),
+    borderRadius: 100,
     marginBottom: Sizes.sizeSmallerH,
   },
 });

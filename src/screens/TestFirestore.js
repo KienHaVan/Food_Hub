@@ -1,8 +1,8 @@
+import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import CustomButton from '../components/CustomButton';
 import InputField from '../components/InputField';
+import CustomButton from '../components/CustomButton';
 
 const TestFirestore = () => {
   const [name, setName] = useState('');
