@@ -47,5 +47,6 @@ export const Images = {
     COMPASS: require('./icons/icon_compass.png'),
     HEART_BOTTOM: require('./icons/icon_heart_bottom.png'),
     LOCATION: require('./icons/icon_location.png'),
+    LOGOUT: require('./icons/icon_logout.png'),
   },
 };

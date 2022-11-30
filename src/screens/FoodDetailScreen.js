@@ -37,7 +37,6 @@ import { scaleSizeUI } from '../utils/scaleSizeUI';
 const FoodDetailScreen = ({ navigation, route }) => {
   const { data } = route.params;
   const dispatch = useDispatch();
-  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
   const currentQuantity = useSelector((state) => state.cart.currentFoodQuantity);
 
   //When new data is passed into the screen, the quantity of the item is reset
@@ -51,6 +50,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
       text1: 'Added Success!',
     });
     dispatch(addToCart({ ...data, quantity: currentQuantity }));
+    navigation.goBack();
   };
 
   return (
@@ -100,18 +100,11 @@ const FoodDetailScreen = ({ navigation, route }) => {
       </ScrollView>
 
       <View style={LayoutStyles.layoutCenter}>
-        <View style={[styles.buttonContainer, { marginRight: Sizes.sizeSmall }]}>
+        <View style={styles.buttonContainer}>
           <CustomButton
             text='ADD TO CART'
             iconSource={Images.ICON.CART}
             onPress={handleAddToCart}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <CustomButton
-            text={`CHECK OUT (${totalQuantity >= 100 ? '99+' : totalQuantity})`}
-            isPrimary={false}
-            onPress={() => navigation.navigate('Cart')}
           />
         </View>
       </View>

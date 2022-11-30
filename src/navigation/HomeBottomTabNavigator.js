@@ -8,10 +8,14 @@ import { scaleSizeUI } from '../utils/scaleSizeUI';
 import LocationScreen from '../screens/LocationScreen';
 import FavoriteScreen from '../screens/FavoriteScreen';
 import NotificationScreen from '../screens/NotificationScreen';
+import { useSelector } from 'react-redux';
+import Colors from '../constants/Color';
 
 const Tab = createBottomTabNavigator();
 
 const HomeBottomTabNavigator = () => {
+  const cartQuantity = useSelector((state) => state.cart.totalQuantity);
+
   return (
     <Tab.Navigator
       style={styles.container}
@@ -41,7 +45,14 @@ const HomeBottomTabNavigator = () => {
     >
       <Tab.Screen name='Home' component={HomeScreen} />
       <Tab.Screen name='Location' component={LocationScreen} />
-      <Tab.Screen name='Cart' component={CartScreen} />
+      <Tab.Screen
+        name='Cart'
+        component={CartScreen}
+        options={{
+          tabBarBadge: cartQuantity,
+          tabBarBadgeStyle: { backgroundColor: Colors.primary, color: Colors.white },
+        }}
+      />
       <Tab.Screen name='Favorite' component={FavoriteScreen} />
       <Tab.Screen name='Notification' component={NotificationScreen} />
     </Tab.Navigator>

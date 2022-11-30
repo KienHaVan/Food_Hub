@@ -15,14 +15,16 @@ import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllCategories } from '../../features/categorySlice';
 
-const HomeCategories = () => {
+const HomeCategories = ({ isScreenFocused }) => {
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.category.categories);
   const [activeCard, setActiveCard] = useState(0);
 
   useEffect(() => {
-    dispatch(fetchAllCategories());
-  }, []);
+    if (isScreenFocused) {
+      dispatch(fetchAllCategories());
+    }
+  }, [isScreenFocused]);
 
   const renderCard = ({ item }) => {
     return (
