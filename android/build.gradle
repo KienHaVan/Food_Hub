@@ -6,6 +6,8 @@ buildscript {
         minSdkVersion = 21
         compileSdkVersion = 31
         targetSdkVersion = 31
+        supportLibVersion = "27.1.1"
+        googlePlayServicesAuthVersion = "19.2.0"
 
         googlePlayServicesVersion = "+" // default: "+"
         firebaseMessagingVersion = "21.1.0" // default: "21.1.0"
@@ -53,5 +55,7 @@ allprojects {
         google()
         mavenCentral()  // Maven Central repository
         maven { url 'https://www.jitpack.io' }
+        mavenLocal()
+        jcenter()
     }
 }

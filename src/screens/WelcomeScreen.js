@@ -15,7 +15,7 @@ const WelcomeScreen = () => {
   const navigation = useNavigation();
   const handleSignInAnonymously = () => {
     try {
-      SignInAnonymously();
+      // SignInAnonymously();
       navigation.navigate('HomeStack');
     } catch (error) {
       Toast.show({
