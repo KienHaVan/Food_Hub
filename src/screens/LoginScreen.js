@@ -43,7 +43,6 @@ const LoginScreen = () => {
     handleSubmit,
     control,
     reset,
-    setFocus,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
@@ -67,7 +66,7 @@ const LoginScreen = () => {
       style={styles.container}
       resizeMode='stretch'
     >
-      <View style={styles.heading}></View>
+      <View style={styles.heading} />
       <View style={styles.content}>
         <Text style={TextStyles.h1}>Login</Text>
 

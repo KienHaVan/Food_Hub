@@ -9,7 +9,7 @@ const SplashScreen = ({ navigation }) => {
     setTimeout(() => {
       navigation.navigate('Welcome');
     }, 1000);
-  }, []);
+  }, [navigation]);
 
   return (
     <View style={[styles.container, LayoutStyles.layoutCenter]}>

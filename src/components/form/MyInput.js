@@ -1,9 +1,9 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
-import Color from '../../constants/Color';
 import { useController } from 'react-hook-form';
+import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { Images } from '../../../assets';
 import Layout from '../../styles/Layout';
+import Color from '../../constants/Color';
 
 const MyInput = ({ control, isPassword = false, ...props }) => {
   const [focus, setFocus] = useState(false);
@@ -30,8 +30,8 @@ const MyInput = ({ control, isPassword = false, ...props }) => {
         value={value}
         secureTextEntry={isPasswordShown}
         {...props}
-      ></TextInput>
-      {isPassword && <View style={styles.seperate}></View>}
+      />
+      {isPassword && <View style={styles.seperate} />}
       {isPassword ? (
         <TouchableOpacity
           style={styles.iconEye}

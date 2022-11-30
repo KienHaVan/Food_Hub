@@ -8,7 +8,7 @@ const LogWithFacebookAndGoogle = ({ text, dark = false }) => {
   return (
     <View>
       <View style={styles.bottomHeading}>
-        <View style={[styles.bottomHeadingLeft, dark ? styles.bottomBackgroundDark : null]}></View>
+        <View style={[styles.bottomHeadingLeft, dark ? styles.bottomBackgroundDark : null]} />
         <Text
           style={[
             TextStyles.textMain,
@@ -19,16 +19,16 @@ const LogWithFacebookAndGoogle = ({ text, dark = false }) => {
         >
           {text}
         </Text>
-        <View style={[styles.bottomHeadingRight, dark ? styles.bottomBackgroundDark : null]}></View>
+        <View style={[styles.bottomHeadingRight, dark ? styles.bottomBackgroundDark : null]} />
       </View>
 
       <View style={styles.bottomMeta}>
-        <TouchableOpacity style={[styles.bottomMetaButton, Layout.layoutShadowGrey]}>
-          <Image source={Images.ICON.FACEBOOK} style={styles.bottomMetaImage}></Image>
+        <TouchableOpacity style={styles.bottomMetaButton}>
+          <Image source={Images.IMAGES.FACEBOOK} style={styles.bottomMetaImage} />
           <Text style={[TextStyles.textMain, styles.metaButtonText]}>FACEBOOK</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.bottomMetaButton, Layout.layoutShadowGrey]}>
-          <Image source={Images.ICON.GOOGLE} style={styles.bottomMetaImage}></Image>
+        <TouchableOpacity style={styles.bottomMetaButton}>
+          <Image source={Images.IMAGES.GOOGLE} style={styles.bottomMetaImage} />
           <Text style={[TextStyles.textMain, styles.metaButtonText]}>GOOGLE</Text>
         </TouchableOpacity>
       </View>
@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
   },
   bottomMetaButton: {
     padding: 13,
-    backgroundColor: 'white',
     borderRadius: 28,
     flexDirection: 'row',
     alignItems: 'center',
