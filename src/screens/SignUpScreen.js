@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
   ImageBackground,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
