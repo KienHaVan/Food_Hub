@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import InputField from '../components/InputField';
 import CustomButton from '../components/CustomButton';

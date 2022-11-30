@@ -19,7 +19,7 @@ const RestaurantCard = ({ data }) => {
     <TouchableOpacity style={[LayoutStyles.layoutShadowGrey, styles.card]}>
       {/*Rating Label*/}
       <View style={[LayoutStyles.layoutCenter, LayoutStyles.layoutShadowGrey, styles.cardRating]}>
-        <Text style={[TextStyles.textMain, styles.cardRatingText]}>{data.ratings}</Text>
+        <Text style={[TextStyles.textMain, styles.cardRatingText]}>{data.rating}</Text>
         <Image source={Images.ICON.STAR} />
         <Text style={[TextStyles.textSmall, styles.cardRatingTextSmall]}>
           ({data.ratingPeople})
@@ -30,7 +30,7 @@ const RestaurantCard = ({ data }) => {
       <FavoriteButton />
 
       {/*Thumbnail*/}
-      <Image source={data.thumbnail} style={styles.cardThumbnail} />
+      <Image source={{ uri: data.image }} style={styles.cardThumbnail} />
 
       {/*Content*/}
       <View style={styles.cardContent}>
@@ -41,23 +41,25 @@ const RestaurantCard = ({ data }) => {
           <View style={styles.cardContentItem}>
             <Image source={Images.ICON.DELIVERY} style={styles.cardContentIcon} />
             <Text style={TextStyles.textSmall}>
-              {data.deliveryPrice === 0 ? 'Free delivery' : `${data.deliveryPrice} delivery`}
+              {data.deliveryPrice === 0 ? 'Free delivery' : `${data.deliveryPrice}$ delivery`}
             </Text>
           </View>
 
           <View style={styles.cardContentItem}>
             <Image source={Images.ICON.TIME} style={styles.cardContentIcon} />
-            <Text style={TextStyles.textSmall}>{data.deliveryTime}</Text>
+            <Text style={TextStyles.textSmall}>10 minutes</Text>
           </View>
         </View>
         {/*Group of tags*/}
-        <View style={styles.labelGroup}>
-          {data.categories.map((cat, index) => (
-            <View key={index} style={[LayoutStyles.layoutCenter, styles.label]}>
-              <Text style={[TextStyles.textSmall, styles.labelText]}>{cat}</Text>
-            </View>
-          ))}
-        </View>
+        {data.categories ? (
+          <View style={styles.labelGroup}>
+            {data.categories.map((cat, index) => (
+              <View key={index} style={[LayoutStyles.layoutCenter, styles.label]}>
+                <Text style={[TextStyles.textSmall, styles.labelText]}>{cat}</Text>
+              </View>
+            ))}
+          </View>
+        ) : null}
       </View>
     </TouchableOpacity>
   );
@@ -74,7 +76,8 @@ const styles = StyleSheet.create({
     marginLeft: Sizes.sizeBig,
   },
   cardThumbnail: {
-    width: '100%',
+    width: scaleSizeUI(266),
+    height: scaleSizeUI(136, true),
     borderTopLeftRadius: Sizes.sizeModerate,
     borderTopRightRadius: Sizes.sizeModerate,
   },
