@@ -83,7 +83,7 @@ const LoginScreen = () => {
         {errors?.password && <Text style={styles.error}>{errors?.password?.message}</Text>}
 
         <View style={styles.center}>
-          <TouchableOpacity onPress={hanleResetPassword}>
+          <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
             <Text style={[TextStyles.textMain, styles.centerText]}>Forgot password?</Text>
           </TouchableOpacity>
         </View>

@@ -8,6 +8,7 @@ export const Images = {
     AVATAR: require('./images/image_avatar.png'),
     AVATAR_LARGE: require('./images/image_avatar_large.png'),
     PROFILE_BACKGROUND: require('./images/image_profile_background.png'),
+    FORGET_PASSWORD_BGC: require('./images/forget_password_bgc.png'),
   },
   ICON: {
     ARROW_DOWN: require('./icons/icon_arrow_down.png'),
@@ -46,5 +47,6 @@ export const Images = {
     COMPASS: require('./icons/icon_compass.png'),
     HEART_BOTTOM: require('./icons/icon_heart_bottom.png'),
     LOCATION: require('./icons/icon_location.png'),
+    LOGOUT: require('./icons/icon_logout.png'),
   },
 };

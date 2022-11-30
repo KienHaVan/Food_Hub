@@ -57,8 +57,12 @@ export const SignOut = () => {
     .then(() => console.log('User signed out!'));
 };
 
-export function resetPassword(email) {
-  return sendPasswordResetEmail(auth, email).then((a) => {
-    alert('Password reset email sent');
-  });
+// export function resetPassword(email) {
+//   return sendPasswordResetEmail(auth, email).then((a) => {
+//     alert('Password reset email sent');
+//   });
+// }
+
+export function passwordReset(email) {
+  return auth().sendPasswordResetEmail(email);
 }
