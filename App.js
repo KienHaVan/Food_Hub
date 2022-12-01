@@ -1,10 +1,10 @@
-import { StyleSheet, SafeAreaView, View } from 'react-native';
-import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import MainStackNavigator from './src/navigation/MainStackNavigator';
+import React from 'react';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import { store } from './src/app/store';
+import MainStackNavigator from './src/navigation/MainStackNavigator';
 
 const App = () => {
   return (

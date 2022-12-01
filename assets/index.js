@@ -8,6 +8,10 @@ export const Images = {
     AVATAR: require('./images/image_avatar.png'),
     AVATAR_LARGE: require('./images/image_avatar_large.png'),
     PROFILE_BACKGROUND: require('./images/image_profile_background.png'),
+    RATING_RESTAURANT: require('./images/image_rating_restaurant.png'),
+    RESTAURANT_AVATAR: require('./images/image_restaurant_avatar.png'),
+    STAR: require('./images/image_star.png'),
+    STAR_FILLED: require('./images/image_star_filled.png'),
   },
   ICON: {
     ARROW_DOWN: require('./icons/icon_arrow_down.png'),
@@ -39,5 +43,6 @@ export const Images = {
     CONTACT: require('./icons/icon_contact.png'),
     SETTING: require('./icons/icon_setting.png'),
     HELP: require('./icons/icon_help.png'),
+    OPTIONS: require('./icons/icon_options.png'),
   },
 };
