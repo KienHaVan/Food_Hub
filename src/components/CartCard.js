@@ -10,6 +10,7 @@ import Counter from './Counter';
 import { useDispatch } from 'react-redux';
 import { addToCart, removeFromCart } from '../features/cartSlice';
 import { Images } from '../../assets';
+import { formatPrice } from '../utils/formatter';
 
 const CartCard = ({ item }) => {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ const CartCard = ({ item }) => {
           {item.name}
         </Text>
         <Text style={[TextStyles.h3, styles.cardPrice]}>
-          ${(item.price * item.quantity).toFixed(2)}
+          ${formatPrice(item.price * item.quantity)}
         </Text>
       </View>
       <View style={styles.cardCounter}>

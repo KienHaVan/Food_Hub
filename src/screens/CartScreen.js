@@ -10,6 +10,7 @@ import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import CustomButton from '../components/CustomButton';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
+import { formatPrice } from '../utils/formatter';
 
 const CartScreen = ({ navigation }) => {
   const carts = useSelector((state) => state.cart.carts);
@@ -49,17 +50,17 @@ const CartScreen = ({ navigation }) => {
       <View style={[LayoutStyles.layoutShadowGrey, styles.summary]}>
         <View style={[LayoutStyles.layoutStretch, styles.summaryLine]}>
           <Text style={TextStyles.textMain}>Subtotal</Text>
-          <Text style={TextStyles.h3}>${totalPrice.toFixed(2)}</Text>
+          <Text style={TextStyles.h3}>${formatPrice(totalPrice)}</Text>
         </View>
 
         <View style={[LayoutStyles.layoutStretch, styles.summaryLine]}>
           <Text style={TextStyles.textMain}>Delivery</Text>
-          <Text style={TextStyles.h3}>${(5).toFixed(2)}</Text>
+          <Text style={TextStyles.h3}>${formatPrice(5)}</Text>
         </View>
 
         <View style={[LayoutStyles.layoutStretch, { paddingVertical: Sizes.sizeModerateH }]}>
           <Text style={TextStyles.textMain}>Total</Text>
-          <Text style={TextStyles.h3}>${(totalPrice + 5).toFixed(2)}</Text>
+          <Text style={TextStyles.h3}>${formatPrice(totalPrice + 5)}</Text>
         </View>
 
         <View style={styles.buttonContainer}>

@@ -46,7 +46,7 @@ const HomeScreen = () => {
       useNativeDriver: true,
     }).start();
     Animated.timing(offsetValueY, {
-      toValue: showMenu ? 0 : scaleSizeUI(150),
+      toValue: showMenu ? 0 : -scaleSizeUI(500),
       duration: 300,
       useNativeDriver: true,
     }).start();
@@ -73,7 +73,7 @@ const HomeScreen = () => {
             transform: [
               { scale: scaleValue },
               { translateX: offsetValueX },
-              // { translateY: offsetValueY },
+              { translateY: offsetValueY },
             ],
           },
         ]}
@@ -83,7 +83,7 @@ const HomeScreen = () => {
         <HomeSearch />
         <HomeCategories isScreenFocused={isScreenFocused} />
         <HomeFeatured isScreenFocused={isScreenFocused} />
-        <HomePopularList />
+        <HomePopularList isScreenFocused={isScreenFocused} />
       </Animated.View>
     </ScrollView>
   );

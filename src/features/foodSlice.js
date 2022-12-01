@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchAllFoodApi, addFoodApi } from '../api/foodApi';
+import { fetchAllFoodApi, fetchPopularFoodApi, addFoodApi } from '../api/foodApi';
 
 export const fetchAllFood = createAsyncThunk('Food/fetchAllFood', async () => {
-  return await fetchAllFoodApi();
+  return await fetchPopularFoodApi();
 });
 
 export const addFood = createAsyncThunk('Food/addFood', async (data, thunkApi) => {
@@ -11,6 +11,7 @@ export const addFood = createAsyncThunk('Food/addFood', async (data, thunkApi) =
 
 const initialState = {
   food: [],
+  isLoading: false,
 };
 
 const foodSlice = createSlice({
@@ -19,9 +20,12 @@ const foodSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(fetchAllFood.pending, (state, action) => {
+        state.isLoading = true;
+      })
       .addCase(fetchAllFood.fulfilled, (state, action) => {
-        console.log('food slice', action.payload);
         state.food = action.payload;
+        state.isLoading = false;
       })
       .addCase(fetchAllFood.rejected, (state, action) => {
         console.log('error', action.error.message);

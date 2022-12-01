@@ -6,12 +6,8 @@ import Sizes from '../../constants/Size';
 import LayoutStyles from '../../styles/Layout';
 import InputField from '../../components/InputField';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
-import { useDispatch } from 'react-redux';
-import { addRestaurant } from '../../features/restaurantSlice';
 
 const HomeSearch = () => {
-  const dispatch = useDispatch();
-
   return (
     <View style={styles.homeSearch}>
       <View style={styles.inputContainer}>
@@ -22,23 +18,6 @@ const HomeSearch = () => {
         />
       </View>
       <TouchableOpacity
-        onPress={() =>
-          dispatch(
-            addRestaurant({
-              name: 'Pizza Hut',
-              rating: 4.3,
-              deliveryPrice: 2,
-              categories: ['Pizza', 'Fast Food', 'Snacks'],
-              food: [
-                {
-                  name: 'pizzz',
-                },
-              ],
-              image:
-                'https://images.deliveryhero.io/image/fd-sg/LH/xvqq-hero.jpg?width=1200&height=300&quality=45',
-            })
-          )
-        }
         style={[LayoutStyles.layoutShadowGrey, LayoutStyles.layoutCenter, styles.buttonFilter]}
       >
         <Image source={Images.ICON.FILTER} />

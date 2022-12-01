@@ -14,6 +14,7 @@ export const addRestaurant = createAsyncThunk(
 
 const initialState = {
   restaurants: [],
+  isLoading: false,
 };
 
 const restaurantSlice = createSlice({
@@ -22,8 +23,12 @@ const restaurantSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(fetchAllRestaurants.pending, (state, action) => {
+        state.isLoading = true;
+      })
       .addCase(fetchAllRestaurants.fulfilled, (state, action) => {
         state.restaurants = action.payload;
+        state.isLoading = false;
       })
       .addCase(fetchAllRestaurants.rejected, (state, action) => {
         console.log('error', action.error.message);

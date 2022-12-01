@@ -33,6 +33,7 @@ import CustomButton from '../components/CustomButton';
 
 import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
+import { formatPrice } from '../utils/formatter';
 
 const FoodDetailScreen = ({ navigation, route }) => {
   const { data } = route.params;
@@ -85,7 +86,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
 
           <View style={LayoutStyles.layoutStretch}>
             <Text style={[TextStyles.textMain, styles.foodPrice]}>
-              $<Text style={[TextStyles.h2, styles.foodPrice]}>{data.price}</Text>
+              $<Text style={[TextStyles.h2, styles.foodPrice]}>{formatPrice(data.price)}</Text>
             </Text>
 
             <Counter

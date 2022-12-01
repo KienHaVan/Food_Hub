@@ -7,6 +7,7 @@ export const fetchAllCategories = createAsyncThunk('Category/fetchAllCategories'
 
 const initialState = {
   categories: [],
+  isLoading: false,
 };
 
 const categorySlice = createSlice({
@@ -14,9 +15,14 @@ const categorySlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchAllCategories.fulfilled, (state, action) => {
-      state.categories = action.payload;
-    });
+    builder
+      .addCase(fetchAllCategories.fulfilled, (state, action) => {
+        state.categories = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchAllCategories.pending, (state, action) => {
+        state.isLoading = true;
+      });
   },
 });
 
