@@ -11,9 +11,11 @@ import { Images } from '../../../assets';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllRestaurants } from '../../features/restaurantSlice';
+import HomeFeaturedSkeleton from './HomeFeaturedSkeleton';
 
 const HomeFeatured = ({ isScreenFocused }) => {
   const restaurants = useSelector((state) => state.restaurant.restaurants);
+  const isLoading = useSelector((state) => state.restaurant.isLoading);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,17 +38,23 @@ const HomeFeatured = ({ isScreenFocused }) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.cards}>
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          horizontal
-          data={restaurants}
-          keyExtractor={(res) => res.id}
-          renderItem={renderCard}
-          ListFooterComponent={<View />}
-          ListFooterComponentStyle={{ width: Sizes.sizeBig }}
-        />
-      </View>
+      {isLoading ? (
+        <View style={{ marginBottom: Sizes.sizeMassiveH + Sizes.sizeModerate }}>
+          <HomeFeaturedSkeleton />
+        </View>
+      ) : (
+        <View style={styles.cards}>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            data={restaurants}
+            keyExtractor={(res) => res.id}
+            renderItem={renderCard}
+            ListFooterComponent={<View />}
+            ListFooterComponentStyle={{ width: Sizes.sizeBig }}
+          />
+        </View>
+      )}
     </View>
   );
 };

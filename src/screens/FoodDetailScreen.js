@@ -33,6 +33,7 @@ import CustomButton from '../components/CustomButton';
 
 import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
+import { formatPrice } from '../utils/formatter';
 
 const FoodDetailScreen = ({ navigation, route }) => {
   const { data } = route.params;
@@ -63,7 +64,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
       </View>
 
       <ImageBackground
-        source={data.image}
+        source={{ uri: data.image }}
         style={styles.foodThumbnail}
         imageStyle={styles.foodThumbnailImage}
       >
@@ -76,8 +77,8 @@ const FoodDetailScreen = ({ navigation, route }) => {
 
           <View style={styles.rating}>
             <Image source={Images.ICON.STAR_LARGE} style={styles.ratingIcon} />
-            <Text style={[TextStyles.textMain, styles.ratingText]}>{data.ratings}</Text>
-            <Text style={TextStyles.textMain}>({data.ratingCount})</Text>
+            <Text style={[TextStyles.textMain, styles.ratingText]}>{data.rating}</Text>
+            <Text style={TextStyles.textMain}>({data.ratingAmount})</Text>
             <TouchableOpacity style={styles.ratingLink}>
               <Text style={[TextStyles.textMain, styles.ratingLinkText]}>See Reviews</Text>
             </TouchableOpacity>
@@ -85,7 +86,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
 
           <View style={LayoutStyles.layoutStretch}>
             <Text style={[TextStyles.textMain, styles.foodPrice]}>
-              $<Text style={[TextStyles.h2, styles.foodPrice]}>{data.price}</Text>
+              $<Text style={[TextStyles.h2, styles.foodPrice]}>{formatPrice(data.price)}</Text>
             </Text>
 
             <Counter

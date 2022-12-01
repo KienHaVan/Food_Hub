@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     width: scaleSizeUI(117),
     height: scaleSizeUI(60, true),
     position: 'absolute',
-    bottom: Sizes.sizeMassiveH * 3 + Sizes.sizeLargeH,
+    bottom: scaleSizeUI(120 + Sizes.sizeLargeH),
     left: Sizes.sizeBig,
   },
 });

@@ -14,10 +14,12 @@ import { scaleSizeUI } from '../../utils/scaleSizeUI';
 //endregion
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllCategories } from '../../features/categorySlice';
+import HomeCategoriesSkeleton from './HomeCategoriesSkeleton';
 
 const HomeCategories = ({ isScreenFocused }) => {
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.category.categories);
+  const isLoading = useSelector((state) => state.category.isLoading);
   const [activeCard, setActiveCard] = useState(0);
 
   useEffect(() => {
@@ -49,24 +51,28 @@ const HomeCategories = ({ isScreenFocused }) => {
 
   return (
     <View>
-      <FlatList
-        style={styles.cardList}
-        contentContainerStyle={{ alignItems: 'center' }}
-        data={categories}
-        keyExtractor={(cat) => cat.id}
-        renderItem={renderCard}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        ListHeaderComponent={
-          <TouchableOpacity>
-            <Text style={[TextStyles.textMain, styles.listLink]}>View All</Text>
-          </TouchableOpacity>
-        }
-        ListHeaderComponentStyle={{
-          width: '8%',
-          marginHorizontal: Sizes.sizeBig,
-        }}
-      />
+      {isLoading ? (
+        <HomeCategoriesSkeleton />
+      ) : (
+        <FlatList
+          style={styles.cardList}
+          contentContainerStyle={{ alignItems: 'center' }}
+          data={categories}
+          keyExtractor={(cat) => cat.id}
+          renderItem={renderCard}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          ListHeaderComponent={
+            <TouchableOpacity>
+              <Text style={[TextStyles.textMain, styles.listLink]}>View All</Text>
+            </TouchableOpacity>
+          }
+          ListHeaderComponentStyle={{
+            width: '8%',
+            marginHorizontal: Sizes.sizeBig,
+          }}
+        />
+      )}
     </View>
   );
 };

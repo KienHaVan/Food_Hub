@@ -19,7 +19,8 @@ import { addUserToFirebaseWithID } from '../utils/authentication';
 const HomeScreen = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [isScreenFocused, setIsScreenFocused] = useState(false);
-  const offsetValue = useRef(new Animated.Value(0)).current;
+  const offsetValueX = useRef(new Animated.Value(0)).current;
+  const offsetValueY = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   const currentUser = useSelector((state) => state.user.currentUser);
   const dispatch = useDispatch();
@@ -44,9 +45,9 @@ const HomeScreen = () => {
       setIsScreenFocused(true);
       return () => {
         setIsScreenFocused(false);
-        setShowMenu(false);
-        scaleScreen();
-        moveScreen();
+        // setShowMenu(false);
+        // scaleScreen();
+        // moveScreen();
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -74,8 +75,13 @@ const HomeScreen = () => {
   };
 
   const moveScreen = () => {
-    Animated.timing(offsetValue, {
+    Animated.timing(offsetValueX, {
       toValue: showMenu ? 0 : scaleSizeUI(250),
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+    Animated.timing(offsetValueY, {
+      toValue: showMenu ? 0 : -scaleSizeUI(500),
       duration: 300,
       useNativeDriver: true,
     }).start();
@@ -101,8 +107,8 @@ const HomeScreen = () => {
             borderRadius: showMenu ? Sizes.sizeModerate : 0,
             transform: [
               { scale: scaleValue },
-              { translateX: offsetValue },
-              { translateY: showMenu ? -scaleSizeUI(150) : 0 },
+              { translateX: offsetValueX },
+              { translateY: offsetValueY },
             ],
           },
         ]}
@@ -112,7 +118,7 @@ const HomeScreen = () => {
         <HomeSearch />
         <HomeCategories isScreenFocused={isScreenFocused} />
         <HomeFeatured isScreenFocused={isScreenFocused} />
-        <HomePopularList />
+        <HomePopularList isScreenFocused={isScreenFocused} />
       </Animated.View>
     </ScrollView>
   );
