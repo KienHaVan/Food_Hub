@@ -1,37 +1,56 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Image,
-  ImageBackground,
-  ScrollView,
-  StyleSheet,
   Text,
-  TouchableOpacity,
+  ScrollView,
   View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  increaseCurrentQuantity,
+  decreaseCurrentQuantity,
+  resetCurrentQuantity,
+  addToCart,
+} from '../features/cartSlice';
 import Toast from 'react-native-toast-message';
-import { useDispatch } from 'react-redux';
-import { Images } from '../../assets';
-import CornerButton from '../components/CornerButton';
-import Counter from '../components/Counter';
-import CustomButton from '../components/CustomButton';
-import FavoriteButton from '../components/FavoriteButton';
+
+//region Import styling
+import TextStyles from '../styles/TextStyles';
+import LayoutStyles from '../styles/Layout';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
-import { addToCart } from '../features/cartSlice';
-import LayoutStyles from '../styles/Layout';
-import TextStyles from '../styles/TextStyles';
+//endregion
+
+//region Import components
+import CornerButton from '../components/CornerButton';
+import FavoriteButton from '../components/FavoriteButton';
+import Counter from '../components/Counter';
+import CustomButton from '../components/CustomButton';
+//endregion
+
+import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const FoodDetailScreen = ({ navigation, route }) => {
-  const dispatch = useDispatch();
   const { data } = route.params;
+  const dispatch = useDispatch();
+  const currentQuantity = useSelector((state) => state.cart.currentFoodQuantity);
+
+  //When new data is passed into the screen, the quantity of the item is reset
+  useEffect(() => {
+    dispatch(resetCurrentQuantity());
+  }, [data]);
 
   const handleAddToCart = () => {
     Toast.show({
       type: 'success',
       text1: 'Added Success!',
     });
-    dispatch(addToCart(data));
+    dispatch(addToCart({ ...data, quantity: currentQuantity }));
+    navigation.goBack();
   };
 
   return (
@@ -68,7 +87,12 @@ const FoodDetailScreen = ({ navigation, route }) => {
             <Text style={[TextStyles.textMain, styles.foodPrice]}>
               $<Text style={[TextStyles.h2, styles.foodPrice]}>{data.price}</Text>
             </Text>
-            <Counter />
+
+            <Counter
+              defaultValue={currentQuantity}
+              onIncrease={() => dispatch(increaseCurrentQuantity(currentQuantity))}
+              onDecrease={() => dispatch(decreaseCurrentQuantity(currentQuantity))}
+            />
           </View>
 
           <Text style={TextStyles.textMain}>{data.description}</Text>
@@ -76,18 +100,11 @@ const FoodDetailScreen = ({ navigation, route }) => {
       </ScrollView>
 
       <View style={LayoutStyles.layoutCenter}>
-        <View style={[styles.buttonContainer, { marginRight: Sizes.sizeSmall }]}>
+        <View style={styles.buttonContainer}>
           <CustomButton
             text='ADD TO CART'
             iconSource={Images.ICON.CART}
             onPress={handleAddToCart}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <CustomButton
-            text='CHECK OUT'
-            isPrimary={false}
-            onPress={() => navigation.navigate('Cart')}
           />
         </View>
       </View>

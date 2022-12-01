@@ -10,11 +10,25 @@ import Menu from '../modules/Menu/Menu';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const [isScreenFocused, setIsScreenFocused] = useState(false);
   const offsetValue = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsScreenFocused(true);
+      return () => {
+        setIsScreenFocused(false);
+        setShowMenu(false);
+        scaleScreen();
+        moveScreen();
+      };
+    }, [])
+  );
 
   const scaleScreen = () => {
     Animated.timing(scaleValue, {
@@ -61,8 +75,8 @@ const HomeScreen = () => {
         <HomeHeader handleShowMenu={animateShowMenu} />
         <Text style={[TextStyles.h2, styles.screenHeading]}>What would you like to order</Text>
         <HomeSearch />
-        <HomeCategories />
-        <HomeFeatured />
+        <HomeCategories isScreenFocused={isScreenFocused} />
+        <HomeFeatured isScreenFocused={isScreenFocused} />
         <HomePopularList />
       </Animated.View>
     </ScrollView>

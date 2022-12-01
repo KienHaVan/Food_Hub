@@ -16,8 +16,12 @@ import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
 import Color from '../constants/Color';
+import { useNavigation } from '@react-navigation/native';
+import { resetPassword, SignInWithEmailAndPassword } from '../utils/authentication';
+import Toast from 'react-native-toast-message';
 
 const LoginScreen = () => {
+  const navigation = useNavigation();
   const schema = yup
     .object({
       email: yup
@@ -45,20 +49,16 @@ const LoginScreen = () => {
     mode: 'onChange',
   });
   const onSubmit = (data) => {
-    if (!isValid) {
-      return;
-    }
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-        console.log(data);
-        reset({
-          fullname: '',
-          email: '',
-          password: '',
-        });
-      }, 3000);
+    if (!isValid) return;
+    SignInWithEmailAndPassword(data.email, data.password);
+    Toast.show({
+      type: 'success',
+      text1: 'Login successfully',
     });
+    navigation.navigate('HomeStack');
+  };
+  const hanleResetPassword = () => {
+    resetPassword();
   };
   return (
     <ImageBackground
@@ -83,7 +83,7 @@ const LoginScreen = () => {
         {errors?.password && <Text style={styles.error}>{errors?.password?.message}</Text>}
 
         <View style={styles.center}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={hanleResetPassword}>
             <Text style={[TextStyles.textMain, styles.centerText]}>Forgot password?</Text>
           </TouchableOpacity>
         </View>
@@ -94,26 +94,15 @@ const LoginScreen = () => {
           onPress={handleSubmit(onSubmit)}
         >
           {!isSubmitting ? (
-            <Text
-              // eslint-disable-next-line react-native/no-inline-styles
-              style={{
-                fontWeight: '700',
-                fontSize: 24,
-                lineHeight: 30,
-                color: '#fff',
-                alignSelf: 'center',
-              }}
-            >
-              Sign Up
-            </Text>
+            <Text style={styles.signupButtonText}>LOGIN</Text>
           ) : (
-            <ActivityIndicator size={'large'} color={Color.primary} />
+            <ActivityIndicator size={'large'} color={Color.white}></ActivityIndicator>
           )}
         </TouchableOpacity>
 
         <View style={styles.quote}>
           <Text style={[TextStyles.textMain, styles.bottomQuote]}>Don't have an account? </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
             <Text style={[TextStyles.textMain, styles.bottomQuoteLink]}>Sign Up</Text>
           </TouchableOpacity>
         </View>
@@ -154,7 +143,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   bottomQuote: {
-    color: Color.secondary,
+    color: Color.grey,
   },
   bottomQuoteLink: {
     textDecorationLine: 'underline',
@@ -168,10 +157,22 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   button: {
+    width: 280,
+    alignSelf: 'center',
     paddingHorizontal: 10,
-    paddingVertical: 8,
-    backgroundColor: '#28a745',
-    borderRadius: 8,
+    paddingVertical: 12,
+    height: 60,
+    backgroundColor: Color.primary,
+    borderRadius: 28,
     marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+
+  signupButtonText: [
+    TextStyles.h3,
+    {
+      color: Color.white,
+    },
+  ],
 });

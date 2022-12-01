@@ -33,7 +33,7 @@ const InputField = ({ placeholder, label, preIcon, isPassword, ...props }) => {
             },
           ]}
         >
-          {preIcon && <Image source={preIcon} />}
+          {preIcon && <Image source={preIcon} style={styles.iconSearch} />}
           <TextInput
             style={styles.input}
             placeholder={placeholder}
@@ -81,7 +81,10 @@ const styles = StyleSheet.create({
     marginLeft: Sizes.sizeSmall,
     color: Colors.secondaryDarker,
     fontFamily: 'Poppins-Regular',
-    fontSize: 17,
+  },
+  iconSearch: {
+    width: 24,
+    height: 24,
   },
 });
 
