@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, StyleSheet, Text } from 'react-native';
 import Sizes from '../constants/Size';
 import HomeCategories from '../modules/Home/HomeCategories';
@@ -15,7 +15,8 @@ import { useFocusEffect } from '@react-navigation/native';
 const HomeScreen = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [isScreenFocused, setIsScreenFocused] = useState(false);
-  const offsetValue = useRef(new Animated.Value(0)).current;
+  const offsetValueX = useRef(new Animated.Value(0)).current;
+  const offsetValueY = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
 
   useFocusEffect(
@@ -23,9 +24,9 @@ const HomeScreen = () => {
       setIsScreenFocused(true);
       return () => {
         setIsScreenFocused(false);
-        setShowMenu(false);
-        scaleScreen();
-        moveScreen();
+        // setShowMenu(false);
+        // scaleScreen();
+        // moveScreen();
       };
     }, [])
   );
@@ -39,8 +40,13 @@ const HomeScreen = () => {
   };
 
   const moveScreen = () => {
-    Animated.timing(offsetValue, {
+    Animated.timing(offsetValueX, {
       toValue: showMenu ? 0 : scaleSizeUI(250),
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+    Animated.timing(offsetValueY, {
+      toValue: showMenu ? 0 : -scaleSizeUI(500),
       duration: 300,
       useNativeDriver: true,
     }).start();
@@ -66,8 +72,8 @@ const HomeScreen = () => {
             borderRadius: showMenu ? Sizes.sizeModerate : 0,
             transform: [
               { scale: scaleValue },
-              { translateX: offsetValue },
-              { translateY: showMenu ? -scaleSizeUI(150) : 0 },
+              { translateX: offsetValueX },
+              { translateY: offsetValueY },
             ],
           },
         ]}
@@ -77,7 +83,7 @@ const HomeScreen = () => {
         <HomeSearch />
         <HomeCategories isScreenFocused={isScreenFocused} />
         <HomeFeatured isScreenFocused={isScreenFocused} />
-        <HomePopularList />
+        <HomePopularList isScreenFocused={isScreenFocused} />
       </Animated.View>
     </ScrollView>
   );

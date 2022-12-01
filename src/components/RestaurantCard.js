@@ -45,15 +45,13 @@ const RestaurantCard = ({ data }) => {
           </View>
         </View>
         {/*Group of tags*/}
-        {data.categories ? (
-          <View style={styles.labelGroup}>
-            {data.categories.map((cat, index) => (
-              <View key={index} style={[LayoutStyles.layoutCenter, styles.label]}>
-                <Text style={[TextStyles.textSmall, styles.labelText]}>{cat}</Text>
-              </View>
-            ))}
-          </View>
-        ) : null}
+        <View style={styles.labelGroup}>
+          {data.categories.map((cat, index) => (
+            <View key={index} style={[LayoutStyles.layoutCenter, styles.label]}>
+              <Text style={[TextStyles.textSmall, styles.labelText]}>{cat}</Text>
+            </View>
+          ))}
+        </View>
       </View>
     </TouchableOpacity>
   );

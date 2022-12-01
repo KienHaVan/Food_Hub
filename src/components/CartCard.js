@@ -10,6 +10,7 @@ import Counter from './Counter';
 import { useDispatch } from 'react-redux';
 import { addToCart, removeFromCart } from '../features/cartSlice';
 import { Images } from '../../assets';
+import { formatPrice } from '../utils/formatter';
 
 const CartCard = ({ item }) => {
   const dispatch = useDispatch();
@@ -22,11 +23,13 @@ const CartCard = ({ item }) => {
       >
         <Image source={Images.ICON.CLOSE} />
       </TouchableOpacity>
-      <Image source={item.image} style={styles.cardThumbnail} />
+      <Image source={{ uri: item.image }} style={styles.cardThumbnail} />
       <View style={styles.cardContent}>
-        <Text style={TextStyles.h3}>{item.name}</Text>
+        <Text numberOfLines={2} style={TextStyles.h3}>
+          {item.name}
+        </Text>
         <Text style={[TextStyles.h3, styles.cardPrice]}>
-          ${(item.price * item.quantity).toFixed(2)}
+          ${formatPrice(item.price * item.quantity)}
         </Text>
       </View>
       <View style={styles.cardCounter}>
@@ -59,6 +62,7 @@ const styles = StyleSheet.create({
     borderRadius: Sizes.sizeModerate,
   },
   cardContent: {
+    flex: 1,
     paddingHorizontal: Sizes.sizeBig,
     paddingVertical: Sizes.sizeLargeH,
   },

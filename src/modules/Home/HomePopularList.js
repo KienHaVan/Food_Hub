@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
 //region Import styling
@@ -10,11 +10,21 @@ import Sizes from '../../constants/Size';
 
 import MealCard from '../../components/MealCard';
 
-import { Food } from '../../api/fakeData/Food';
 import { Images } from '../../../assets';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchAllFood } from '../../features/foodSlice';
 
-const HomePopularList = () => {
+const HomePopularList = ({ isScreenFocused }) => {
+  const dispatch = useDispatch();
+  const food = useSelector((state) => state.food.food);
+
+  useEffect(() => {
+    if (isScreenFocused) {
+      dispatch(fetchAllFood());
+    }
+  }, [dispatch, isScreenFocused]);
+
   const renderCard = (data) => {
     return <MealCard key={data.id} data={data} />;
   };
@@ -29,7 +39,7 @@ const HomePopularList = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.cards}>{Food.map((res) => renderCard(res))}</View>
+      <View style={styles.cards}>{food.map((res) => renderCard(res))}</View>
     </View>
   );
 };

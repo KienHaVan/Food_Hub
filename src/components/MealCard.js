@@ -8,6 +8,7 @@ import Sizes from '../constants/Size';
 import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import FavoriteButton from './FavoriteButton';
+import { formatPrice, formatRating } from '../utils/formatter';
 
 const MealCard = ({ data }) => {
   const navigation = useNavigation();
@@ -20,18 +21,24 @@ const MealCard = ({ data }) => {
       <FavoriteButton />
       <View style={[styles.price, LayoutStyles.layoutShadowGrey]}>
         <Text style={TextStyles.textMain}>
-          $ <Text style={[TextStyles.h3, styles.priceText]}>{data.price}</Text>
+          $ <Text style={[TextStyles.h3, styles.priceText]}>{formatPrice(data.price)}</Text>
         </Text>
       </View>
-      <Image source={data.image} style={styles.cardThumbnail} />
+      <Image source={{ uri: data.image }} style={styles.cardThumbnail} />
       <View style={styles.cardContent}>
         <View style={[LayoutStyles.layoutShadowGrey, styles.rating]}>
           <Image source={Images.ICON.STAR} />
-          <Text style={[TextStyles.textMain, styles.cardRatingText]}>{data.ratings}</Text>
-          <Text style={TextStyles.textSmall}>({data.ratingCount})</Text>
+          <Text style={[TextStyles.textMain, styles.cardRatingText]}>
+            {formatRating(data.rating)}
+          </Text>
+          <Text style={TextStyles.textSmall}>({data.ratingAmount})</Text>
         </View>
-        <Text style={TextStyles.h3}>{data.name}</Text>
-        <Text style={[TextStyles.textMain, styles.cardDescription]}>{data.description}</Text>
+        <Text numberOfLines={2} style={TextStyles.h3}>
+          {data.name}
+        </Text>
+        <Text numberOfLines={3} style={[TextStyles.textMain, styles.cardDescription]}>
+          {data.description}
+        </Text>
       </View>
     </TouchableOpacity>
   );
