@@ -15,8 +15,8 @@ export const SignInAnonymously = () => {
       console.error(error);
     });
 };
-export const SignUpWithEmailAndPassword = (email, password) => {
-  auth()
+export const SignUpWithEmailAndPassword = async (email, password) => {
+  await auth()
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       console.log('User account created & signed in!');
@@ -71,4 +71,8 @@ export function passwordReset(email) {
 export const addUserToFirebase = async (props) => {
   const usersCollection = firestore().collection('users');
   await usersCollection.add({ ...props });
+};
+export const addUserToFirebaseWithID = async (props, id) => {
+  const usersCollection = firestore().collection('users').doc(id);
+  await usersCollection.set({ ...props });
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, StyleSheet, Text } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Sizes from '../constants/Size';
 import HomeCategories from '../modules/Home/HomeCategories';
 import HomeFeatured from '../modules/Home/HomeFeatured';
@@ -14,6 +14,7 @@ import { scaleSizeUI } from '../utils/scaleSizeUI';
 import auth from '@react-native-firebase/auth';
 import { addCurrentUser } from '../features/userSlice';
 import { useFocusEffect } from '@react-navigation/native';
+import { addUserToFirebaseWithID } from '../utils/authentication';
 
 const HomeScreen = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -21,19 +22,22 @@ const HomeScreen = () => {
   const offsetValue = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   const currentUser = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
+  console.log(auth()?.currentUser);
   useEffect(() => {
-    auth().onAuthStateChanged((user) => {
-      if (user) {
-        console.log('User email: ', user);
+    const user = auth()?.currentUser;
+    if (user?.email) {
+      dispatch(
         addCurrentUser({
           fullname: user?.displayName,
           email: user?.email,
-          id: user.uid,
-        });
-      }
-    });
+          id: user?.uid || user?.id,
+        })
+      );
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log('🚀 ~ file: HomeScreen.js:22 ~ HomeScreen ~ currentUser', currentUser);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -44,6 +48,7 @@ const HomeScreen = () => {
         scaleScreen();
         moveScreen();
       };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   );
 
@@ -56,6 +61,7 @@ const HomeScreen = () => {
         scaleScreen();
         moveScreen();
       };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   );
 
