@@ -6,10 +6,10 @@ import {
   SignUpScreen,
   SplashScreen,
   WelcomeScreen,
+  EditProfileScreen,
+  ProfileScreen,
+  SearchScreen,
 } from '../screens';
-import EditProfileScreen from '../screens/EditProfileScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import TestFirestore from '../screens/TestFirestore';
 import HomeBottomTabNavigator from './HomeBottomTabNavigator';
 
 const Stack = createNativeStackNavigator();
@@ -29,7 +29,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name='FoodDetail' component={FoodDetailScreen} />
       <Stack.Screen name='Profile' component={ProfileScreen} />
       <Stack.Screen name='EditProfile' component={EditProfileScreen} />
-      <Stack.Screen name='TestFirestore' component={TestFirestore} />
+      <Stack.Screen name='Search' component={SearchScreen} />
     </Stack.Navigator>
   );
 };

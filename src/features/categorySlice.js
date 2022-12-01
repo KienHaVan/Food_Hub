@@ -1,29 +1,38 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchAllCategoriesApi } from '../api/categoryApi';
+import { fetchCategoriesApi } from '../api/categoryApi';
 
-export const fetchAllCategories = createAsyncThunk('Category/fetchAllCategories', async () => {
-  return await fetchAllCategoriesApi();
-});
+export const fetchCategories = createAsyncThunk(
+  'Category/fetchAllCategories',
+  async (areFeatured = false, thunkApi) => {
+    return await fetchCategoriesApi(areFeatured);
+  }
+);
 
 const initialState = {
   categories: [],
   isLoading: false,
+  isModalShown: false,
 };
 
 const categorySlice = createSlice({
   name: 'Category',
   initialState,
-  reducers: {},
+  reducers: {
+    toggleModal(state) {
+      state.isModalShown = !state.isModalShown;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllCategories.fulfilled, (state, action) => {
+      .addCase(fetchCategories.fulfilled, (state, action) => {
         state.categories = action.payload;
         state.isLoading = false;
       })
-      .addCase(fetchAllCategories.pending, (state, action) => {
+      .addCase(fetchCategories.pending, (state, action) => {
         state.isLoading = true;
       });
   },
 });
 
+export const { toggleModal } = categorySlice.actions;
 export default categorySlice.reducer;

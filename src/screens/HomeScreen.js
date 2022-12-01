@@ -11,10 +11,13 @@ import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import { useFocusEffect } from '@react-navigation/native';
+import HomeCategoriesModal from '../modules/Home/HomeCategoriesModal';
+import { useSelector } from 'react-redux';
 
 const HomeScreen = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [isScreenFocused, setIsScreenFocused] = useState(false);
+  const isModalShown = useSelector((state) => state.category.isModalShown);
   const offsetValueX = useRef(new Animated.Value(0)).current;
   const offsetValueY = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
@@ -24,9 +27,6 @@ const HomeScreen = () => {
       setIsScreenFocused(true);
       return () => {
         setIsScreenFocused(false);
-        // setShowMenu(false);
-        // scaleScreen();
-        // moveScreen();
       };
     }, [])
   );
@@ -84,6 +84,7 @@ const HomeScreen = () => {
         <HomeCategories isScreenFocused={isScreenFocused} />
         <HomeFeatured isScreenFocused={isScreenFocused} />
         <HomePopularList isScreenFocused={isScreenFocused} />
+        <HomeCategoriesModal isModalShown={isModalShown} />
       </Animated.View>
     </ScrollView>
   );

@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.white,
     borderRadius: Sizes.sizeModerate,
-    marginBottom: Sizes.sizeBig,
+    marginHorizontal: Sizes.sizeBig,
+    marginBottom: Sizes.sizeBigH,
   },
   cardThumbnail: {
     width: '100%',
