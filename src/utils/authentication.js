@@ -1,4 +1,5 @@
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 export const SignInAnonymously = () => {
   auth()
@@ -14,8 +15,8 @@ export const SignInAnonymously = () => {
       console.error(error);
     });
 };
-export const SignUpWithEmailAndPassword = (email, password) => {
-  auth()
+export const SignUpWithEmailAndPassword = async (email, password) => {
+  await auth()
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       console.log('User account created & signed in!');
@@ -57,8 +58,21 @@ export const SignOut = () => {
     .then(() => console.log('User signed out!'));
 };
 
-export function resetPassword(email) {
-  return sendPasswordResetEmail(auth, email).then((a) => {
-    alert('Password reset email sent');
-  });
+// export function resetPassword(email) {
+//   return sendPasswordResetEmail(auth, email).then((a) => {
+//     alert('Password reset email sent');
+//   });
+// }
+
+export function passwordReset(email) {
+  return auth().sendPasswordResetEmail(email);
 }
+
+export const addUserToFirebase = async (props) => {
+  const usersCollection = firestore().collection('users');
+  await usersCollection.add({ ...props });
+};
+export const addUserToFirebaseWithID = async (props, id) => {
+  const usersCollection = firestore().collection('users').doc(id);
+  await usersCollection.set({ ...props });
+};

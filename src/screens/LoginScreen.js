@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import TextStyles from '../styles/TextStyles';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,26 +19,34 @@ import Color from '../constants/Color';
 import { useNavigation } from '@react-navigation/native';
 import { resetPassword, SignInWithEmailAndPassword } from '../utils/authentication';
 import Toast from 'react-native-toast-message';
+import { useSelector } from 'react-redux';
 
+const schema = yup
+  .object({
+    email: yup
+      .string()
+      .lowercase()
+      .required('Please insert your email')
+      .matches(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        'Enter the valid email'
+      ),
+    password: yup
+      .string()
+      .required('Please insert your password')
+      .min(6, 'Password length should be at least 6 characters')
+      .max(20, 'Password cannot exceed more than 20 characters'),
+  })
+  .required();
 const LoginScreen = () => {
   const navigation = useNavigation();
-  const schema = yup
-    .object({
-      email: yup
-        .string()
-        .lowercase()
-        .required('Please insert your email')
-        .matches(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-          'Enter the valid email'
-        ),
-      password: yup
-        .string()
-        .required('Please insert your password')
-        .min(6, 'Password length should be at least 6 characters')
-        .max(20, 'Password cannot exceed more than 20 characters'),
-    })
-    .required();
+  const currentUser = useSelector((state) => state.user.currentUser);
+  useEffect(() => {
+    if (currentUser?.email) {
+      navigation.navigate('HomeStack');
+    }
+  }, [currentUser?.email, navigation]);
+
   const {
     handleSubmit,
     control,
@@ -83,7 +91,7 @@ const LoginScreen = () => {
         {errors?.password && <Text style={styles.error}>{errors?.password?.message}</Text>}
 
         <View style={styles.center}>
-          <TouchableOpacity onPress={hanleResetPassword}>
+          <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
             <Text style={[TextStyles.textMain, styles.centerText]}>Forgot password?</Text>
           </TouchableOpacity>
         </View>

@@ -8,6 +8,7 @@ export const Images = {
     AVATAR: require('./images/image_avatar.png'),
     AVATAR_LARGE: require('./images/image_avatar_large.png'),
     PROFILE_BACKGROUND: require('./images/image_profile_background.png'),
+    FORGET_PASSWORD_BGC: require('./images/forget_password_bgc.png'),
     RATING_RESTAURANT: require('./images/image_rating_restaurant.png'),
     RESTAURANT_AVATAR: require('./images/image_restaurant_avatar.png'),
     STAR: require('./images/image_star.png'),
