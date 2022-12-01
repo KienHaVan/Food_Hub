@@ -260,6 +260,7 @@ android {
 }
 
 dependencies {
+    implementation project(':lottie-react-native')
     implementation 'com.google.firebase:firebase-analytics:17.3.0'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation platform('com.google.firebase:firebase-bom:31.1.0')

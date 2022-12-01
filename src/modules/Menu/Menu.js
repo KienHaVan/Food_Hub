@@ -11,8 +11,11 @@ import { MenuItems } from '../../data/MenuItems';
 import { Images } from '../../../assets';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import CustomButton from '../../components/CustomButton';
+import { SignOut } from '../../utils/authentication';
+import { useNavigation } from '@react-navigation/native';
 
 const Menu = () => {
+  const navigation = useNavigation();
   const renderItem = (item) => {
     return (
       <View key={item.id} style={styles.menuItem}>
@@ -21,7 +24,10 @@ const Menu = () => {
       </View>
     );
   };
-
+  const handleSignOut = () => {
+    SignOut();
+    navigation.navigate('Welcome');
+  };
   return (
     <View style={styles.menu}>
       <View style={LayoutStyles.layoutShadowRed}>
@@ -33,7 +39,7 @@ const Menu = () => {
       <View style={styles.menuItemGroup}>{MenuItems.map((item) => renderItem(item))}</View>
 
       <View style={styles.buttonContainer}>
-        <CustomButton text='Log Out' iconSource={Images.ICON.LOGOUT} />
+        <CustomButton text='Log Out' iconSource={Images.ICON.LOGOUT} onPress={handleSignOut} />
       </View>
     </View>
   );

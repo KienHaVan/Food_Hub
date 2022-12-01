@@ -33,8 +33,8 @@ export const SignUpWithEmailAndPassword = async (email, password) => {
       console.error(error);
     });
 };
-export const SignInWithEmailAndPassword = (email, password) => {
-  auth()
+export const SignInWithEmailAndPassword = async (email, password) => {
+  await auth()
     .signInWithEmailAndPassword(email, password)
     .then(() => {
       console.log('User account signed in!');
@@ -52,8 +52,8 @@ export const SignInWithEmailAndPassword = (email, password) => {
     });
 };
 
-export const SignOut = () => {
-  auth()
+export const SignOut = async () => {
+  await auth()
     .signOut()
     .then(() => console.log('User signed out!'));
 };

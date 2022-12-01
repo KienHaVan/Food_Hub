@@ -23,31 +23,16 @@ const HomeScreen = () => {
   const offsetValueY = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   const currentUser = useSelector((state) => state.user.currentUser);
+  console.log('CurrentUser Redux', currentUser);
   const dispatch = useDispatch();
-  console.log(auth()?.currentUser);
-  useEffect(() => {
-    const user = auth()?.currentUser;
-    if (user?.email) {
-      dispatch(
-        addCurrentUser({
-          fullname: user?.displayName,
-          email: user?.email,
-          id: user?.uid || user?.id,
-        })
-      );
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const user = auth()?.currentUser;
+  console.log('CurrentUser Auth', user);
 
   useFocusEffect(
     React.useCallback(() => {
       setIsScreenFocused(true);
       return () => {
         setIsScreenFocused(false);
-        // setShowMenu(false);
-        // scaleScreen();
-        // moveScreen();
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

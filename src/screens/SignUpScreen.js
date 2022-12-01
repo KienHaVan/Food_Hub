@@ -61,44 +61,43 @@ const SignUpScreen = () => {
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
-  useEffect(() => {
-    const user = auth()?.currentUser;
-    if (user?.email) {
-      dispatch(
-        addCurrentUser({
-          fullname: user.displayName,
-          email: user.email,
-          id: user.uid,
-        })
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const onSubmit = async (data) => {
     if (!isValid) {
       return;
     }
-    await SignUpWithEmailAndPassword(data.email, data.password);
-    await auth().currentUser.updateProfile({
-      displayName: data.fullname,
-      avatarURL:
-        'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-    });
-    await addUserToFirebaseWithID(
-      {
-        fullname: data.fullname,
-        email: data.email,
-        password: data.password,
-        avatarURL:
+    try {
+      await SignUpWithEmailAndPassword(data.email, data.password);
+      await auth().currentUser.updateProfile({
+        displayName: data.fullname,
+        photoURL:
           'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-      },
-      auth()?.currentUser?.uid
-    );
-    Toast.show({
-      type: 'success',
-      text1: 'Create user successfully',
-    });
-    navigation.navigate('HomeStack');
+      });
+      await addUserToFirebaseWithID(
+        {
+          fullname: data.fullname,
+          email: data.email,
+          password: data.password,
+          photoURL:
+            'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+        },
+        auth()?.currentUser?.uid
+      );
+      await dispatch(
+        addCurrentUser({
+          fullname: auth()?.currentUser?.displayName,
+          email: auth()?.currentUser?.email,
+          photoURL: auth()?.currentUser?.photoURL,
+          id: auth()?.currentUser?.uid,
+        })
+      );
+      Toast.show({
+        type: 'success',
+        text1: 'Create user successfully',
+      });
+      navigation.navigate('HomeStack');
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <ImageBackground
@@ -138,7 +137,7 @@ const SignUpScreen = () => {
           {!isSubmitting ? (
             <Text style={styles.signupButtonText}>SIGN UP</Text>
           ) : (
-            <ActivityIndicator size={'large'} color={Color.white}></ActivityIndicator>
+            <ActivityIndicator size={'large'} color={Color.white} />
           )}
         </TouchableOpacity>
 

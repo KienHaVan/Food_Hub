@@ -1,3 +1,8 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import auth from '@react-native-firebase/auth';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
   ImageBackground,
@@ -6,20 +11,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import TextStyles from '../styles/TextStyles';
-import { yupResolver } from '@hookform/resolvers/yup';
+import Toast from 'react-native-toast-message';
+import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
-import MyInput from '../components/form/MyInput';
 import { Images } from '../../assets';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
+import MyInput from '../components/form/MyInput';
 import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
 import Color from '../constants/Color';
-import { useNavigation } from '@react-navigation/native';
-import { resetPassword, SignInWithEmailAndPassword } from '../utils/authentication';
-import Toast from 'react-native-toast-message';
-import { useSelector } from 'react-redux';
+import { addCurrentUser } from '../features/userSlice';
+import TextStyles from '../styles/TextStyles';
+import { SignInWithEmailAndPassword } from '../utils/authentication';
+import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const schema = yup
   .object({
@@ -40,12 +42,13 @@ const schema = yup
   .required();
 const LoginScreen = () => {
   const navigation = useNavigation();
-  const currentUser = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (currentUser?.email) {
+    const user = auth()?.currentUser;
+    if (user?.email) {
       navigation.navigate('HomeStack');
     }
-  }, [currentUser?.email, navigation]);
+  }, [navigation]);
 
   const {
     handleSubmit,
@@ -56,17 +59,26 @@ const LoginScreen = () => {
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (!isValid) return;
-    SignInWithEmailAndPassword(data.email, data.password);
-    Toast.show({
-      type: 'success',
-      text1: 'Login successfully',
-    });
-    navigation.navigate('HomeStack');
-  };
-  const hanleResetPassword = () => {
-    resetPassword();
+    try {
+      await SignInWithEmailAndPassword(data.email, data.password);
+      await dispatch(
+        addCurrentUser({
+          fullname: auth()?.currentUser?.displayName,
+          email: auth()?.currentUser?.email,
+          photoURL: auth()?.currentUser?.photoURL,
+          id: auth()?.currentUser?.uid,
+        })
+      );
+      Toast.show({
+        type: 'success',
+        text1: 'Login successfully!',
+      });
+      navigation.navigate('HomeStack');
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <ImageBackground
@@ -104,7 +116,7 @@ const LoginScreen = () => {
           {!isSubmitting ? (
             <Text style={styles.signupButtonText}>LOGIN</Text>
           ) : (
-            <ActivityIndicator size={'large'} color={Color.white}></ActivityIndicator>
+            <ActivityIndicator size={'large'} color={Color.white} />
           )}
         </TouchableOpacity>
 
