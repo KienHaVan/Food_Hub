@@ -6,22 +6,12 @@ export const fetchAllRestaurantsApi = async () => {
   let results = [];
   await restaurantsCollection.get().then((collections) =>
     collections.forEach((documentSnapshot) => {
-      const newItem = {
-        ...documentSnapshot.data(),
-        id: documentSnapshot.id,
-        food: [],
-        categories: [],
-      };
-
-      documentSnapshot.data().categories.forEach((cat) => {
-        cat.get().then(async (res) => {
-          newItem.categories = [...newItem.categories, await res.data()];
-        });
-      });
-
-      results = [...results, newItem];
-      console.log('from api', results);
+      results = [...results, { id: documentSnapshot.id, ...documentSnapshot.data() }];
     })
   );
   return results;
+};
+
+export const addRestaurantApi = async (data) => {
+  return await restaurantsCollection.add(data).then((res) => res);
 };

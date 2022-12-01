@@ -23,12 +23,12 @@ const MealCard = ({ data }) => {
           $ <Text style={[TextStyles.h3, styles.priceText]}>{data.price}</Text>
         </Text>
       </View>
-      <Image source={data.image} style={styles.cardThumbnail} />
+      <Image source={{ uri: data.image }} style={styles.cardThumbnail} />
       <View style={styles.cardContent}>
         <View style={[LayoutStyles.layoutShadowGrey, styles.rating]}>
           <Image source={Images.ICON.STAR} />
-          <Text style={[TextStyles.textMain, styles.cardRatingText]}>{data.ratings}</Text>
-          <Text style={TextStyles.textSmall}>({data.ratingCount})</Text>
+          <Text style={[TextStyles.textMain, styles.cardRatingText]}>{data.rating}</Text>
+          <Text style={TextStyles.textSmall}>({data.ratingAmount})</Text>
         </View>
         <Text style={TextStyles.h3}>{data.name}</Text>
         <Text style={[TextStyles.textMain, styles.cardDescription]}>{data.description}</Text>

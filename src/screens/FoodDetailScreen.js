@@ -63,7 +63,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
       </View>
 
       <ImageBackground
-        source={data.image}
+        source={{ uri: data.image }}
         style={styles.foodThumbnail}
         imageStyle={styles.foodThumbnailImage}
       >
@@ -76,8 +76,8 @@ const FoodDetailScreen = ({ navigation, route }) => {
 
           <View style={styles.rating}>
             <Image source={Images.ICON.STAR_LARGE} style={styles.ratingIcon} />
-            <Text style={[TextStyles.textMain, styles.ratingText]}>{data.ratings}</Text>
-            <Text style={TextStyles.textMain}>({data.ratingCount})</Text>
+            <Text style={[TextStyles.textMain, styles.ratingText]}>{data.rating}</Text>
+            <Text style={TextStyles.textMain}>({data.ratingAmount})</Text>
             <TouchableOpacity style={styles.ratingLink}>
               <Text style={[TextStyles.textMain, styles.ratingLinkText]}>See Reviews</Text>
             </TouchableOpacity>

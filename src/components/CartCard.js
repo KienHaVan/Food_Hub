@@ -22,9 +22,11 @@ const CartCard = ({ item }) => {
       >
         <Image source={Images.ICON.CLOSE} />
       </TouchableOpacity>
-      <Image source={item.image} style={styles.cardThumbnail} />
+      <Image source={{ uri: item.image }} style={styles.cardThumbnail} />
       <View style={styles.cardContent}>
-        <Text style={TextStyles.h3}>{item.name}</Text>
+        <Text numberOfLines={2} style={TextStyles.h3}>
+          {item.name}
+        </Text>
         <Text style={[TextStyles.h3, styles.cardPrice]}>
           ${(item.price * item.quantity).toFixed(2)}
         </Text>
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
     borderRadius: Sizes.sizeModerate,
   },
   cardContent: {
+    flex: 1,
     paddingHorizontal: Sizes.sizeBig,
     paddingVertical: Sizes.sizeLargeH,
   },
