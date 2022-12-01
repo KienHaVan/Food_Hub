@@ -9,6 +9,8 @@ import {
 } from '../screens';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import RatingScreen from '../screens/RatingScreen';
+import ReviewScreen from '../screens/ReviewScreen';
 import TestFirestore from '../screens/TestFirestore';
 import HomeBottomTabNavigator from './HomeBottomTabNavigator';
 
@@ -30,6 +32,8 @@ const MainStackNavigator = () => {
       <Stack.Screen name='Profile' component={ProfileScreen} />
       <Stack.Screen name='EditProfile' component={EditProfileScreen} />
       <Stack.Screen name='TestFirestore' component={TestFirestore} />
+      <Stack.Screen name='Rating' component={RatingScreen} />
+      <Stack.Screen name='Review' component={ReviewScreen} />
     </Stack.Navigator>
   );
 };
