@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, StyleSheet, Text } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import Sizes from '../constants/Size';
 import HomeCategories from '../modules/Home/HomeCategories';
 import HomeFeatured from '../modules/Home/HomeFeatured';
@@ -12,21 +11,20 @@ import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import auth from '@react-native-firebase/auth';
-import { addCurrentUser } from '../features/userSlice';
 import { useFocusEffect } from '@react-navigation/native';
-import { addUserToFirebaseWithID } from '../utils/authentication';
+import HomeCategoriesModal from '../modules/Home/HomeCategoriesModal';
+import { useSelector, useDispatch } from 'react-redux';
 
 const HomeScreen = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [isScreenFocused, setIsScreenFocused] = useState(false);
+  const isModalShown = useSelector((state) => state.category.isModalShown);
   const offsetValueX = useRef(new Animated.Value(0)).current;
   const offsetValueY = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   const currentUser = useSelector((state) => state.user.currentUser);
-  console.log('CurrentUser Redux', currentUser);
   const dispatch = useDispatch();
   const user = auth()?.currentUser;
-  console.log('CurrentUser Auth', user);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -34,20 +32,6 @@ const HomeScreen = () => {
       return () => {
         setIsScreenFocused(false);
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-  );
-
-  useFocusEffect(
-    React.useCallback(() => {
-      setIsScreenFocused(true);
-      return () => {
-        setIsScreenFocused(false);
-        setShowMenu(false);
-        scaleScreen();
-        moveScreen();
-      };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   );
 
@@ -80,7 +64,7 @@ const HomeScreen = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} scrollEnabled={!showMenu}>
-      <Menu />
+      <Menu handleShowMenu={animateShowMenu} />
 
       <Animated.View
         style={[
@@ -104,6 +88,7 @@ const HomeScreen = () => {
         <HomeCategories isScreenFocused={isScreenFocused} />
         <HomeFeatured isScreenFocused={isScreenFocused} />
         <HomePopularList isScreenFocused={isScreenFocused} />
+        <HomeCategoriesModal isModalShown={isModalShown} />
       </Animated.View>
     </ScrollView>
   );

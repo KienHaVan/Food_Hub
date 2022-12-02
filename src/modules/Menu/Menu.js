@@ -14,7 +14,7 @@ import CustomButton from '../../components/CustomButton';
 import { SignOut } from '../../utils/authentication';
 import { useNavigation } from '@react-navigation/native';
 
-const Menu = () => {
+const Menu = ({ handleShowMenu }) => {
   const navigation = useNavigation();
   const renderItem = (item) => {
     return (
@@ -27,6 +27,7 @@ const Menu = () => {
   const handleSignOut = () => {
     SignOut();
     navigation.navigate('Welcome');
+    handleShowMenu();
   };
   return (
     <View style={styles.menu}>
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: scaleSizeUI(117),
-    height: scaleSizeUI(60, true),
+    height: 60,
     position: 'absolute',
     bottom: scaleSizeUI(120 + Sizes.sizeLargeH),
     left: Sizes.sizeBig,
