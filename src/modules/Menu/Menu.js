@@ -13,9 +13,12 @@ import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import CustomButton from '../../components/CustomButton';
 import { SignOut } from '../../utils/authentication';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const Menu = ({ handleShowMenu }) => {
+  const currentUser = useSelector((state) => state.user.currentUser);
   const navigation = useNavigation();
+
   const renderItem = (item) => {
     return (
       <View key={item.id} style={styles.menuItem}>
@@ -32,10 +35,12 @@ const Menu = ({ handleShowMenu }) => {
   return (
     <View style={styles.menu}>
       <View style={LayoutStyles.layoutShadowRed}>
-        <Image source={Images.IMAGES.AVATAR} style={styles.avatar} />
+        <Image source={{ uri: currentUser.photoURL }} style={styles.avatar} />
       </View>
-      <Text style={TextStyles.h2}>Farion Wick</Text>
-      <Text style={TextStyles.textMain}>farionwick@gmail.com</Text>
+      <Text style={TextStyles.h2} numberOfLines={2}>
+        {currentUser.fullname}
+      </Text>
+      <Text style={TextStyles.textMain}>{currentUser.email}</Text>
 
       <View style={styles.menuItemGroup}>{MenuItems.map((item) => renderItem(item))}</View>
 
@@ -50,6 +55,7 @@ export default Menu;
 
 const styles = StyleSheet.create({
   menu: {
+    width: '75%',
     position: 'absolute',
     height: Dimensions.get('screen').height,
     paddingVertical: Sizes.sizeLargeH,
