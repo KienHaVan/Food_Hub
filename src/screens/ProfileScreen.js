@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
 import InputField from '../components/InputField';
@@ -10,32 +11,55 @@ import Sizes from '../constants/Size';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
-const textFieldLabel = [{ title: 'Full name' }, { title: 'Email' }, { title: 'Phone number' }];
-
 const ProfileScreen = () => {
+  const [fullName, setFullname] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
   const navigation = useNavigation();
+  const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (currentUser) {
+      setFullname(currentUser?.fullname);
+      setPhoneNumber(currentUser?.phoneNumber);
+      setEmail(currentUser?.email);
+    }
+  }, [currentUser]);
+
   return (
     <KeyBoardAvoidingWaraper>
       <ImageBackground
         source={Images.IMAGES.PROFILE_BACKGROUND}
         style={styles.profileImageBackground}
       >
-        <CornerButton sourceImage={Images.ICON.ARROW_LEFT} />
+        <CornerButton
+          sourceImage={Images.ICON.ARROW_LEFT}
+          handlePress={() => navigation.navigate('HomeStack')}
+        />
         <View style={styles.avatarContainer}>
-          <Image resizeMode='cover' source={Images.IMAGES.AVATAR} style={styles.avatar} />
+          <Image resizeMode='cover' source={{ uri: currentUser.photoURL }} style={styles.avatar} />
         </View>
         <View style={styles.infoContainer}>
-          <Text style={styles.name}>Eljad Eandaz</Text>
+          <Text style={styles.name}>{currentUser.fullname}</Text>
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
             <Text style={[TextStyles.textMain, styles.editInfo]}>Edit profile</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.textFieldContainer}>
-          {textFieldLabel.map((item) => (
-            <View key={item.title} style={styles.textInput}>
-              <InputField label={item.title} />
-            </View>
-          ))}
+          <View style={styles.textInput}>
+            <InputField label='Full name' value={fullName} />
+          </View>
+          <View style={styles.textInput}>
+            <InputField label='Email' value={email} />
+          </View>
+          <View style={styles.textInput}>
+            <InputField label='Phone number' value={phoneNumber} />
+            {!currentUser.phoneNumber && (
+              <Text style={[TextStyles.textMain, styles.warning]}>
+                Update your phone number in Edit page
+              </Text>
+            )}
+          </View>
         </View>
       </ImageBackground>
     </KeyBoardAvoidingWaraper>
@@ -81,5 +105,9 @@ const styles = StyleSheet.create({
   },
   textInput: {
     marginBottom: scaleSizeUI(20),
+  },
+  warning: {
+    color: Colors.primary,
+    marginTop: 6,
   },
 });
