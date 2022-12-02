@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image, FlatList, ScrollView, Dimensions } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 //region Import styling
 import Sizes from '../../constants/Size';
@@ -7,21 +7,25 @@ import LayoutStyles from '../../styles/Layout';
 import TextStyles from '../../styles/TextStyles';
 //endregion
 
-import { MenuItems } from '../../data/MenuItems';
-import { Images } from '../../../assets';
-import { scaleSizeUI } from '../../utils/scaleSizeUI';
-import CustomButton from '../../components/CustomButton';
-import { SignOut } from '../../utils/authentication';
 import { useNavigation } from '@react-navigation/native';
+import { Images } from '../../../assets';
+import CustomButton from '../../components/CustomButton';
+import { MenuItems } from '../../data/MenuItems';
+import { SignOut } from '../../utils/authentication';
+import { scaleSizeUI } from '../../utils/scaleSizeUI';
 
 const Menu = () => {
   const navigation = useNavigation();
   const renderItem = (item) => {
     return (
-      <View key={item.id} style={styles.menuItem}>
+      <TouchableOpacity
+        key={item.id}
+        style={styles.menuItem}
+        onPress={() => navigation.navigate(item.toScreen)}
+      >
         <Image source={item.icon} />
         <Text style={[TextStyles.textMain, styles.menuItemText]}>{item.name}</Text>
-      </View>
+      </TouchableOpacity>
     );
   };
   const handleSignOut = () => {
