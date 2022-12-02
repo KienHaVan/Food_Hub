@@ -38,19 +38,6 @@ const HomeScreen = () => {
     }, [])
   );
 
-  useFocusEffect(
-    React.useCallback(() => {
-      setIsScreenFocused(true);
-      return () => {
-        setIsScreenFocused(false);
-        setShowMenu(false);
-        scaleScreen();
-        moveScreen();
-      };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-  );
-
   const scaleScreen = () => {
     Animated.timing(scaleValue, {
       toValue: showMenu ? 1 : 0.75,

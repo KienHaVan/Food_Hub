@@ -22,11 +22,13 @@ const WelcomeScreen = () => {
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
   const handleSignInAnonymously = () => {
+    setVisible(true);
     auth()
       .signInAnonymously()
       .then(() => {
         console.log('User signed in anonymously');
         navigation.navigate('HomeStack');
+        setVisible(false);
       })
       .catch((error) => {
         if (error.code === 'auth/operation-not-allowed') {

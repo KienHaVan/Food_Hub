@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
@@ -22,6 +22,7 @@ import { addCurrentUser } from '../features/userSlice';
 import TextStyles from '../styles/TextStyles';
 import { SignInWithEmailAndPassword } from '../utils/authentication';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
+import AnimatedLoader from 'react-native-animated-loader';
 
 const schema = yup
   .object({
@@ -41,6 +42,7 @@ const schema = yup
   })
   .required();
 const LoginScreen = () => {
+  const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   useEffect(() => {
@@ -129,8 +131,20 @@ const LoginScreen = () => {
 
         <View style={{ height: scaleSizeUI(30, true) }} />
 
-        <LogWithFacebookAndGoogle text={'Sign in with'} dark />
+        <LogWithFacebookAndGoogle text={'Sign in with'} dark setVisible={setVisible} />
       </View>
+      {visible && (
+        <View style={styles.LoadingGoogleFacebook}>
+          {/* <ActivityIndicator size={'large'} color={Color.primary} /> */}
+          <AnimatedLoader
+            visible={visible}
+            overlayColor='rgba(255, 255, 255, 0.2)'
+            source={require('../../assets/loader2.json')}
+            animationStyle={styles.lottie}
+            speed={1}
+          />
+        </View>
+      )}
     </ImageBackground>
   );
 };
@@ -140,6 +154,22 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  LoadingGoogleFacebook: {
+    position: 'absolute',
+    width: 600,
+    height: 600,
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -75 }, { translateY: -100 }],
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10000,
+  },
+  lottie: {
+    width: 600,
+    height: 600,
+    borderRadius: 10000,
   },
   heading: {
     flex: scaleSizeUI(100, true),

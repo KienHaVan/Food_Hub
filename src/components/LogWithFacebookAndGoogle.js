@@ -72,7 +72,10 @@ const LogWithFacebookAndGoogle = ({ text, dark = false, setVisible = () => {} })
           <Image source={Images.ICON.FACEBOOK} style={styles.bottomMetaImage} />
           <Text style={[TextStyles.textMain, styles.metaButtonText]}>FACEBOOK</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomMetaButton} onPress={onGoogleButtonPress}>
+        <TouchableOpacity
+          style={[styles.bottomMetaButton, { marginLeft: 20 }]}
+          onPress={onGoogleButtonPress}
+        >
           <Image source={Images.ICON.GOOGLE} style={styles.bottomMetaImage} />
           <Text style={[TextStyles.textMain, styles.metaButtonText]}>GOOGLE</Text>
         </TouchableOpacity>
@@ -124,7 +127,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      minWidth: 180,
+      flex: 1 / 2,
       backgroundColor: '#fff',
       height: 60,
     },

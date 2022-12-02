@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
@@ -27,6 +27,7 @@ import {
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import auth from '@react-native-firebase/auth';
 import { useDispatch, useSelector } from 'react-redux';
+import AnimatedLoader from 'react-native-animated-loader';
 
 const schema = yup
   .object({
@@ -50,6 +51,7 @@ const schema = yup
   })
   .required();
 const SignUpScreen = () => {
+  const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {
@@ -150,8 +152,20 @@ const SignUpScreen = () => {
 
         <View style={{ height: scaleSizeUI(30, true) }} />
 
-        <LogWithFacebookAndGoogle text={'Sign up with'} dark />
+        <LogWithFacebookAndGoogle text={'Sign up with'} dark setVisible={setVisible} />
       </View>
+      {visible && (
+        <View style={styles.LoadingGoogleFacebook}>
+          {/* <ActivityIndicator size={'large'} color={Color.primary} /> */}
+          <AnimatedLoader
+            visible={visible}
+            overlayColor='rgba(255, 255, 255, 0.2)'
+            source={require('../../assets/loader2.json')}
+            animationStyle={styles.lottie}
+            speed={1}
+          />
+        </View>
+      )}
     </ImageBackground>
   );
 };
@@ -161,6 +175,22 @@ export default SignUpScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  LoadingGoogleFacebook: {
+    position: 'absolute',
+    width: 600,
+    height: 600,
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -75 }, { translateY: -100 }],
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10000,
+  },
+  lottie: {
+    width: 600,
+    height: 600,
+    borderRadius: 10000,
   },
   heading: {
     flex: scaleSizeUI(50, true),
