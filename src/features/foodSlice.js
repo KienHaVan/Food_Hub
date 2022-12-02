@@ -1,9 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchAllFoodApi, fetchPopularFoodApi, addFoodApi } from '../api/foodApi';
+import { fetchFoodApi, fetchPopularFoodApi, addFoodApi } from '../api/foodApi';
 
-export const fetchAllFood = createAsyncThunk('Food/fetchAllFood', async () => {
-  return await fetchPopularFoodApi();
-});
+export const fetchFood = createAsyncThunk(
+  'Food/fetchAllFood',
+  async ([areFeatured, category], thunkApi) => {
+    return areFeatured ? await fetchPopularFoodApi() : await fetchFoodApi(category);
+  }
+);
 
 export const addFood = createAsyncThunk('Food/addFood', async (data, thunkApi) => {
   return await addFoodApi(data);
@@ -20,14 +23,14 @@ const foodSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllFood.pending, (state, action) => {
+      .addCase(fetchFood.pending, (state, action) => {
         state.isLoading = true;
       })
-      .addCase(fetchAllFood.fulfilled, (state, action) => {
+      .addCase(fetchFood.fulfilled, (state, action) => {
         state.food = action.payload;
         state.isLoading = false;
       })
-      .addCase(fetchAllFood.rejected, (state, action) => {
+      .addCase(fetchFood.rejected, (state, action) => {
         console.log('error', action.error.message);
       });
     builder

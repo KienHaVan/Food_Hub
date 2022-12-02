@@ -6,10 +6,11 @@ import {
   SignUpScreen,
   SplashScreen,
   WelcomeScreen,
+  EditProfileScreen,
+  ProfileScreen,
+  SearchScreen,
 } from '../screens';
-import EditProfileScreen from '../screens/EditProfileScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
-import ProfileScreen from '../screens/ProfileScreen';
 import RatingScreen from '../screens/RatingScreen';
 import ReviewScreen from '../screens/ReviewScreen';
 import TestFirestore from '../screens/TestFirestore';
@@ -32,6 +33,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name='FoodDetail' component={FoodDetailScreen} />
       <Stack.Screen name='Profile' component={ProfileScreen} />
       <Stack.Screen name='EditProfile' component={EditProfileScreen} />
+      <Stack.Screen name='Search' component={SearchScreen} />
       <Stack.Screen name='ForgotPassword' component={ForgotPasswordScreen} />
       <Stack.Screen name='TestFirestore' component={TestFirestore} />
       <Stack.Screen name='Rating' component={RatingScreen} />
