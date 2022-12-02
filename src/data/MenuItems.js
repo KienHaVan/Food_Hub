@@ -10,6 +10,7 @@ export const MenuItems = [
     id: 1,
     name: 'My Profile',
     icon: Images.ICON.PROFILE,
+    toScreen: 'Profile',
   },
   {
     id: 2,

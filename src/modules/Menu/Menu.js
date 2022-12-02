@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image, FlatList, ScrollView, Dimensions } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 //region Import styling
 import Sizes from '../../constants/Size';
@@ -21,10 +21,14 @@ const Menu = ({ handleShowMenu }) => {
 
   const renderItem = (item) => {
     return (
-      <View key={item.id} style={styles.menuItem}>
+      <TouchableOpacity
+        key={item.id}
+        style={styles.menuItem}
+        onPress={() => navigation.navigate(item.toScreen)}
+      >
         <Image source={item.icon} />
         <Text style={[TextStyles.textMain, styles.menuItemText]}>{item.name}</Text>
-      </View>
+      </TouchableOpacity>
     );
   };
   const handleSignOut = () => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
@@ -9,16 +9,43 @@ import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import CustomButton from '../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCurrentUser } from '../features/userSlice';
+import { addUserToFirebaseWithID } from '../utils/authentication';
 
-const inputLabel = [
-  { title: 'Full name' },
-  { title: 'Mobile number' },
-  { title: 'State' },
-  { title: 'City' },
-  { title: 'Street (Include house number)' },
-];
 const EditProfileScreen = () => {
+  const [fullname, setFullname] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [region, setRegion] = useState('');
+  const [city, setCity] = useState('');
+  const [street, setStreet] = useState('');
+  const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    if (currentUser) {
+      setFullname(currentUser.fullname);
+      setPhoneNumber(currentUser.phoneNumber);
+      setRegion(currentUser.region);
+      setCity(currentUser.city);
+      setStreet(currentUser.street);
+    }
+  }, [currentUser]);
+
+  const handleUpdateUserDetail = async () => {
+    const formValues = {
+      fullname: fullname,
+      phoneNumber: phoneNumber,
+      region: region,
+      city: city,
+      street: street,
+    };
+    dispatch(updateCurrentUser(formValues));
+    await addUserToFirebaseWithID(formValues, currentUser.id);
+    navigation.navigate('HomeStack');
+    console.log(currentUser);
+  };
   return (
     <KeyBoardAvoidingWaraper>
       <View style={styles.container}>
@@ -31,14 +58,36 @@ const EditProfileScreen = () => {
           <View style={styles.space} />
         </View>
         <View style={styles.textFieldContainer}>
-          {inputLabel.map((item) => (
-            <View key={item.title} style={styles.textInput}>
-              <InputField label={item.title} />
-            </View>
-          ))}
+          <View style={styles.textInput}>
+            <InputField
+              label='Full name'
+              value={fullname}
+              onChangeText={(text) => setFullname(text)}
+            />
+          </View>
+          <View style={styles.textInput}>
+            <InputField
+              label='Mobile number'
+              value={phoneNumber}
+              onChangeText={(text) => setPhoneNumber(text)}
+            />
+          </View>
+          <View style={styles.textInput}>
+            <InputField label='State' value={region} onChangeText={(text) => setRegion(text)} />
+          </View>
+          <View style={styles.textInput}>
+            <InputField label='City' value={city} onChangeText={(text) => setCity(text)} />
+          </View>
+          <View style={styles.textInput}>
+            <InputField
+              label='Street (Include house number)'
+              onChangeText={(text) => setStreet(text)}
+              value={street}
+            />
+          </View>
         </View>
         <View style={styles.buttonSave}>
-          <CustomButton text='SAVE' />
+          <CustomButton text='SAVE' onPress={handleUpdateUserDetail} />
         </View>
       </View>
     </KeyBoardAvoidingWaraper>

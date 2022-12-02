@@ -11,9 +11,12 @@ const userSlice = createSlice({
     addCurrentUser: (state, action) => {
       state.currentUser = { ...action.payload };
     },
+    updateCurrentUser: (state, action) => {
+      state.currentUser = { ...state.currentUser, ...action.payload };
+    },
   },
   extraReducers: (builder) => {},
 });
 
-export const { addCurrentUser } = userSlice.actions;
+export const { addCurrentUser, updateCurrentUser } = userSlice.actions;
 export default userSlice.reducer;
