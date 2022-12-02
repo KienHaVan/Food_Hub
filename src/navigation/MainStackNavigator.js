@@ -10,6 +10,10 @@ import {
   ProfileScreen,
   SearchScreen,
 } from '../screens';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import RatingScreen from '../screens/RatingScreen';
+import ReviewScreen from '../screens/ReviewScreen';
+import TestFirestore from '../screens/TestFirestore';
 import HomeBottomTabNavigator from './HomeBottomTabNavigator';
 
 const Stack = createNativeStackNavigator();
@@ -17,7 +21,7 @@ const Stack = createNativeStackNavigator();
 const MainStackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName='HomeStack'
+      initialRouteName='Splash'
       defaultScreenOptions={'Splash'}
       screenOptions={{ headerShown: false }}
     >
@@ -30,6 +34,10 @@ const MainStackNavigator = () => {
       <Stack.Screen name='Profile' component={ProfileScreen} />
       <Stack.Screen name='EditProfile' component={EditProfileScreen} />
       <Stack.Screen name='Search' component={SearchScreen} />
+      <Stack.Screen name='ForgotPassword' component={ForgotPasswordScreen} />
+      <Stack.Screen name='TestFirestore' component={TestFirestore} />
+      <Stack.Screen name='Rating' component={RatingScreen} />
+      <Stack.Screen name='Review' component={ReviewScreen} />
     </Stack.Navigator>
   );
 };

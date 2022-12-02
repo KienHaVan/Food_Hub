@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
@@ -17,33 +17,41 @@ import { Images } from '../../assets';
 import MyInput from '../components/form/MyInput';
 import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
 import Color from '../constants/Color';
+import { addCurrentUser } from '../features/userSlice';
 import TextStyles from '../styles/TextStyles';
-import { SignUpWithEmailAndPassword } from '../utils/authentication';
+import {
+  addUserToFirebase,
+  addUserToFirebaseWithID,
+  SignUpWithEmailAndPassword,
+} from '../utils/authentication';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
+import auth from '@react-native-firebase/auth';
+import { useDispatch, useSelector } from 'react-redux';
 
+const schema = yup
+  .object({
+    fullname: yup
+      .string()
+      .required('Please insert your name')
+      .max(20, 'Your name should be 20 charaters or less'),
+    email: yup
+      .string()
+      .lowercase()
+      .required('Please insert your email')
+      .matches(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        'Enter the valid email'
+      ),
+    password: yup
+      .string()
+      .required('Please insert your password')
+      .min(6, 'Password length should be at least 6 characters')
+      .max(20, 'Password cannot exceed more than 20 characters'),
+  })
+  .required();
 const SignUpScreen = () => {
   const navigation = useNavigation();
-  const schema = yup
-    .object({
-      fullname: yup
-        .string()
-        .required('Please insert your name')
-        .max(20, 'Your name should be 20 charaters or less'),
-      email: yup
-        .string()
-        .lowercase()
-        .required('Please insert your email')
-        .matches(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-          'Enter the valid email'
-        ),
-      password: yup
-        .string()
-        .required('Please insert your password')
-        .min(6, 'Password length should be at least 6 characters')
-        .max(20, 'Password cannot exceed more than 20 characters'),
-    })
-    .required();
+  const dispatch = useDispatch();
   const {
     handleSubmit,
     control,
@@ -53,23 +61,43 @@ const SignUpScreen = () => {
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
-
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (!isValid) {
       return;
     }
-    console.log(data);
-    SignUpWithEmailAndPassword(data.email, data.password);
-    Toast.show({
-      type: 'success',
-      text1: 'Create user successfully',
-    });
-    reset({
-      fullname: '',
-      email: '',
-      password: '',
-    });
-    navigation.navigate('HomeStack');
+    try {
+      await SignUpWithEmailAndPassword(data.email, data.password);
+      await auth().currentUser.updateProfile({
+        displayName: data.fullname,
+        photoURL:
+          'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+      });
+      await addUserToFirebaseWithID(
+        {
+          fullname: data.fullname,
+          email: data.email,
+          password: data.password,
+          photoURL:
+            'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+        },
+        auth()?.currentUser?.uid
+      );
+      await dispatch(
+        addCurrentUser({
+          fullname: auth()?.currentUser?.displayName,
+          email: auth()?.currentUser?.email,
+          photoURL: auth()?.currentUser?.photoURL,
+          id: auth()?.currentUser?.uid,
+        })
+      );
+      Toast.show({
+        type: 'success',
+        text1: 'Create user successfully',
+      });
+      navigation.navigate('HomeStack');
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <ImageBackground
@@ -109,7 +137,7 @@ const SignUpScreen = () => {
           {!isSubmitting ? (
             <Text style={styles.signupButtonText}>SIGN UP</Text>
           ) : (
-            <ActivityIndicator size={'large'} color={Color.white}></ActivityIndicator>
+            <ActivityIndicator size={'large'} color={Color.white} />
           )}
         </TouchableOpacity>
 

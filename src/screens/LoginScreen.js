@@ -1,3 +1,8 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import auth from '@react-native-firebase/auth';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
   ImageBackground,
@@ -6,39 +11,45 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import TextStyles from '../styles/TextStyles';
-import { yupResolver } from '@hookform/resolvers/yup';
+import Toast from 'react-native-toast-message';
+import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
-import MyInput from '../components/form/MyInput';
 import { Images } from '../../assets';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
+import MyInput from '../components/form/MyInput';
 import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
 import Color from '../constants/Color';
-import { useNavigation } from '@react-navigation/native';
-import { resetPassword, SignInWithEmailAndPassword } from '../utils/authentication';
-import Toast from 'react-native-toast-message';
+import { addCurrentUser } from '../features/userSlice';
+import TextStyles from '../styles/TextStyles';
+import { SignInWithEmailAndPassword } from '../utils/authentication';
+import { scaleSizeUI } from '../utils/scaleSizeUI';
 
+const schema = yup
+  .object({
+    email: yup
+      .string()
+      .lowercase()
+      .required('Please insert your email')
+      .matches(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        'Enter the valid email'
+      ),
+    password: yup
+      .string()
+      .required('Please insert your password')
+      .min(6, 'Password length should be at least 6 characters')
+      .max(20, 'Password cannot exceed more than 20 characters'),
+  })
+  .required();
 const LoginScreen = () => {
   const navigation = useNavigation();
-  const schema = yup
-    .object({
-      email: yup
-        .string()
-        .lowercase()
-        .required('Please insert your email')
-        .matches(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-          'Enter the valid email'
-        ),
-      password: yup
-        .string()
-        .required('Please insert your password')
-        .min(6, 'Password length should be at least 6 characters')
-        .max(20, 'Password cannot exceed more than 20 characters'),
-    })
-    .required();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const user = auth()?.currentUser;
+    if (user?.email) {
+      navigation.navigate('HomeStack');
+    }
+  }, [navigation]);
+
   const {
     handleSubmit,
     control,
@@ -48,17 +59,26 @@ const LoginScreen = () => {
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (!isValid) return;
-    SignInWithEmailAndPassword(data.email, data.password);
-    Toast.show({
-      type: 'success',
-      text1: 'Login successfully',
-    });
-    navigation.navigate('HomeStack');
-  };
-  const hanleResetPassword = () => {
-    resetPassword();
+    try {
+      await SignInWithEmailAndPassword(data.email, data.password);
+      await dispatch(
+        addCurrentUser({
+          fullname: auth()?.currentUser?.displayName,
+          email: auth()?.currentUser?.email,
+          photoURL: auth()?.currentUser?.photoURL,
+          id: auth()?.currentUser?.uid,
+        })
+      );
+      Toast.show({
+        type: 'success',
+        text1: 'Login successfully!',
+      });
+      navigation.navigate('HomeStack');
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <ImageBackground
@@ -83,7 +103,7 @@ const LoginScreen = () => {
         {errors?.password && <Text style={styles.error}>{errors?.password?.message}</Text>}
 
         <View style={styles.center}>
-          <TouchableOpacity onPress={hanleResetPassword}>
+          <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
             <Text style={[TextStyles.textMain, styles.centerText]}>Forgot password?</Text>
           </TouchableOpacity>
         </View>
@@ -96,7 +116,7 @@ const LoginScreen = () => {
           {!isSubmitting ? (
             <Text style={styles.signupButtonText}>LOGIN</Text>
           ) : (
-            <ActivityIndicator size={'large'} color={Color.white}></ActivityIndicator>
+            <ActivityIndicator size={'large'} color={Color.white} />
           )}
         </TouchableOpacity>
 
