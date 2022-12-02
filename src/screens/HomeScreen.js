@@ -11,9 +11,7 @@ import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import auth from '@react-native-firebase/auth';
-import { addCurrentUser } from '../features/userSlice';
 import { useFocusEffect } from '@react-navigation/native';
-import { addUserToFirebaseWithID } from '../utils/authentication';
 import HomeCategoriesModal from '../modules/Home/HomeCategoriesModal';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -33,9 +31,6 @@ const HomeScreen = () => {
       setIsScreenFocused(true);
       return () => {
         setIsScreenFocused(false);
-        // setShowMenu(false);
-        // scaleScreen();
-        // moveScreen();
       };
     }, [])
   );
@@ -69,7 +64,7 @@ const HomeScreen = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} scrollEnabled={!showMenu}>
-      <Menu />
+      <Menu handleShowMenu={animateShowMenu} />
 
       <Animated.View
         style={[
