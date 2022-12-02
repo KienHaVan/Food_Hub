@@ -7,7 +7,7 @@ import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
-const InputField = ({ placeholder, label, preIcon, isPassword, ...props }) => {
+const InputField = ({ placeholder, label, preIcon, isPassword, value, onChangeText, ...props }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(isPassword);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -39,6 +39,8 @@ const InputField = ({ placeholder, label, preIcon, isPassword, ...props }) => {
             placeholder={placeholder}
             secureTextEntry={isPasswordShown}
             cursorColor={Colors.grey}
+            value={value}
+            onChangeText={onChangeText}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             {...props}

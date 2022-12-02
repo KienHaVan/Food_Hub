@@ -1,5 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import { Images } from '../../../assets';
 import CornerButton from '../../components/CornerButton';
 import Colors from '../../constants/Color';
@@ -8,6 +10,8 @@ import LayoutStyles from '../../styles/Layout';
 import TextStyles from '../../styles/TextStyles';
 
 const HomeHeader = ({ handleShowMenu }) => {
+  const navigation = useNavigation();
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <View style={[LayoutStyles.layoutStretch, styles.header]}>
       <CornerButton sourceImage={Images.ICON.BURGER} handlePress={handleShowMenu} />
@@ -18,8 +22,11 @@ const HomeHeader = ({ handleShowMenu }) => {
         <Text style={[TextStyles.textMain, styles.addressText]}>4102 Pretty View Lane</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[LayoutStyles.layoutShadowRed, styles.avatar]}>
-        <Image source={Images.IMAGES.AVATAR} />
+      <TouchableOpacity
+        style={[LayoutStyles.layoutShadowRed, styles.avatar]}
+        onPress={() => navigation.navigate('Profile')}
+      >
+        <Image source={{ uri: currentUser.photoURL }} style={styles.avatar} />
       </TouchableOpacity>
     </View>
   );
