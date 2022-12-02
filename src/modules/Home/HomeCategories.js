@@ -8,30 +8,35 @@ import Colors from '../../constants/Color';
 import Sizes from '../../constants/Size';
 //endregion
 
-//region Import utils
-import { Categories } from '../../api/fakeData/Categories';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
-//endregion
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllCategories } from '../../features/categorySlice';
+import { useNavigation } from '@react-navigation/native';
+import { fetchCategories, toggleModal } from '../../features/categorySlice';
 import HomeCategoriesSkeleton from './HomeCategoriesSkeleton';
 
 const HomeCategories = ({ isScreenFocused }) => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const categories = useSelector((state) => state.category.categories);
   const isLoading = useSelector((state) => state.category.isLoading);
+  const isModalShown = useSelector((state) => state.category.isModalShown);
   const [activeCard, setActiveCard] = useState(0);
 
   useEffect(() => {
-    if (isScreenFocused) {
-      dispatch(fetchAllCategories());
+    if (isScreenFocused && !isModalShown) {
+      dispatch(fetchCategories(true));
     }
-  }, [isScreenFocused]);
+  }, [isScreenFocused, isModalShown]);
+
+  const handlePress = (item) => {
+    navigation.navigate('Search', { category: item });
+    setActiveCard(item.id);
+  };
 
   const renderCard = ({ item }) => {
     return (
       <TouchableOpacity
-        onPress={() => setActiveCard(item.id)}
+        onPress={() => handlePress(item)}
         style={[
           styles.card,
           activeCard === item.id ? LayoutStyles.layoutShadowRed : LayoutStyles.layoutShadowGrey,
@@ -63,7 +68,7 @@ const HomeCategories = ({ isScreenFocused }) => {
           horizontal
           showsHorizontalScrollIndicator={false}
           ListHeaderComponent={
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => dispatch(toggleModal())}>
               <Text style={[TextStyles.textMain, styles.listLink]}>View All</Text>
             </TouchableOpacity>
           }

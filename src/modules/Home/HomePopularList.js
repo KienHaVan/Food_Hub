@@ -13,7 +13,7 @@ import MealCard from '../../components/MealCard';
 import { Images } from '../../../assets';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchAllFood } from '../../features/foodSlice';
+import { fetchFood } from '../../features/foodSlice';
 
 const HomePopularList = ({ isScreenFocused }) => {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const HomePopularList = ({ isScreenFocused }) => {
 
   useEffect(() => {
     if (isScreenFocused) {
-      dispatch(fetchAllFood());
+      dispatch(fetchFood([true, null]));
     }
   }, [dispatch, isScreenFocused]);
 
@@ -57,5 +57,8 @@ const styles = StyleSheet.create({
   linkArrow: {
     width: scaleSizeUI(6),
     height: scaleSizeUI(12, true),
+  },
+  cards: {
+    marginHorizontal: -Sizes.sizeBig,
   },
 });
