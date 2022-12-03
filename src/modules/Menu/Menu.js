@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 
 //region Import styling
 import Sizes from '../../constants/Size';
@@ -7,12 +7,12 @@ import LayoutStyles from '../../styles/Layout';
 import TextStyles from '../../styles/TextStyles';
 //endregion
 
-import { MenuItems } from '../../data/MenuItems';
-import { Images } from '../../../assets';
-import { scaleSizeUI } from '../../utils/scaleSizeUI';
-import CustomButton from '../../components/CustomButton';
-import { SignOut } from '../../utils/authentication';
 import { useNavigation } from '@react-navigation/native';
+import { Images } from '../../../assets';
+import CustomButton from '../../components/CustomButton';
+import { MenuItems } from '../../data/MenuItems';
+import { SignOut } from '../../utils/authentication';
+import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import { useSelector, useDispatch } from 'react-redux';
 import { resetCart } from '../../features/cartSlice';
 
@@ -34,10 +34,22 @@ const Menu = ({ isMenuShown, handleShowMenu }) => {
     );
   };
   const handleSignOut = () => {
-    dispatch(resetCart());
-    SignOut();
-    navigation.navigate('Welcome');
-    handleShowMenu();
+    Alert.alert('Logout', 'Are you sure you want to log out?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel'),
+        style: 'cancel',
+      },
+      {
+        text: 'Yes, Log out',
+        onPress: () => {
+          dispatch(resetCart());
+          SignOut();
+          navigation.navigate('Welcome');
+          handleShowMenu();
+        },
+      },
+    ]);
   };
   return (
     <View style={[styles.menu, { zIndex: isMenuShown ? 1 : -1 }]}>
