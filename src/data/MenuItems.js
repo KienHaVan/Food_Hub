@@ -21,6 +21,7 @@ export const MenuItems = [
     id: 3,
     name: 'Payment Methods',
     icon: Images.ICON.PAYMENT,
+    toScreen: 'ManageCreditCard',
   },
   // {
   //   id: 4,

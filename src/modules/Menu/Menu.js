@@ -1,5 +1,5 @@
-import React from 'react';
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 
 //region Import styling
 import Sizes from '../../constants/Size';
@@ -13,6 +13,8 @@ import CustomButton from '../../components/CustomButton';
 import { MenuItems } from '../../data/MenuItems';
 import { SignOut } from '../../utils/authentication';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import Color from '../../constants/Color';
 
 const Menu = ({ handleShowMenu }) => {
   const navigation = useNavigation();
@@ -29,9 +31,21 @@ const Menu = ({ handleShowMenu }) => {
     );
   };
   const handleSignOut = () => {
-    SignOut();
-    navigation.navigate('Welcome');
-    handleShowMenu();
+    Alert.alert('Logout', 'Are you sure you want to log out?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel'),
+        style: 'cancel',
+      },
+      {
+        text: 'Yes, Log out',
+        onPress: () => {
+          SignOut();
+          navigation.navigate('Welcome');
+          handleShowMenu();
+        },
+      },
+    ]);
   };
   return (
     <View style={styles.menu}>
