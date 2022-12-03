@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Animated, ScrollView, StyleSheet, Text } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Animated, Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Sizes from '../constants/Size';
 import HomeCategories from '../modules/Home/HomeCategories';
 import HomeFeatured from '../modules/Home/HomeFeatured';
@@ -10,10 +10,9 @@ import Menu from '../modules/Menu/Menu';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
-import auth from '@react-native-firebase/auth';
 import { useFocusEffect } from '@react-navigation/native';
 import HomeCategoriesModal from '../modules/Home/HomeCategoriesModal';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const HomeScreen = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -22,9 +21,6 @@ const HomeScreen = () => {
   const offsetValueX = useRef(new Animated.Value(0)).current;
   const offsetValueY = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
-  const currentUser = useSelector((state) => state.user.currentUser);
-  const dispatch = useDispatch();
-  const user = auth()?.currentUser;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -38,7 +34,7 @@ const HomeScreen = () => {
   const scaleScreen = () => {
     Animated.timing(scaleValue, {
       toValue: showMenu ? 1 : 0.75,
-      duration: 300,
+      duration: 400,
       useNativeDriver: true,
     }).start();
   };

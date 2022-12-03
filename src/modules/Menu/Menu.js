@@ -13,9 +13,11 @@ import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import CustomButton from '../../components/CustomButton';
 import { SignOut } from '../../utils/authentication';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { resetCart } from '../../features/cartSlice';
 
-const Menu = ({ handleShowMenu }) => {
+const Menu = ({ isMenuShown, handleShowMenu }) => {
+  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
   const navigation = useNavigation();
 
@@ -32,12 +34,13 @@ const Menu = ({ handleShowMenu }) => {
     );
   };
   const handleSignOut = () => {
+    dispatch(resetCart());
     SignOut();
     navigation.navigate('Welcome');
     handleShowMenu();
   };
   return (
-    <View style={styles.menu}>
+    <View style={[styles.menu, { zIndex: isMenuShown ? 1 : -1 }]}>
       <View style={LayoutStyles.layoutShadowRed}>
         <Image source={{ uri: currentUser.photoURL }} style={styles.avatar} />
       </View>

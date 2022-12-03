@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Text,
   ScrollView,
@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
+  ActivityIndicator,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -15,6 +16,7 @@ import {
   resetCurrentQuantity,
   addToCart,
 } from '../features/cartSlice';
+import { updateUser } from '../features/userSlice';
 import Toast from 'react-native-toast-message';
 
 //region Import styling
@@ -39,74 +41,92 @@ const FoodDetailScreen = ({ navigation, route }) => {
   const { data } = route.params;
   const dispatch = useDispatch();
   const currentQuantity = useSelector((state) => state.cart.currentFoodQuantity);
+  const carts = useSelector((state) => state.cart.carts);
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const updateUserLoading = useSelector((state) => state.user.isLoading);
 
   //When new data is passed into the screen, the quantity of the item is reset
   useEffect(() => {
     dispatch(resetCurrentQuantity());
   }, [data]);
 
+  //When the cart is changed => update user in firestore
+  //TODO: Bug here!!! navigating to this screen also calls API
+  useEffect(() => {
+    dispatch(updateUser({ userId: currentUser.id, newData: { carts } }));
+  }, [carts]);
+
+  //Handle adding to cart action after pressing Add to cart
   const handleAddToCart = () => {
     Toast.show({
       type: 'success',
       text1: 'Added Success!',
     });
     dispatch(addToCart({ ...data, quantity: currentQuantity }));
-    navigation.goBack();
+    setTimeout(() => {
+      navigation.goBack();
+    }, 0);
   };
+
+  if (updateUserLoading) {
+    return <ActivityIndicator size='large' color={Colors.primary} />;
+  }
 
   return (
     <View style={[LayoutStyles.layoutScreen, styles.screen]}>
-      <View style={styles.backButton}>
-        <CornerButton
-          sourceImage={Images.ICON.ARROW_LEFT}
-          handlePress={() => navigation.goBack()}
-        />
-      </View>
+      <View style={{ height: '100%' }}>
+        <View style={styles.backButton}>
+          <CornerButton
+            sourceImage={Images.ICON.ARROW_LEFT}
+            handlePress={() => navigation.goBack()}
+          />
+        </View>
 
-      <ImageBackground
-        source={{ uri: data.image }}
-        style={styles.foodThumbnail}
-        imageStyle={styles.foodThumbnailImage}
-      >
-        <FavoriteButton />
-      </ImageBackground>
+        <ImageBackground
+          source={{ uri: data.image }}
+          style={styles.foodThumbnail}
+          imageStyle={styles.foodThumbnailImage}
+        >
+          <FavoriteButton />
+        </ImageBackground>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.contentWrapper}>
-          <Text style={TextStyles.h2}>{data.name}</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.contentWrapper}>
+            <Text style={TextStyles.h2}>{data.name}</Text>
 
-          <View style={styles.rating}>
-            <Image source={Images.ICON.STAR_LARGE} style={styles.ratingIcon} />
-            <Text style={[TextStyles.textMain, styles.ratingText]}>{data.rating}</Text>
-            <Text style={TextStyles.textMain}>({data.ratingAmount})</Text>
-            <TouchableOpacity style={styles.ratingLink}>
-              <Text style={[TextStyles.textMain, styles.ratingLinkText]}>See Reviews</Text>
-            </TouchableOpacity>
+            <View style={styles.rating}>
+              <Image source={Images.ICON.STAR_LARGE} style={styles.ratingIcon} />
+              <Text style={[TextStyles.textMain, styles.ratingText]}>{data.rating}</Text>
+              <Text style={TextStyles.textMain}>({data.ratingAmount})</Text>
+              <TouchableOpacity style={styles.ratingLink}>
+                <Text style={[TextStyles.textMain, styles.ratingLinkText]}>See Reviews</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={LayoutStyles.layoutStretch}>
+              <Text style={[TextStyles.textMain, styles.foodPrice]}>
+                $<Text style={[TextStyles.h2, styles.foodPrice]}>{formatPrice(data.price)}</Text>
+              </Text>
+
+              <Counter
+                defaultValue={currentQuantity}
+                onIncrease={() => dispatch(increaseCurrentQuantity(currentQuantity))}
+                onDecrease={() => dispatch(decreaseCurrentQuantity(currentQuantity))}
+              />
+            </View>
+
+            <Text style={TextStyles.textMain}>{data.description}</Text>
           </View>
+        </ScrollView>
 
-          <View style={LayoutStyles.layoutStretch}>
-            <Text style={[TextStyles.textMain, styles.foodPrice]}>
-              $<Text style={[TextStyles.h2, styles.foodPrice]}>{formatPrice(data.price)}</Text>
-            </Text>
-
-            <Counter
-              defaultValue={currentQuantity}
-              onIncrease={() => dispatch(increaseCurrentQuantity(currentQuantity))}
-              onDecrease={() => dispatch(decreaseCurrentQuantity(currentQuantity))}
+        <View style={LayoutStyles.layoutCenter}>
+          <View style={styles.buttonContainer}>
+            <CustomButton
+              text='ADD TO CART'
+              iconSource={Images.ICON.CART}
+              onPress={handleAddToCart}
             />
           </View>
-
-          <Text style={TextStyles.textMain}>{data.description}</Text>
-        </View>
-      </ScrollView>
-
-      <View style={LayoutStyles.layoutCenter}>
-        <View style={styles.buttonContainer}>
-          <CustomButton
-            text='ADD TO CART'
-            iconSource={Images.ICON.CART}
-            onPress={handleAddToCart}
-          />
         </View>
       </View>
     </View>

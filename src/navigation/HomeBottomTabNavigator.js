@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { Images } from '../../assets';
 import Color from '../constants/Color';
@@ -8,13 +8,24 @@ import { scaleSizeUI } from '../utils/scaleSizeUI';
 import LocationScreen from '../screens/LocationScreen';
 import FavoriteScreen from '../screens/FavoriteScreen';
 import NotificationScreen from '../screens/NotificationScreen';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Colors from '../constants/Color';
+import { fetchCartFromDB } from '../features/cartSlice';
+import { getUserInfoByID } from '../utils/authentication';
 
 const Tab = createBottomTabNavigator();
 
 const HomeBottomTabNavigator = () => {
+  const dispatch = useDispatch();
   const cartQuantity = useSelector((state) => state.cart.totalQuantity);
+  const currentUser = useSelector((state) => state.user.currentUser);
+
+  useEffect(() => {
+    const getCurrentFullInfo = async () => {
+      return await getUserInfoByID(currentUser.id);
+    };
+    getCurrentFullInfo().then((data) => dispatch(fetchCartFromDB(data.data())));
+  }, [currentUser]);
 
   return (
     <Tab.Navigator
