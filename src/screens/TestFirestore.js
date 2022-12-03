@@ -48,6 +48,18 @@ const TestFirestore = () => {
   const deleteUser = async (id) => {
     await usersCollection.doc(id).delete();
   };
+  // UPDATE USER
+  const updateUser = async () => {
+    await firestore()
+      .collection('users')
+      .doc('doc')
+      .update({
+        age: 31,
+      })
+      .then(() => {
+        console.log('User updated!');
+      });
+  };
   const userQuerySnapshot = () => {
     usersCollection.get().then((querySnapshot) => {
       console.log('Total users: ', querySnapshot.size);
