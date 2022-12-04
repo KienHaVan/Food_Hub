@@ -139,7 +139,7 @@ const LoginScreen = () => {
           <AnimatedLoader
             visible={visible}
             overlayColor='rgba(255, 255, 255, 0.2)'
-            source={require('../../assets/loader2.json')}
+            source={require('../../assets/pizza-loading.json')}
             animationStyle={styles.lottie}
             speed={1}
           />
@@ -157,8 +157,8 @@ const styles = StyleSheet.create({
   },
   LoadingGoogleFacebook: {
     position: 'absolute',
-    width: 600,
-    height: 600,
+    width: 300,
+    height: 300,
     top: '50%',
     left: '50%',
     transform: [{ translateX: -75 }, { translateY: -100 }],
@@ -167,8 +167,8 @@ const styles = StyleSheet.create({
     borderRadius: 10000,
   },
   lottie: {
-    width: 600,
-    height: 600,
+    width: 300,
+    height: 300,
     borderRadius: 10000,
   },
   heading: {
