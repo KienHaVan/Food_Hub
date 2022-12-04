@@ -11,6 +11,7 @@ import TextStyles from '../styles/TextStyles';
 import CustomButton from '../components/CustomButton';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import { formatPrice } from '../utils/formatter';
+import { useNavigation } from '@react-navigation/native';
 import { updateUser } from '../features/userSlice';
 
 const CartScreen = ({ navigation }) => {
@@ -71,7 +72,7 @@ const CartScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <CustomButton text='CHECKOUT' />
+          <CustomButton text='CHECKOUT' onPress={() => navigation.navigate('CheckoutPayment')} />
         </View>
       </View>
     </View>
