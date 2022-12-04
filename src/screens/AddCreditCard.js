@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CreditCard from '../components/CreditCard';
 import CornerButton from '../components/CornerButton';
 import { Images } from '../../assets';
@@ -11,15 +11,33 @@ import InputField from '../components/InputField';
 import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import { addUserToFirebaseWithID } from '../utils/authentication';
 
 const AddCreditCard = () => {
   const navigation = useNavigation();
   const [number, setNumber] = useState('0000 0000 0000 0000');
-  const [date, setDate] = useState('12/24');
+  const [date, setDate] = useState('');
   const [VCC, setVCC] = useState('');
   const [name, setName] = useState('HA VAN KIEN');
+  const id = auth()?.currentUser?.uid;
+  useEffect(() => {
+    const checkPayment = async () => {
+      const data = await firestore().collection('users').doc(id).get();
+      const payment = data.data().payment;
+      if (!payment) {
+        await addUserToFirebaseWithID(
+          {
+            ...data.data(),
+            payment: [],
+          },
+          auth()?.currentUser?.uid
+        );
+      }
+    };
+    checkPayment();
+  }, [id]);
+
   const handleSave = async () => {
-    const id = auth()?.currentUser?.uid;
     const data = await firestore().collection('users').doc(id).get();
     const payment = data.data().payment;
     try {
