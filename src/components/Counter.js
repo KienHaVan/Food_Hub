@@ -7,11 +7,11 @@ import AmountButton from './AmountButton';
 import { useDispatch } from 'react-redux';
 import { resetCurrentQuantity } from '../features/cartSlice';
 
-const Counter = ({ defaultValue, onIncrease, onDecrease }) => {
+const Counter = ({ defaultValue, onIncrease, onDecrease, allowZero = false }) => {
   const dispatch = useDispatch();
 
   const calculateCount = (number) => {
-    if (number === 0) {
+    if (number === 0 && !allowZero) {
       dispatch(resetCurrentQuantity());
       return '01';
     }

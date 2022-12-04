@@ -8,7 +8,7 @@ import { scaleSizeUI } from '../utils/scaleSizeUI';
 import LocationScreen from '../screens/LocationScreen';
 import FavoriteScreen from '../screens/FavoriteScreen';
 import NotificationScreen from '../screens/NotificationScreen';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Colors from '../constants/Color';
 
 const Tab = createBottomTabNavigator();
