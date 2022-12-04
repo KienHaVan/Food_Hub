@@ -5,10 +5,14 @@ import Color from '../constants/Color';
 import LayoutStyles from '../styles/Layout';
 import auth from '@react-native-firebase/auth';
 import { addCurrentUser } from '../features/userSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserInfoByID } from '../utils/authentication';
+import { fetchCartFromDB } from '../features/cartSlice';
 
 const SplashScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
+
   useEffect(() => {
     setTimeout(() => {
       const user = auth()?.currentUser;
@@ -29,6 +33,16 @@ const SplashScreen = ({ navigation }) => {
       }
     }, 4000);
   }, [dispatch, navigation]);
+
+  useEffect(() => {
+    if (currentUser?.email) {
+      const getCurrentFullInfo = async () => {
+        return await getUserInfoByID(currentUser.id);
+      };
+      getCurrentFullInfo().then((data) => dispatch(fetchCartFromDB(data.data())));
+    }
+  }, [currentUser]);
+
   return (
     <View style={[styles.container, LayoutStyles.layoutCenter]}>
       <Image source={Images.IMAGES.SPLASH} style={styles.logo} resizeMode='contain' />

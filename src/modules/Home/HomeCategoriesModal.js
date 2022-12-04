@@ -20,11 +20,13 @@ import { useNavigation } from '@react-navigation/native';
 import { fetchCategories, toggleModal } from '../../features/categorySlice';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import { Images } from '../../../assets';
+import Loader from '../../components/Loader';
 
 const HomeCategoriesModal = ({ isModalShown }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const categories = useSelector((state) => state.category.categories);
+  const categoriesLoading = useSelector((state) => state.category.isLoading);
 
   useEffect(() => {
     if (isModalShown) {
@@ -55,6 +57,8 @@ const HomeCategoriesModal = ({ isModalShown }) => {
       >
         <TouchableWithoutFeedback>
           <View style={[LayoutStyles.layoutShadowGrey, styles.modal]}>
+            <Loader loaderVisible={categoriesLoading} />
+
             <Image source={Images.ICON.CLOSE} style={styles.modalCloseButton} />
 
             <Text style={[TextStyles.h2, styles.modalHeading]}>All Categories</Text>

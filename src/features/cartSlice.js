@@ -11,6 +11,18 @@ const cartSlice = createSlice({
   name: 'Cart',
   initialState,
   reducers: {
+    fetchCartFromDB(state, action) {
+      state.carts = action.payload?.carts ? action.payload.carts : [];
+      if (state.carts.length !== 0) {
+        state.carts.forEach((item) => {
+          state.totalQuantity += item.quantity;
+          state.totalPrice += item.price * item.quantity;
+        });
+      } else {
+        state.totalPrice = 0;
+        state.totalQuantity = 0;
+      }
+    },
     //Function to add item to cart
     addToCart(state, action) {
       state.totalQuantity += action.payload.quantity;
@@ -55,15 +67,23 @@ const cartSlice = createSlice({
     resetCurrentQuantity(state) {
       state.currentFoodQuantity = 1;
     },
+    //Function to reset cart status when user logs out
+    resetCart(state) {
+      state.carts = [];
+      state.totalQuantity = 0;
+      state.totalPrice = 0;
+    },
   },
   extraReducers: (builder) => {},
 });
 
 export const {
+  fetchCartFromDB,
   addToCart,
   removeFromCart,
   increaseCurrentQuantity,
   decreaseCurrentQuantity,
   resetCurrentQuantity,
+  resetCart,
 } = cartSlice.actions;
 export default cartSlice.reducer;

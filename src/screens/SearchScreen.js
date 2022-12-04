@@ -9,6 +9,7 @@ import Colors from '../constants/Color';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
 import MealCard from '../components/MealCard';
+import Loader from '../components/Loader';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
@@ -18,6 +19,7 @@ const SearchScreen = ({ navigation, route }) => {
   const { category } = route.params;
   const dispatch = useDispatch();
   const foodList = useSelector((state) => state.food.food);
+  const foodLoading = useSelector((state) => state.food.isLoading);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -31,6 +33,8 @@ const SearchScreen = ({ navigation, route }) => {
 
   return (
     <View style={[LayoutStyles.layoutScreen, styles.screen]}>
+      <Loader loaderVisible={foodLoading} />
+
       <View style={styles.backButton}>
         <CornerButton
           sourceImage={Images.ICON.ARROW_LEFT}

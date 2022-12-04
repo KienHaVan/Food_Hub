@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Images } from '../../assets';
 import CartCard from '../components/CartCard';
 import CornerButton from '../components/CornerButton';
@@ -11,10 +11,17 @@ import TextStyles from '../styles/TextStyles';
 import CustomButton from '../components/CustomButton';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import { formatPrice } from '../utils/formatter';
+import { updateUser } from '../features/userSlice';
 
 const CartScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const carts = useSelector((state) => state.cart.carts);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
+  const currentUser = useSelector((state) => state.user.currentUser);
+
+  useEffect(() => {
+    dispatch(updateUser({ userId: currentUser.id, newData: { carts: carts } }));
+  }, [carts]);
 
   const renderCartItem = ({ item }) => {
     return <CartCard item={item} />;

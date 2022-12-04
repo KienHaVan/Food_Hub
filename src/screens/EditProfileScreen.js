@@ -43,7 +43,7 @@ const EditProfileScreen = () => {
     };
     dispatch(updateCurrentUser(formValues));
     await addUserToFirebaseWithID(formValues, currentUser.id);
-    navigation.navigate('HomeStack');
+    navigation.navigate('Profile');
     console.log(currentUser);
   };
   return (
