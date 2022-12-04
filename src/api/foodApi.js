@@ -2,16 +2,33 @@ import firestore from '@react-native-firebase/firestore';
 
 const foodCollection = firestore().collection('food');
 
-export const fetchFoodApi = async (category) => {
+export const fetchFoodApi = async (category, searchTerm, sortCriteria) => {
   let results = [];
-  await foodCollection
-    .where('categories', 'array-contains', category)
-    .get()
-    .then((collections) =>
-      collections.forEach((documentSnapshot) => {
-        results = [...results, { id: documentSnapshot.id, ...documentSnapshot.data() }];
-      })
-    );
+  if (category || searchTerm) {
+    console.log('into here');
+    await foodCollection
+      .where(
+        category ? 'categories' : 'name',
+        category ? 'array-contains' : '==',
+        category || searchTerm
+      )
+      .orderBy(sortCriteria, 'desc')
+      .get()
+      .then((collections) =>
+        collections.forEach((documentSnapshot) => {
+          results = [...results, { id: documentSnapshot.id, ...documentSnapshot.data() }];
+        })
+      );
+  } else {
+    await foodCollection
+      .orderBy(sortCriteria, 'desc')
+      .get()
+      .then((collections) =>
+        collections.forEach((documentSnapshot) => {
+          results = [...results, { id: documentSnapshot.id, ...documentSnapshot.data() }];
+        })
+      );
+  }
   return results;
 };
 

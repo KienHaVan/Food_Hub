@@ -7,7 +7,16 @@ import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
-const InputField = ({ placeholder, label, preIcon, isPassword, value, onChangeText, ...props }) => {
+const InputField = ({
+  placeholder,
+  label,
+  preIcon,
+  isPassword,
+  value,
+  onChangeText,
+  onSubmitted,
+  ...props
+}) => {
   const [isPasswordShown, setIsPasswordShown] = useState(isPassword);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -35,6 +44,8 @@ const InputField = ({ placeholder, label, preIcon, isPassword, value, onChangeTe
         >
           {preIcon && <Image source={preIcon} style={styles.iconSearch} />}
           <TextInput
+            autoCapitalize='none'
+            autoCorrect={false}
             style={styles.input}
             placeholder={placeholder}
             secureTextEntry={isPasswordShown}
@@ -43,6 +54,7 @@ const InputField = ({ placeholder, label, preIcon, isPassword, value, onChangeTe
             onChangeText={onChangeText}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
+            onSubmitEditing={onSubmitted}
             {...props}
           />
         </View>

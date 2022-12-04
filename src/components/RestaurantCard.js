@@ -16,7 +16,7 @@ const RestaurantCard = ({ data }) => {
         <Text style={[TextStyles.textMain, styles.cardRatingText]}>{data.rating}</Text>
         <Image source={Images.ICON.STAR} />
         <Text style={[TextStyles.textSmall, styles.cardRatingTextSmall]}>
-          ({data.ratingPeople})
+          ({data.ratingAmount})
         </Text>
       </View>
 

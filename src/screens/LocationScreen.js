@@ -18,9 +18,10 @@ const LocationScreen = () => {
             dispatch(
               addRestaurant({
                 name: 'Pizza Hut',
-                rating: 4.3,
+                rating: generateRandomRating(3, 4),
+                ratingAmount: generateRandomRatingAmount(800, 8000),
                 deliveryPrice: 2,
-                categories: ['Pizza', 'Fast Food', 'Snacks'],
+                categories: [],
                 food: [],
                 image:
                   'https://images.deliveryhero.io/image/fd-sg/LH/xvqq-hero.jpg?width=1200&height=300&quality=45',
@@ -30,23 +31,23 @@ const LocationScreen = () => {
         />
       </View>
 
-      <View
-        style={styles.buttonContainer}
-        onPress={() => {
-          dispatch(
-            addFood({
-              name: '',
-              categories: [],
-              description: '',
-              image: '',
-              price: 0,
-              rating: generateRandomRating(3, 4),
-              ratingAmount: generateRandomRatingAmount(60, 1000),
-            })
-          );
-        }}
-      >
-        <CustomButton text='Generate Food' />
+      <View style={styles.buttonContainer}>
+        <CustomButton
+          text='Generate Food'
+          onPress={() => {
+            dispatch(
+              addFood({
+                name: '',
+                categories: [],
+                description: '',
+                image: '',
+                price: 0,
+                rating: generateRandomRating(3, 4),
+                ratingAmount: generateRandomRatingAmount(60, 1000),
+              })
+            );
+          }}
+        />
       </View>
     </View>
   );
