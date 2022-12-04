@@ -12,6 +12,13 @@ import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import { addUserToFirebaseWithID } from '../utils/authentication';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  initUserPayment,
+  InitUserPayment,
+  updateCurrentUser,
+  updateUserPayment,
+} from '../features/userSlice';
 
 const AddCreditCard = () => {
   const navigation = useNavigation();
@@ -20,7 +27,12 @@ const AddCreditCard = () => {
   const [VCC, setVCC] = useState('');
   const [name, setName] = useState('HA VAN KIEN');
   const id = auth()?.currentUser?.uid;
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
   useEffect(() => {
+    if (!currentUser?.paymentMethod) {
+      dispatch(initUserPayment());
+    }
     const checkPayment = async () => {
       const data = await firestore().collection('users').doc(id).get();
       const payment = data.data().payment;
@@ -35,7 +47,8 @@ const AddCreditCard = () => {
       }
     };
     checkPayment();
-  }, [id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSave = async () => {
     const data = await firestore().collection('users').doc(id).get();
@@ -56,6 +69,7 @@ const AddCreditCard = () => {
           ],
         })
         .then(() => {
+          dispatch(updateUserPayment({ number, date, VCC, name }));
           console.log('User updated!');
           navigation.goBack();
         });

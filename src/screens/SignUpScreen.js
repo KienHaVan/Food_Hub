@@ -84,7 +84,7 @@ const SignUpScreen = () => {
         },
         auth()?.currentUser?.uid
       );
-      await dispatch(
+      dispatch(
         addCurrentUser({
           fullname: auth()?.currentUser?.displayName,
           email: auth()?.currentUser?.email,
