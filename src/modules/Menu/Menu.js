@@ -43,8 +43,7 @@ const Menu = ({ isMenuShown, handleShowMenu }) => {
       {
         text: 'Yes, Log out',
         onPress: () => {
-          dispatch(resetCart());
-          SignOut();
+          SignOut().then(() => dispatch(resetCart()));
           navigation.navigate('Welcome');
           handleShowMenu();
         },

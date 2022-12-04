@@ -7,7 +7,6 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
-  ActivityIndicator,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -36,6 +35,8 @@ import CustomButton from '../components/CustomButton';
 import { Images } from '../../assets';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import { formatPrice } from '../utils/formatter';
+import FoodAddonList from '../modules/FoodDetail/FoodAddonList';
+import Loader from '../components/Loader';
 
 const FoodDetailScreen = ({ navigation, route }) => {
   const { data } = route.params;
@@ -58,22 +59,16 @@ const FoodDetailScreen = ({ navigation, route }) => {
 
   //Handle adding to cart action after pressing Add to cart
   const handleAddToCart = () => {
-    Toast.show({
-      type: 'success',
-      text1: 'Added Success!',
-    });
     dispatch(addToCart({ ...data, quantity: currentQuantity }));
     setTimeout(() => {
       navigation.goBack();
     }, 0);
   };
 
-  if (updateUserLoading) {
-    return <ActivityIndicator size='large' color={Colors.primary} />;
-  }
-
   return (
     <View style={[LayoutStyles.layoutScreen, styles.screen]}>
+      <Loader loaderVisible={updateUserLoading} />
+
       <View style={{ height: '100%' }}>
         <View style={styles.backButton}>
           <CornerButton
@@ -116,6 +111,8 @@ const FoodDetailScreen = ({ navigation, route }) => {
             </View>
 
             <Text style={TextStyles.textMain}>{data.description}</Text>
+
+            <FoodAddonList data={data?.addons} />
           </View>
         </ScrollView>
 
@@ -138,7 +135,6 @@ export default FoodDetailScreen;
 const styles = StyleSheet.create({
   screen: {
     paddingVertical: Sizes.sizeBigH,
-    //paddingHorizontal: Sizes.sizeBig,
   },
   contentWrapper: {
     marginHorizontal: Sizes.sizeBig,

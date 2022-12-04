@@ -19,7 +19,6 @@ const CartScreen = ({ navigation }) => {
   const totalPrice = useSelector((state) => state.cart.totalPrice);
   const currentUser = useSelector((state) => state.user.currentUser);
 
-  //TODO: Bug here: when the cart is empty => does not update on firestore
   useEffect(() => {
     dispatch(updateUser({ userId: currentUser.id, newData: { carts: carts } }));
   }, [carts]);

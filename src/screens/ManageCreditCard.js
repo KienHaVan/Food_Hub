@@ -19,7 +19,7 @@ const ManageCreditCard = () => {
       .collection('users')
       .doc(id)
       .onSnapshot((documentSnapshot) => {
-        setCreditCardList(documentSnapshot.data().payment);
+        setCreditCardList(documentSnapshot.data().payment || []);
       });
     return () => subscriber();
   }, []);
