@@ -4,7 +4,7 @@ import AnimatedLoader from 'react-native-animated-loader';
 
 import Sizes from '../constants/Size';
 
-const Loader = ({ loaderVisible = false, overlayColor = 'rgba(255,255,255,0.9)', speed = 1 }) => {
+const Loader = ({ loaderVisible = false, overlayColor = 'rgba(255,255,255,0.9)', speed = 6 }) => {
   return (
     <View>
       <AnimatedLoader
