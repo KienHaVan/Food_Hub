@@ -28,12 +28,6 @@ const SearchScreen = ({ navigation, route }) => {
   const [currentCriteria, setCurrentCriteria] = useState(defaultSortCriteria || 1);
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     handleFilter(defaultSortCriteria);
-  //   }, [])
-  // );
-
   useEffect(() => {
     handleFilter(defaultSortCriteria);
   }, [localSearchTerm]);
