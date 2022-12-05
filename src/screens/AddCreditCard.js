@@ -85,7 +85,7 @@ const AddCreditCard = () => {
             sourceImage={Images.ICON.ARROW_LEFT}
             handlePress={() => navigation.goBack()}
           />
-          <Text style={TextStyles.h3}>ADD CREDIT CARDS</Text>
+          <Text style={TextStyles.h3}>Add Credit Cards</Text>
           <View style={styles.hidden}>
             <CornerButton />
           </View>

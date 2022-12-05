@@ -5,7 +5,7 @@ import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
-const CustomButton = ({ isPrimary = true, iconSource, text = 'Click here', onPress }) => {
+const CustomButton = ({ isPrimary = true, iconSource, text = 'Click here', onPress, ...props }) => {
   return (
     <TouchableOpacity
       style={[
@@ -16,6 +16,7 @@ const CustomButton = ({ isPrimary = true, iconSource, text = 'Click here', onPre
         iconSource ? styles.buttonWithTextIcon : styles.buttonWithText,
       ]}
       onPress={onPress}
+      {...props}
     >
       {iconSource && (
         <View style={styles.iconContainer}>

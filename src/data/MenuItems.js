@@ -5,6 +5,7 @@ export const MenuItems = [
     id: 0,
     name: 'My Orders',
     icon: Images.ICON.ORDERS,
+    toScreen: 'Billing',
   },
   {
     id: 1,
