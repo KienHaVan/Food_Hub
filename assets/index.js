@@ -16,6 +16,8 @@ export const Images = {
     RESTAURANT_AVATAR: require('./images/image_restaurant_avatar.png'),
     STAR: require('./images/image_star.png'),
     STAR_FILLED: require('./images/image_star_filled.png'),
+    IMAGE_SEARCH:
+      'https://images.unsplash.com/photo-1493770348161-369560ae357d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
   },
   ICON: {
     ARROW_DOWN: require('./icons/icon_arrow_down.png'),

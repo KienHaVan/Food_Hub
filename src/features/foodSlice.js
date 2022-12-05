@@ -3,8 +3,14 @@ import { fetchFoodApi, fetchPopularFoodApi, addFoodApi } from '../api/foodApi';
 
 export const fetchFood = createAsyncThunk(
   'Food/fetchAllFood',
-  async ([areFeatured, category], thunkApi) => {
-    return areFeatured ? await fetchPopularFoodApi() : await fetchFoodApi(category);
+  async ({ areFeatured = false, category, searchTerm = '', sortCriteria = 'rating' }, thunkApi) => {
+    console.log('are featured?', areFeatured);
+    console.log('category?', category);
+    console.log('search term?', searchTerm);
+    console.log('sort criteria?', sortCriteria);
+    return areFeatured
+      ? await fetchPopularFoodApi()
+      : await fetchFoodApi(category, searchTerm, sortCriteria);
   }
 );
 
