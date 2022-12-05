@@ -1,16 +1,68 @@
-import React from 'react';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Images } from '../../assets';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
+import { addUserToFirebaseWithID } from '../utils/authentication';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import FavoriteButton from './FavoriteButton';
 
-const RestaurantCard = ({ data }) => {
+const RestaurantCard = ({ data, isFavorite = false, isFullWidth = false }) => {
+  const [fav, setFav] = useState(isFavorite);
+  const id = auth()?.currentUser?.uid;
+
+  useEffect(() => {
+    const checkFavoriteRestaurant = async () => {
+      const userData = await firestore().collection('users').doc(id).get();
+      const favoriteRestaurant = userData.data().favoriteRestaurant;
+      if (!favoriteRestaurant) {
+        await addUserToFirebaseWithID(
+          {
+            ...userData.data(),
+            favoriteRestaurant: [],
+          },
+          auth()?.currentUser?.uid
+        );
+      }
+    };
+    checkFavoriteRestaurant();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handlePress = async (item) => {
+    setFav(!fav);
+    const userData = await firestore().collection('users').doc(id).get();
+    const favoriteRestaurant = userData.data().favoriteRestaurant;
+    try {
+      if (!fav) {
+        await firestore()
+          .collection('users')
+          .doc(id)
+          .update({
+            favoriteRestaurant: [...favoriteRestaurant, { ...item }],
+          });
+      } else {
+        const updateItem = favoriteRestaurant.filter((foodData) => foodData.id !== item.id);
+        await firestore()
+          .collection('users')
+          .doc(id)
+          .update({
+            favoriteRestaurant: [...updateItem],
+          });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <TouchableOpacity style={[LayoutStyles.layoutShadowGrey, styles.card]}>
+    <TouchableOpacity
+      style={[LayoutStyles.layoutShadowGrey, styles.card, isFullWidth && styles.cardFull]}
+    >
       {/*Rating Label*/}
       <View style={[LayoutStyles.layoutCenter, LayoutStyles.layoutShadowGrey, styles.cardRating]}>
         <Text style={[TextStyles.textMain, styles.cardRatingText]}>{data.rating}</Text>
@@ -21,10 +73,13 @@ const RestaurantCard = ({ data }) => {
       </View>
 
       {/*Add to favorite*/}
-      <FavoriteButton />
+      <FavoriteButton handlePress={() => handlePress(data)} isFavorite={fav} />
 
       {/*Thumbnail*/}
-      <Image source={{ uri: data.image }} style={styles.cardThumbnail} />
+      <Image
+        source={{ uri: data.image }}
+        style={isFullWidth ? styles.cardThumbnailFull : styles.cardThumbnail}
+      />
 
       {/*Content*/}
       <View style={styles.cardContent}>
@@ -69,6 +124,12 @@ const styles = StyleSheet.create({
   },
   cardThumbnail: {
     width: scaleSizeUI(266),
+    height: scaleSizeUI(136, true),
+    borderTopLeftRadius: Sizes.sizeModerate,
+    borderTopRightRadius: Sizes.sizeModerate,
+  },
+  cardThumbnailFull: {
+    width: '100%',
     height: scaleSizeUI(136, true),
     borderTopLeftRadius: Sizes.sizeModerate,
     borderTopRightRadius: Sizes.sizeModerate,
@@ -119,5 +180,8 @@ const styles = StyleSheet.create({
   },
   cardRatingTextSmall: {
     marginLeft: Sizes.sizeTiny - 2,
+  },
+  cardFull: {
+    width: '87%',
   },
 });

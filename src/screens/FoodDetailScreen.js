@@ -1,45 +1,45 @@
 import React, { useEffect } from 'react';
 import {
-  Text,
-  ScrollView,
-  View,
-  StyleSheet,
   Image,
-  TouchableOpacity,
   ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  increaseCurrentQuantity,
-  decreaseCurrentQuantity,
-  resetCurrentQuantity,
   addToCart,
+  decreaseCurrentQuantity,
+  increaseCurrentQuantity,
+  resetCurrentQuantity,
 } from '../features/cartSlice';
 import { updateUser } from '../features/userSlice';
 import Toast from 'react-native-toast-message';
 
 //region Import styling
-import TextStyles from '../styles/TextStyles';
-import LayoutStyles from '../styles/Layout';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
+import LayoutStyles from '../styles/Layout';
+import TextStyles from '../styles/TextStyles';
 //endregion
 
 //region Import components
 import CornerButton from '../components/CornerButton';
-import FavoriteButton from '../components/FavoriteButton';
 import Counter from '../components/Counter';
 import CustomButton from '../components/CustomButton';
 //endregion
 
 import { Images } from '../../assets';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
+import FavoriteButton from '../components/FavoriteButton';
 import { formatPrice } from '../utils/formatter';
+import { scaleSizeUI } from '../utils/scaleSizeUI';
 import FoodAddonList from '../modules/FoodDetail/FoodAddonList';
 import Loader from '../components/Loader';
 
 const FoodDetailScreen = ({ navigation, route }) => {
-  const { data } = route.params;
+  const { data, isFavorite } = route.params;
   const dispatch = useDispatch();
   const currentQuantity = useSelector((state) => state.cart.currentFoodQuantity);
   const carts = useSelector((state) => state.cart.carts);
@@ -83,7 +83,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
         style={styles.foodThumbnail}
         imageStyle={styles.foodThumbnailImage}
       >
-        <FavoriteButton />
+        <FavoriteButton isFavorite={isFavorite} />
       </ImageBackground>
 
       <ScrollView showsVerticalScrollIndicator={false}>
