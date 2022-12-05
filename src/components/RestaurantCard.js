@@ -1,14 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { Images } from '../../assets';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
+import {
+  addToFavoriteRestaurantList,
+  getFireStoreUserData,
+  removeToFavoriteRestaurantList,
+} from '../features/userSlice';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
+import { addUserToFirebaseWithID } from '../utils/authentication';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import FavoriteButton from './FavoriteButton';
 
-const RestaurantCard = ({ data }) => {
+const RestaurantCard = ({ data, isFavorite = false }) => {
+  const [fav, setFav] = useState(isFavorite);
+  const dispatch = useDispatch();
+  const { currentUser, currentUserFirestoreData, favoriteRestaurantList } = useSelector(
+    (state) => state.user
+  );
+
+  const handlePress = (item) => {
+    setFav(!fav);
+    if (!fav) {
+      dispatch(addToFavoriteRestaurantList(item));
+    } else {
+      dispatch(removeToFavoriteRestaurantList(item));
+    }
+  };
+
+  // useEffect(() => {
+  //   dispatch(getFireStoreUserData(currentUser.id));
+  //   console.log('fireStore:', currentUserFirestoreData);
+  //   const result = { ...currentUserFirestoreData, favoriteRestaurant: [...favoriteRestaurantList] };
+  //   console.log(result);
+  //   addUserToFirebaseWithID(result, currentUser.id);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [currentUser, favoriteRestaurantList, dispatch]);
+
   return (
     <TouchableOpacity style={[LayoutStyles.layoutShadowGrey, styles.card]}>
       {/*Rating Label*/}
@@ -21,7 +52,7 @@ const RestaurantCard = ({ data }) => {
       </View>
 
       {/*Add to favorite*/}
-      <FavoriteButton />
+      <FavoriteButton handlePress={() => handlePress(data)} isFavorite={fav} />
 
       {/*Thumbnail*/}
       <Image source={{ uri: data.image }} style={styles.cardThumbnail} />

@@ -22,7 +22,7 @@ const HomeFeatured = ({ isScreenFocused }) => {
     if (isScreenFocused) {
       dispatch(fetchAllRestaurants());
     }
-  }, [isScreenFocused]);
+  }, [dispatch, isScreenFocused]);
 
   const renderCard = ({ item }) => {
     return <RestaurantCard data={item} />;

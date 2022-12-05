@@ -1,30 +1,35 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
+import CustomButton from '../components/CustomButton';
 import InputField from '../components/InputField';
 import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
+import { getFireStoreUserData } from '../features/userSlice';
 import TextStyles from '../styles/TextStyles';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
+import { height, scaleSizeUI } from '../utils/scaleSizeUI';
 
 const ProfileScreen = () => {
   const [fullName, setFullname] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const navigation = useNavigation();
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, currentUserFirestoreData } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (currentUser) {
-      setFullname(currentUser?.fullname);
-      setPhoneNumber(currentUser?.phoneNumber);
-      setEmail(currentUser?.email);
+    dispatch(getFireStoreUserData(currentUser.id));
+    if (currentUserFirestoreData) {
+      setFullname(currentUserFirestoreData?.fullname);
+      setPhoneNumber(currentUserFirestoreData?.phoneNumber);
+      setEmail(currentUserFirestoreData?.email);
     }
-  }, [currentUser]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser, dispatch]);
 
   return (
     <KeyBoardAvoidingWaraper>
@@ -47,18 +52,40 @@ const ProfileScreen = () => {
         </View>
         <View style={styles.textFieldContainer}>
           <View style={styles.textInput}>
-            <InputField label='Full name' value={fullName} />
+            <InputField
+              label='Full name'
+              value={fullName}
+              isDisabled
+              isEditable={false}
+              isShowKeyboard={false}
+              isSelected={false}
+            />
           </View>
           <View style={styles.textInput}>
-            <InputField label='Email' value={email} />
+            <InputField
+              label='Email'
+              value={email}
+              isDisabled
+              isEditable={false}
+              isShowKeyboard={false}
+              isSelected={false}
+            />
           </View>
           <View style={styles.textInput}>
-            <InputField label='Phone number' value={phoneNumber} />
-            {!currentUser.phoneNumber && (
-              <Text style={[TextStyles.textMain, styles.warning]}>
-                Update your phone number in Edit page
-              </Text>
-            )}
+            <InputField
+              label='Phone number'
+              value={phoneNumber}
+              isDisabled
+              isEditable={false}
+              isShowKeyboard={false}
+              isSelected={false}
+            />
+          </View>
+          <View style={styles.navigationButton}>
+            <CustomButton
+              text='Go to edit profile'
+              onPress={() => navigation.navigate('EditProfile')}
+            />
           </View>
         </View>
       </ImageBackground>
@@ -73,6 +100,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: Sizes.sizeLargeH,
     paddingHorizontal: Sizes.sizeBigH,
+    height: height,
   },
   avatarContainer: {
     width: scaleSizeUI(108),
@@ -96,6 +124,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
     color: Colors.secondaryDarker,
+    textAlign: 'center',
   },
   editInfo: {
     textAlign: 'center',
@@ -109,5 +138,10 @@ const styles = StyleSheet.create({
   warning: {
     color: Colors.primary,
     marginTop: 6,
+  },
+  navigationButton: {
+    width: scaleSizeUI(248),
+    height: scaleSizeUI(40),
+    alignSelf: 'center',
   },
 });

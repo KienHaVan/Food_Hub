@@ -7,7 +7,20 @@ import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
-const InputField = ({ placeholder, label, preIcon, isPassword, value, onChangeText, ...props }) => {
+const InputField = ({
+  placeholder,
+  label,
+  preIcon,
+  isPassword,
+  value,
+  onChangeText,
+  keyboardType,
+  isShowKeyboard,
+  isDisabled,
+  isEditable,
+  isSelected,
+  ...props
+}) => {
   const [isPasswordShown, setIsPasswordShown] = useState(isPassword);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -19,7 +32,7 @@ const InputField = ({ placeholder, label, preIcon, isPassword, value, onChangeTe
         style={[
           LayoutStyles.layoutStretch,
           LayoutStyles.layoutShadowGrey,
-          styles.inputContainer,
+          isDisabled ? styles.disabled : styles.inputContainer,
           preIcon !== undefined ? styles.inputWithIcon : null,
           isFocus ? styles.inputFocus : styles.inputOnBlur,
         ]}
@@ -41,6 +54,10 @@ const InputField = ({ placeholder, label, preIcon, isPassword, value, onChangeTe
             cursorColor={Colors.grey}
             value={value}
             onChangeText={onChangeText}
+            keyboardType={keyboardType}
+            showSoftInputOnFocus={isShowKeyboard}
+            editable={isEditable}
+            selectTextOnFocus={isSelected}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             {...props}
@@ -68,6 +85,12 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: Sizes.sizeSmall,
     backgroundColor: Colors.white,
+  },
+  disabled: {
+    backgroundColor: Colors.grey,
+    borderWidth: 2,
+    borderRadius: Sizes.sizeSmall,
+    opacity: 0.3,
   },
   inputFocus: {
     borderColor: Colors.primary,
