@@ -12,6 +12,7 @@ const InputField = ({
   label,
   preIcon,
   isPassword,
+  defaultValue = '',
   value,
   onChangeText,
   onSubmitted,
@@ -50,6 +51,7 @@ const InputField = ({
             placeholder={placeholder}
             secureTextEntry={isPasswordShown}
             cursorColor={Colors.grey}
+            defaultValue={defaultValue}
             value={value}
             onChangeText={onChangeText}
             onFocus={() => setIsFocus(true)}

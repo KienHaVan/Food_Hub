@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
 
 import TextStyles from '../styles/TextStyles';
@@ -25,20 +25,27 @@ const SearchScreen = ({ navigation, route }) => {
   const foodList = useSelector((state) => state.food.food);
   const foodLoading = useSelector((state) => state.food.isLoading);
   const [isPopupShown, setIsPopupShown] = useState(false);
-  const [currentCriteria, setCurrentCriteria] = useState(0);
+  const [currentCriteria, setCurrentCriteria] = useState(defaultSortCriteria || 1);
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      handleFilter(defaultSortCriteria);
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     handleFilter(defaultSortCriteria);
+  //   }, [])
+  // );
+
+  useEffect(() => {
+    handleFilter(defaultSortCriteria);
+  }, [localSearchTerm]);
 
   const showFood = ({ item }) => {
     return <MealCard data={item} />;
   };
 
   const handleFilter = (criteria) => {
-    dispatch(fetchFood({ category: category?.name, searchTerm, sortCriteria: criteria }));
+    dispatch(
+      fetchFood({ category: category?.name, searchTerm: localSearchTerm, sortCriteria: criteria })
+    );
   };
 
   return (
@@ -82,7 +89,11 @@ const SearchScreen = ({ navigation, route }) => {
       >
         <View style={[LayoutStyles.layoutStretch, styles.searchFieldContainer]}>
           <View style={styles.inputContainer}>
-            <InputField placeholder='Search for food...' />
+            <InputField
+              placeholder='Search for food...'
+              defaultValue={searchTerm}
+              onSubmitted={(event) => setLocalSearchTerm(event.nativeEvent.text)}
+            />
           </View>
           <TouchableOpacity
             style={[LayoutStyles.layoutShadowGrey, LayoutStyles.layoutCenter, styles.buttonFilter]}

@@ -13,8 +13,8 @@ export const fetchFoodApi = async (category, searchTerm, sortCriteria) => {
       .then((collections) =>
         collections.forEach((documentSnapshot) => {
           if (
-            documentSnapshot.data().name.includes(searchTerm) ||
-            documentSnapshot.data().description.includes(searchTerm)
+            documentSnapshot.data().name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            documentSnapshot.data().description.toLowerCase().includes(searchTerm.toLowerCase())
           ) {
             results = [...results, { id: documentSnapshot.id, ...documentSnapshot.data() }];
           }
@@ -30,8 +30,8 @@ export const fetchFoodApi = async (category, searchTerm, sortCriteria) => {
       .then((collections) =>
         collections.forEach((documentSnapshot) => {
           if (
-            documentSnapshot.data().name.includes(searchTerm) ||
-            documentSnapshot.data().description.includes(searchTerm)
+            documentSnapshot.data().name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            documentSnapshot.data().description.toLowerCase().includes(searchTerm.toLowerCase())
           ) {
             results = [...results, { id: documentSnapshot.id, ...documentSnapshot.data() }];
           }
