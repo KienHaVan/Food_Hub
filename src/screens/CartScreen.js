@@ -22,6 +22,7 @@ const CartScreen = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(updateUser({ userId: currentUser.id, newData: { carts: carts } }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [carts]);
 
   const renderCartItem = ({ item }) => {
