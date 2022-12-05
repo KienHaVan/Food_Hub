@@ -35,7 +35,7 @@ const ManageCreditCard = () => {
           sourceImage={Images.ICON.ARROW_LEFT}
           handlePress={() => navigation.navigate('HomeStack')}
         />
-        <Text style={TextStyles.h3}>CREDIT CARDS</Text>
+        <Text style={TextStyles.h3}>Credit Cards</Text>
         <View style={styles.hidden}>
           <CornerButton />
         </View>

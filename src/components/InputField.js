@@ -12,13 +12,15 @@ const InputField = ({
   label,
   preIcon,
   isPassword,
-  value,
-  onChangeText,
   keyboardType,
   isShowKeyboard,
   isDisabled,
   isEditable,
   isSelected,
+  defaultValue = '',
+  value,
+  onChangeText,
+  onSubmitted,
   ...props
 }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(isPassword);
@@ -48,10 +50,13 @@ const InputField = ({
         >
           {preIcon && <Image source={preIcon} style={styles.iconSearch} />}
           <TextInput
+            autoCapitalize='none'
+            autoCorrect={false}
             style={styles.input}
             placeholder={placeholder}
             secureTextEntry={isPasswordShown}
             cursorColor={Colors.grey}
+            defaultValue={defaultValue}
             value={value}
             onChangeText={onChangeText}
             keyboardType={keyboardType}
@@ -60,6 +65,7 @@ const InputField = ({
             selectTextOnFocus={isSelected}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
+            onSubmitEditing={onSubmitted}
             {...props}
           />
         </View>

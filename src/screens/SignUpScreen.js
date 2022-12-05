@@ -162,7 +162,7 @@ const SignUpScreen = () => {
             overlayColor='rgba(255, 255, 255, 0.2)'
             source={require('../../assets/pizza-loading.json')}
             animationStyle={styles.lottie}
-            speed={1}
+            speed={6}
           />
         </View>
       )}

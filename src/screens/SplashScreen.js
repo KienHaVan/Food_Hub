@@ -7,7 +7,7 @@ import auth from '@react-native-firebase/auth';
 import { addCurrentUser } from '../features/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserInfoByID } from '../utils/authentication';
-import { fetchCartFromDB } from '../features/cartSlice';
+import { fetchCartFromDB, resetCart } from '../features/cartSlice';
 
 const SplashScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -35,6 +35,7 @@ const SplashScreen = ({ navigation }) => {
   }, [dispatch, navigation]);
 
   useEffect(() => {
+    dispatch(resetCart());
     if (currentUser?.email) {
       const getCurrentFullInfo = async () => {
         return await getUserInfoByID(currentUser.id);

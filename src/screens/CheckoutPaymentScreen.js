@@ -12,6 +12,8 @@ import firestore from '@react-native-firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
 import { initUserPayment } from '../features/userSlice';
 import { RadioButton } from 'react-native-paper';
+import CheckoutPaymentCard from '../components/CheckoutPaymentCard';
+import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const paymentList = [
   {
@@ -44,19 +46,6 @@ const CheckoutPaymentScreen = () => {
       navigation.navigate('Welcome');
       return;
     }
-    if (!currentUser?.paymentMethod) {
-      dispatch(initUserPayment());
-    } else {
-      // currentUser?.paymentMethod.map((item) =>
-      //   setPaymentList([
-      //     ...paymentList,
-      //     {
-      //       iconURL: Images.IMAGES.MASTER_CARD,
-      //       text: item.number,
-      //     },
-      //   ])
-      // );
-    }
     const id = auth()?.currentUser?.uid;
     const subscriber = firestore()
       .collection('users')
@@ -82,7 +71,7 @@ const CheckoutPaymentScreen = () => {
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         {theList.map((item) => (
-          <MyCard
+          <CheckoutPaymentCard
             key={item.id}
             iconURL={item.iconURL}
             text={item.text}
@@ -91,15 +80,8 @@ const CheckoutPaymentScreen = () => {
             setChecked={setChecked}
           />
         ))}
-        {/* {creditCardList.map((item, index) => (
-          <MyCard
-            key={'creditCard' + index}
-            iconURL={Images.IMAGES.MASTER_CARD}
-            text={item.number}
-          />
-        ))} */}
       </ScrollView>
-      <View style={styles.bottom}>
+      <View style={[styles.bottom, LayoutStyles.layoutShadowGrey]}>
         <View style={styles.bottomButton}>
           <CustomButton
             text='Add new card'
@@ -117,35 +99,9 @@ const CheckoutPaymentScreen = () => {
 
 export default CheckoutPaymentScreen;
 
-const MyCard = ({
-  iconURL = Images.ICON.CASH,
-  text = 'Cash Money',
-  index,
-  checked,
-  setChecked,
-}) => {
-  return (
-    <TouchableOpacity
-      style={[LayoutStyles.layoutShadowGrey, styles.childrenContainer]}
-      onPress={() => setChecked(index)}
-    >
-      <View style={styles.childrenContainerTop}>
-        <Image source={iconURL} style={styles.childrenIcon} />
-        <Text style={TextStyles.textMain}>{text}</Text>
-      </View>
-      <RadioButton
-        value={index}
-        status={checked === index ? 'checked' : 'unchecked'}
-        color={Color.primary}
-      />
-    </TouchableOpacity>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
     paddingVertical: 20,
     backgroundColor: Color.white,
   },
@@ -154,6 +110,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
+    marginHorizontal: scaleSizeUI(24),
   },
   hidden: {
     opacity: 0,
@@ -164,25 +121,6 @@ const styles = StyleSheet.create({
   },
   bottom: {
     marginTop: 'auto',
-  },
-  childrenContainer: {
-    backgroundColor: Color.white,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 16,
-    marginBottom: 20,
-    height: 76,
-  },
-  childrenContainerTop: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  childrenIcon: {
-    width: 50,
-    height: 50,
-    marginRight: 12,
+    marginHorizontal: scaleSizeUI(24),
   },
 });

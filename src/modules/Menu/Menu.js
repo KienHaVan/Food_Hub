@@ -13,11 +13,9 @@ import CustomButton from '../../components/CustomButton';
 import { MenuItems } from '../../data/MenuItems';
 import { SignOut } from '../../utils/authentication';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
-import { useSelector, useDispatch } from 'react-redux';
-import { resetCart } from '../../features/cartSlice';
+import { useSelector } from 'react-redux';
 
 const Menu = ({ isMenuShown, handleShowMenu }) => {
-  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
   const navigation = useNavigation();
 
@@ -43,7 +41,7 @@ const Menu = ({ isMenuShown, handleShowMenu }) => {
       {
         text: 'Yes, Log out',
         onPress: () => {
-          SignOut().then(() => dispatch(resetCart()));
+          SignOut();
           navigation.navigate('Welcome');
           handleShowMenu();
         },

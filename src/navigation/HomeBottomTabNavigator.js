@@ -10,6 +10,7 @@ import FavoriteScreen from '../screens/FavoriteScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import { useSelector, useDispatch } from 'react-redux';
 import Colors from '../constants/Color';
+import OrderScreen from '../screens/OrderScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -25,8 +26,8 @@ const HomeBottomTabNavigator = () => {
           let iconSource;
           if (route.name === 'Home') {
             iconSource = Images.ICON.COMPASS;
-          } else if (route.name === 'Location') {
-            iconSource = Images.ICON.LOCATION;
+          } else if (route.name === 'Billing') {
+            iconSource = Images.ICON.BILL;
           } else if (route.name === 'Cart') {
             iconSource = Images.ICON.CART_BOTTOM;
           } else if (route.name === 'Favorite') {
@@ -44,7 +45,7 @@ const HomeBottomTabNavigator = () => {
       })}
     >
       <Tab.Screen name='Home' component={HomeScreen} />
-      <Tab.Screen name='Location' component={LocationScreen} />
+      <Tab.Screen name='Billing' component={OrderScreen} />
       <Tab.Screen
         name='Cart'
         component={CartScreen}
