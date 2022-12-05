@@ -15,6 +15,7 @@ import TextStyles from '../styles/TextStyles';
 import { addUserToFirebaseWithID } from '../utils/authentication';
 import { height, scaleSizeUI } from '../utils/scaleSizeUI';
 import { launchImageLibrary } from 'react-native-image-picker';
+import firestore from '@react-native-firebase/firestore';
 
 const ProfileScreen = () => {
   const [fullName, setFullname] = useState('');
@@ -26,13 +27,17 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     dispatch(getFireStoreUserData(currentUser.id));
-    if (currentUserFirestoreData) {
-      setFullname(currentUserFirestoreData?.fullname);
-      setPhoneNumber(currentUserFirestoreData?.phoneNumber);
-      setEmail(currentUserFirestoreData?.email);
-    }
+    const subscriber = firestore()
+      .collection('users')
+      .doc(currentUser.id)
+      .onSnapshot((documentSnapshot) => {
+        setFullname(documentSnapshot.data().fullname || '');
+        setEmail(documentSnapshot.data().email || '');
+        setPhoneNumber(documentSnapshot.data().phoneNumber || '');
+      });
+    return () => subscriber();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser, dispatch]);
+  }, [currentUser]);
 
   const handleChoosePhoto = () => {
     launchImageLibrary({}, (res) => {

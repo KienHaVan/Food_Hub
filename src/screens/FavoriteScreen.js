@@ -1,15 +1,15 @@
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
 import MealCard from '../components/MealCard';
 import RestaurantCard from '../components/RestaurantCard';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
-import { getFireStoreUserData } from '../features/userSlice';
 import TextStyles from '../styles/TextStyles';
 
 const buttons = [
@@ -18,15 +18,25 @@ const buttons = [
 ];
 const FavoriteScreen = () => {
   const [currentButton, setCurrentButon] = useState(1);
-  const [isFoodItem, setIsFoodItems] = useState(false);
+  const [isFoodItem, setIsFoodItems] = useState(true);
   const navigation = useNavigation();
   const currentUserFirestoreData = useSelector((state) => state.user.currentUserFirestoreData);
-  const dispatch = useDispatch();
   const id = auth()?.currentUser?.uid;
+  const [userData, setUserData] = useState([]);
 
   useEffect(() => {
-    dispatch(getFireStoreUserData(id));
-  }, [dispatch, id]);
+    const subscriber = firestore()
+      .collection('users')
+      .doc(id)
+      .onSnapshot((documentSnapshot) => {
+        setUserData(
+          isFoodItem
+            ? documentSnapshot.data().favoriteFood || []
+            : documentSnapshot.data().favoriteRestaurant || []
+        );
+      });
+    return () => subscriber();
+  }, [id, isFoodItem]);
 
   const handlePress = (item) => {
     setCurrentButon(item.id);
@@ -85,11 +95,7 @@ const FavoriteScreen = () => {
       <View style={styles.foodList}>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={
-            isFoodItem
-              ? currentUserFirestoreData.favoriteFood
-              : currentUserFirestoreData.favoriteRestaurant
-          }
+          data={userData}
           keyExtractor={(item) => item.id}
           renderItem={showFood}
           ListFooterComponent={<View />}

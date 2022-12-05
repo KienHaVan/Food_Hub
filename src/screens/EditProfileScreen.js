@@ -29,18 +29,22 @@ const EditProfileScreen = () => {
   useEffect(() => {
     dispatch(getFireStoreUserData(id));
     if (currentUserFirestoreData) {
-      const address = currentUserFirestoreData.address.split(',');
+      const address =
+        currentUserFirestoreData.address && currentUserFirestoreData.address.split(', ');
       setFullname(currentUserFirestoreData.fullname);
       setPhoneNumber(currentUserFirestoreData.phoneNumber);
-      setRegion(address[2]);
-      setCity(address[1]);
-      setStreet(address[0]);
+      if (address?.length) {
+        setRegion(address[2]);
+        setCity(address[1]);
+        setStreet(address[0]);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [dispatch, id]);
 
   const handleUpdateUserDetail = () => {
     const formValues = {
+      fullname: fullname,
       phoneNumber: phoneNumber,
       address: `${street}, ${city}, ${region}`,
     };

@@ -70,7 +70,10 @@ const MealCard = ({ data, isFavorite = false }) => {
       <FavoriteButton handlePress={() => handlePress(data)} isFavorite={fav} />
       <View style={[styles.price, LayoutStyles.layoutShadowGrey]}>
         <Text style={TextStyles.textMain}>
-          $ <Text style={[TextStyles.h3, styles.priceText]}>{formatPrice(data.price)}</Text>
+          ${' '}
+          <Text style={[TextStyles.h3, styles.priceText]}>
+            {data.price && formatPrice(data.price)}
+          </Text>
         </Text>
       </View>
       <Image source={{ uri: data.image }} style={styles.cardThumbnail} />
