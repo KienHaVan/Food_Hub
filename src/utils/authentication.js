@@ -76,3 +76,7 @@ export const addUserToFirebaseWithID = async (props, id) => {
   const usersCollection = firestore().collection('users').doc(id);
   await usersCollection.set({ ...props });
 };
+
+export const getUserInfoByID = async (id) => {
+  return firestore().collection('users').doc(id).get();
+};

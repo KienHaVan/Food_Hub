@@ -1,4 +1,3 @@
-import { firebase } from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';

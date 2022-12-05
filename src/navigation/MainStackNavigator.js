@@ -10,7 +10,11 @@ import {
   ProfileScreen,
   SearchScreen,
 } from '../screens';
+import AddCreditCard from '../screens/AddCreditCard';
+import CheckoutOrderScreen from '../screens/CheckoutOrderScreen';
+import CheckoutPaymentScreen from '../screens/CheckoutPaymentScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import ManageCreditCard from '../screens/ManageCreditCard';
 import RatingScreen from '../screens/RatingScreen';
 import ReviewScreen from '../screens/ReviewScreen';
 import TestFirestore from '../screens/TestFirestore';
@@ -38,6 +42,10 @@ const MainStackNavigator = () => {
       <Stack.Screen name='TestFirestore' component={TestFirestore} />
       <Stack.Screen name='Rating' component={RatingScreen} />
       <Stack.Screen name='Review' component={ReviewScreen} />
+      <Stack.Screen name='ManageCreditCard' component={ManageCreditCard} />
+      <Stack.Screen name='AddCreditCard' component={AddCreditCard} />
+      <Stack.Screen name='CheckoutPayment' component={CheckoutPaymentScreen} />
+      <Stack.Screen name='CheckoutOrder' component={CheckoutOrderScreen} />
     </Stack.Navigator>
   );
 };

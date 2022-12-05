@@ -4,7 +4,10 @@ export const Images = {
     GOOGLE: require('./images/GOOGLE.png'),
     FACEBOOK: require('./images/FACEBOOK.png'),
     WELCOME_BACKGROUND: require('./images/WELCOME_BACKGROUND.png'),
+    CREDIT_CARD_BACKGROUND: require('./images/CREDIT_CARD_BACKGROUND.png'),
     LOGIN_BACKGROUND: require('./images/LOGIN_BACKGROUND.png'),
+    MASTER_CARD: require('./images/MASTER_CARD.png'),
+    SECURITY_CHIP: require('./images/SECURITY_CHIP.png'),
     AVATAR: require('./images/image_avatar.png'),
     AVATAR_LARGE: require('./images/image_avatar_large.png'),
     PROFILE_BACKGROUND: require('./images/image_profile_background.png'),
@@ -54,5 +57,7 @@ export const Images = {
     HEART_BOTTOM: require('./icons/icon_heart_bottom.png'),
     LOCATION: require('./icons/icon_location.png'),
     LOGOUT: require('./icons/icon_logout.png'),
+    CASH: require('./icons/icon_cash.png'),
+    WALLET: require('./icons/icon_wallet.png'),
   },
 };

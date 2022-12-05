@@ -8,3 +8,7 @@ export const fetchUserById = async (id) => {
     .get()
     .then((res) => res.data());
 };
+
+export const updateUserApi = async (userId, newData) => {
+  return await usersCollection.doc(userId).update(newData);
+};

@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import { addUserToFirebaseWithID } from '../utils/authentication';
 import { useDispatch } from 'react-redux';
+import firestore from '@react-native-firebase/firestore';
 import { addCurrentUser } from '../features/userSlice';
 GoogleSignin.configure({
   webClientId: '397847646741-rpg6qgcel1e7ed8htpjvgfdc90and1c8.apps.googleusercontent.com',
@@ -27,14 +28,25 @@ const LogWithFacebookAndGoogle = ({ text, dark = false, setVisible = () => {} })
       photoURL:
         'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
     });
-    await addUserToFirebaseWithID(
-      {
-        fullname: auth()?.currentUser?.displayName,
-        email: auth()?.currentUser?.email,
-        photoURL: auth()?.currentUser?.photoURL,
-      },
-      auth()?.currentUser?.uid
-    );
+    const id = auth()?.currentUser?.uid;
+    const data = await firestore().collection('users').doc(id).get();
+    if (!data?.data()?.email) {
+      await addUserToFirebaseWithID(
+        {
+          fullname: auth()?.currentUser?.displayName,
+          email: auth()?.currentUser?.email,
+          photoURL: auth()?.currentUser?.photoURL,
+        },
+        auth()?.currentUser?.uid
+      );
+    } else {
+      await addUserToFirebaseWithID(
+        {
+          ...data.data(),
+        },
+        auth()?.currentUser?.uid
+      );
+    }
     dispatch(
       addCurrentUser({
         fullname: auth()?.currentUser?.displayName,
@@ -68,13 +80,13 @@ const LogWithFacebookAndGoogle = ({ text, dark = false, setVisible = () => {} })
       </View>
 
       <View style={styles.bottomMeta}>
-        <TouchableOpacity style={styles.bottomMetaButton}>
+        {/* <TouchableOpacity style={styles.bottomMetaButton}>
           <Image source={Images.ICON.FACEBOOK} style={styles.bottomMetaImage} />
           <Text style={[TextStyles.textMain, styles.metaButtonText]}>FACEBOOK</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomMetaButton} onPress={onGoogleButtonPress}>
+        </TouchableOpacity> */}
+        <TouchableOpacity style={[styles.bottomMetaButton]} onPress={onGoogleButtonPress}>
           <Image source={Images.ICON.GOOGLE} style={styles.bottomMetaImage} />
-          <Text style={[TextStyles.textMain, styles.metaButtonText]}>GOOGLE</Text>
+          <Text style={[TextStyles.textMain, styles.metaButtonText]}>Continue with Google</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -124,7 +136,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      minWidth: 180,
+      flex: 1,
       backgroundColor: '#fff',
       height: 60,
     },
@@ -139,7 +151,7 @@ const styles = StyleSheet.create({
   ],
   metaButtonText: {
     color: '#000',
-    letterSpacing: 1.2,
+    letterSpacing: 0.6,
     marginRight: 8,
   },
 });
