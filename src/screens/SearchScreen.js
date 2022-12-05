@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, View, StyleSheet, Image, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
 
 import TextStyles from '../styles/TextStyles';
 import LayoutStyles from '../styles/Layout';
@@ -10,30 +10,56 @@ import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
 import MealCard from '../components/MealCard';
 import Loader from '../components/Loader';
+import InputField from '../components/InputField';
+import Popup from '../components/Popup';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { fetchFood } from '../features/foodSlice';
+import FilterPopup from '../modules/Search/FilterPopup';
+import { SearchCriterias } from '../data/SearchCriterias';
 
 const SearchScreen = ({ navigation, route }) => {
-  const { category } = route.params;
+  const { category, searchTerm, defaultSortCriteria } = route.params;
   const dispatch = useDispatch();
   const foodList = useSelector((state) => state.food.food);
   const foodLoading = useSelector((state) => state.food.isLoading);
+  const [isPopupShown, setIsPopupShown] = useState(false);
+  const [currentCriteria, setCurrentCriteria] = useState(defaultSortCriteria || 1);
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      dispatch(fetchFood([false, category.name]));
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     handleFilter(defaultSortCriteria);
+  //   }, [])
+  // );
+
+  useEffect(() => {
+    handleFilter(defaultSortCriteria);
+  }, [localSearchTerm]);
 
   const showFood = ({ item }) => {
     return <MealCard data={item} />;
   };
 
+  const handleFilter = (criteria) => {
+    dispatch(
+      fetchFood({ category: category?.name, searchTerm: localSearchTerm, sortCriteria: criteria })
+    );
+  };
+
   return (
     <View style={[LayoutStyles.layoutScreen, styles.screen]}>
       <Loader loaderVisible={foodLoading} />
+      <Popup isVisible={isPopupShown} hidePopup={() => setIsPopupShown(false)}>
+        <FilterPopup
+          data={SearchCriterias}
+          currentCriteria={currentCriteria}
+          onSelect={setCurrentCriteria}
+          onConfirmed={handleFilter}
+          hidePopup={() => setIsPopupShown(false)}
+        />
+      </Popup>
 
       <View style={styles.backButton}>
         <CornerButton
@@ -41,16 +67,42 @@ const SearchScreen = ({ navigation, route }) => {
           handlePress={() => navigation.goBack()}
         />
       </View>
-      <View style={[LayoutStyles.layoutShadowRed, styles.searchThumbnailContainer]}>
-        <Image source={{ uri: category.image }} style={styles.searchThumbnail} />
-      </View>
 
-      <View style={styles.searchHeader}>
-        <Text style={[TextStyles.h1, styles.searchHeading]}>{category.name}</Text>
-        <Text style={TextStyles.textMain}>We found {foodList.length} for you</Text>
-      </View>
+      {category ? (
+        <View style={[LayoutStyles.layoutShadowRed, styles.searchThumbnailContainer]}>
+          <Image source={{ uri: category.image }} style={styles.searchThumbnail} />
+        </View>
+      ) : null}
 
-      <View style={styles.foodList}>
+      {category ? (
+        <View style={styles.searchHeader}>
+          <Text style={[TextStyles.h1, styles.searchHeading]}>{category.name}</Text>
+          <Text style={TextStyles.textMain}>We found {foodList.length} for you</Text>
+        </View>
+      ) : null}
+
+      <View
+        style={[
+          styles.foodList,
+          { marginTop: category ? Sizes.sizeMassiveH + Sizes.sizeSmallerH : 0 },
+        ]}
+      >
+        <View style={[LayoutStyles.layoutStretch, styles.searchFieldContainer]}>
+          <View style={styles.inputContainer}>
+            <InputField
+              placeholder='Search for food...'
+              defaultValue={searchTerm}
+              onSubmitted={(event) => setLocalSearchTerm(event.nativeEvent.text)}
+            />
+          </View>
+          <TouchableOpacity
+            style={[LayoutStyles.layoutShadowGrey, LayoutStyles.layoutCenter, styles.buttonFilter]}
+            onPress={() => setIsPopupShown(true)}
+          >
+            <Image source={Images.ICON.FILTER} style={styles.buttonFilterIcon} />
+          </TouchableOpacity>
+        </View>
+
         <FlatList
           showsVerticalScrollIndicator={false}
           data={foodList}
@@ -96,6 +148,24 @@ const styles = StyleSheet.create({
     lineHeight: 65,
   },
   foodList: {
-    marginTop: Sizes.sizeMassiveH + Sizes.sizeLargeH,
+    paddingBottom: Sizes.sizeMassiveH * 2,
+  },
+  searchFieldContainer: {
+    marginBottom: Sizes.sizeModerateH,
+    marginHorizontal: Sizes.sizeBig,
+  },
+  inputContainer: {
+    width: '80%',
+  },
+  buttonFilter: {
+    width: scaleSizeUI(51),
+    height: scaleSizeUI(51),
+    marginLeft: Sizes.sizeModerate,
+    backgroundColor: Colors.white,
+    borderRadius: Sizes.sizeModerate,
+  },
+  buttonFilterIcon: {
+    width: Sizes.sizeBig,
+    height: Sizes.sizeBig,
   },
 });

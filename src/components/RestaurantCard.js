@@ -16,7 +16,7 @@ const RestaurantCard = ({ data }) => {
         <Text style={[TextStyles.textMain, styles.cardRatingText]}>{data.rating}</Text>
         <Image source={Images.ICON.STAR} />
         <Text style={[TextStyles.textSmall, styles.cardRatingTextSmall]}>
-          ({data.ratingPeople})
+          ({data.ratingAmount})
         </Text>
       </View>
 
@@ -35,7 +35,7 @@ const RestaurantCard = ({ data }) => {
           <View style={styles.cardContentItem}>
             <Image source={Images.ICON.DELIVERY} style={styles.cardContentIcon} />
             <Text style={TextStyles.textSmall}>
-              {data.deliveryPrice === 0 ? 'Free delivery' : `${data.deliveryPrice}$ delivery`}
+              {data.deliveryPrice === 0 ? 'Free delivery' : `$${data.deliveryPrice} delivery`}
             </Text>
           </View>
 

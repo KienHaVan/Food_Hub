@@ -69,61 +69,59 @@ const FoodDetailScreen = ({ navigation, route }) => {
     <View style={[LayoutStyles.layoutScreen, styles.screen]}>
       <Loader loaderVisible={updateUserLoading} />
 
-      <View style={{ height: '100%' }}>
-        <View style={styles.backButton}>
-          <CornerButton
-            sourceImage={Images.ICON.ARROW_LEFT}
-            handlePress={() => navigation.goBack()}
-          />
-        </View>
+      <View style={styles.backButton}>
+        <CornerButton
+          sourceImage={Images.ICON.ARROW_LEFT}
+          handlePress={() => navigation.goBack()}
+        />
+      </View>
 
-        <ImageBackground
-          source={{ uri: data.image }}
-          style={styles.foodThumbnail}
-          imageStyle={styles.foodThumbnailImage}
-        >
-          <FavoriteButton />
-        </ImageBackground>
+      <ImageBackground
+        source={{ uri: data.image }}
+        style={styles.foodThumbnail}
+        imageStyle={styles.foodThumbnailImage}
+      >
+        <FavoriteButton />
+      </ImageBackground>
 
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.contentWrapper}>
-            <Text style={TextStyles.h2}>{data.name}</Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.contentWrapper}>
+          <Text style={TextStyles.h2}>{data.name}</Text>
 
-            <View style={styles.rating}>
-              <Image source={Images.ICON.STAR_LARGE} style={styles.ratingIcon} />
-              <Text style={[TextStyles.textMain, styles.ratingText]}>{data.rating}</Text>
-              <Text style={TextStyles.textMain}>({data.ratingAmount})</Text>
-              <TouchableOpacity style={styles.ratingLink}>
-                <Text style={[TextStyles.textMain, styles.ratingLinkText]}>See Reviews</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={LayoutStyles.layoutStretch}>
-              <Text style={[TextStyles.textMain, styles.foodPrice]}>
-                $<Text style={[TextStyles.h2, styles.foodPrice]}>{formatPrice(data.price)}</Text>
-              </Text>
-
-              <Counter
-                defaultValue={currentQuantity}
-                onIncrease={() => dispatch(increaseCurrentQuantity(currentQuantity))}
-                onDecrease={() => dispatch(decreaseCurrentQuantity(currentQuantity))}
-              />
-            </View>
-
-            <Text style={TextStyles.textMain}>{data.description}</Text>
-
-            <FoodAddonList data={data?.addons} />
+          <View style={styles.rating}>
+            <Image source={Images.ICON.STAR_LARGE} style={styles.ratingIcon} />
+            <Text style={[TextStyles.textMain, styles.ratingText]}>{data.rating}</Text>
+            <Text style={TextStyles.textMain}>({data.ratingAmount})</Text>
+            <TouchableOpacity style={styles.ratingLink}>
+              <Text style={[TextStyles.textMain, styles.ratingLinkText]}>See Reviews</Text>
+            </TouchableOpacity>
           </View>
-        </ScrollView>
 
-        <View style={LayoutStyles.layoutCenter}>
-          <View style={styles.buttonContainer}>
-            <CustomButton
-              text='ADD TO CART'
-              iconSource={Images.ICON.CART}
-              onPress={handleAddToCart}
+          <View style={LayoutStyles.layoutStretch}>
+            <Text style={[TextStyles.textMain, styles.foodPrice]}>
+              $<Text style={[TextStyles.h2, styles.foodPrice]}>{formatPrice(data.price)}</Text>
+            </Text>
+
+            <Counter
+              defaultValue={currentQuantity}
+              onIncrease={() => dispatch(increaseCurrentQuantity(currentQuantity))}
+              onDecrease={() => dispatch(decreaseCurrentQuantity(currentQuantity))}
             />
           </View>
+
+          <Text style={TextStyles.textMain}>{data.description}</Text>
+
+          <FoodAddonList data={data?.addons} />
+        </View>
+      </ScrollView>
+
+      <View style={LayoutStyles.layoutCenter}>
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            text='ADD TO CART'
+            iconSource={Images.ICON.CART}
+            onPress={handleAddToCart}
+          />
         </View>
       </View>
     </View>
