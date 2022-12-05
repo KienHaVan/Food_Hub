@@ -16,7 +16,6 @@ import {
   addToCart,
 } from '../features/cartSlice';
 import { updateUser } from '../features/userSlice';
-import Toast from 'react-native-toast-message';
 
 //region Import styling
 import TextStyles from '../styles/TextStyles';

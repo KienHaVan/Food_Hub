@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchFoodApi, fetchPopularFoodApi, addFoodApi } from '../api/foodApi';
+import {
+  fetchFoodApi,
+  fetchPopularFoodApi,
+  addFoodApi,
+  fetchFoodInRestaurantApi,
+} from '../api/foodApi';
 
 export const fetchFood = createAsyncThunk(
   'Food/fetchAllFood',
@@ -11,6 +16,13 @@ export const fetchFood = createAsyncThunk(
     return areFeatured
       ? await fetchPopularFoodApi()
       : await fetchFoodApi(category, searchTerm, sortCriteria);
+  }
+);
+
+export const fetchFoodInRestaurant = createAsyncThunk(
+  'Food/fetchFoodInRestaurant',
+  async (foodIdList, thunkApi) => {
+    return await fetchFoodInRestaurantApi(foodIdList);
   }
 );
 
@@ -28,6 +40,7 @@ const foodSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    //fetchFood
     builder
       .addCase(fetchFood.pending, (state, action) => {
         state.isLoading = true;
@@ -39,6 +52,21 @@ const foodSlice = createSlice({
       .addCase(fetchFood.rejected, (state, action) => {
         console.log('error', action.error.message);
       });
+
+    //fetchFoodInRestaurant
+    builder
+      .addCase(fetchFoodInRestaurant.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchFoodInRestaurant.fulfilled, (state, action) => {
+        state.food = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchFoodInRestaurant.rejected, (state, action) => {
+        console.log('error', action.error.message);
+      });
+
+    //addFood
     builder
       .addCase(addFood.fulfilled, (state, action) => {
         console.log('new food added');

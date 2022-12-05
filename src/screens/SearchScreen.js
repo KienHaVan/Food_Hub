@@ -29,7 +29,7 @@ const SearchScreen = ({ navigation, route }) => {
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
 
   useEffect(() => {
-    handleFilter(defaultSortCriteria);
+    handleFilter(SearchCriterias[currentCriteria - 1].criteria);
   }, [localSearchTerm]);
 
   const showFood = ({ item }) => {
@@ -50,7 +50,7 @@ const SearchScreen = ({ navigation, route }) => {
           data={SearchCriterias}
           currentCriteria={currentCriteria}
           onSelect={setCurrentCriteria}
-          onConfirmed={handleFilter}
+          onConfirmed={() => handleFilter(SearchCriterias[currentCriteria - 1].criteria)}
           hidePopup={() => setIsPopupShown(false)}
         />
       </Popup>

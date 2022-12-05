@@ -7,14 +7,20 @@ import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import FavoriteButton from './FavoriteButton';
+import { useNavigation } from '@react-navigation/native';
 
 const RestaurantCard = ({ data }) => {
+  const navigation = useNavigation();
+
   return (
-    <TouchableOpacity style={[LayoutStyles.layoutShadowGrey, styles.card]}>
+    <TouchableOpacity
+      onPress={() => navigation.navigate('RestaurantDetail', { data })}
+      style={[LayoutStyles.layoutShadowGrey, styles.card]}
+    >
       {/*Rating Label*/}
       <View style={[LayoutStyles.layoutCenter, LayoutStyles.layoutShadowGrey, styles.cardRating]}>
         <Text style={[TextStyles.textMain, styles.cardRatingText]}>{data.rating}</Text>
-        <Image source={Images.ICON.STAR} />
+        <Image source={Images.ICON.STAR} style={styles.cardIcon} />
         <Text style={[TextStyles.textSmall, styles.cardRatingTextSmall]}>
           ({data.ratingAmount})
         </Text>
@@ -46,7 +52,7 @@ const RestaurantCard = ({ data }) => {
         </View>
         {/*Group of tags*/}
         <View style={styles.labelGroup}>
-          {data.categories.map((cat, index) => (
+          {data.categories.slice(0, 3).map((cat, index) => (
             <View key={index} style={[LayoutStyles.layoutCenter, styles.label]}>
               <Text style={[TextStyles.textSmall, styles.labelText]}>{cat}</Text>
             </View>
@@ -66,6 +72,7 @@ const styles = StyleSheet.create({
     borderRadius: Sizes.sizeModerate,
     marginBottom: Sizes.sizeMassiveH + Sizes.sizeModerate,
     marginLeft: Sizes.sizeBig,
+    overflow: 'hidden',
   },
   cardThumbnail: {
     width: scaleSizeUI(266),
@@ -81,6 +88,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: Sizes.sizeSmallerH,
     marginBottom: Sizes.sizeSmallH,
+  },
+  cardIcon: {
+    width: Sizes.sizeModerate,
+    height: Sizes.sizeModerate,
   },
   cardContentItem: {
     flexDirection: 'row',
@@ -116,8 +127,10 @@ const styles = StyleSheet.create({
   cardRatingText: {
     marginRight: Sizes.sizeTiny,
     color: Colors.secondary,
+    lineHeight: 20,
   },
   cardRatingTextSmall: {
     marginLeft: Sizes.sizeTiny - 2,
+    lineHeight: 20,
   },
 });
