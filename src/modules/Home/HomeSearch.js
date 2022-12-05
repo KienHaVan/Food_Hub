@@ -22,6 +22,7 @@ const HomeSearch = () => {
 
   return (
     <View style={styles.homeSearch}>
+      {/*Sorting Popup*/}
       <Popup isVisible={isPopupShown} hidePopup={() => setIsPopupShown(false)}>
         <FilterPopup
           data={SearchCriterias}
@@ -35,6 +36,8 @@ const HomeSearch = () => {
           hidePopup={() => setIsPopupShown(false)}
         />
       </Popup>
+
+      {/*Search Bar*/}
       <View style={styles.inputContainer}>
         <InputField
           placeholder='Find for food or restaurant...'
@@ -43,6 +46,8 @@ const HomeSearch = () => {
           onSubmitted={(event) => handleSearch(event.nativeEvent.text)}
         />
       </View>
+
+      {/*Filter Button*/}
       <TouchableOpacity
         onPress={() => setIsPopupShown(true)}
         style={[LayoutStyles.layoutShadowGrey, LayoutStyles.layoutCenter, styles.buttonFilter]}

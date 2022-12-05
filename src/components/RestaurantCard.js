@@ -35,7 +35,7 @@ const RestaurantCard = ({ data }) => {
           <View style={styles.cardContentItem}>
             <Image source={Images.ICON.DELIVERY} style={styles.cardContentIcon} />
             <Text style={TextStyles.textSmall}>
-              {data.deliveryPrice === 0 ? 'Free delivery' : `${data.deliveryPrice}$ delivery`}
+              {data.deliveryPrice === 0 ? 'Free delivery' : `$${data.deliveryPrice} delivery`}
             </Text>
           </View>
 
