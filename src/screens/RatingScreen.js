@@ -6,30 +6,42 @@ import Rating from '../components/Rating';
 import Colors from '../constants/Color';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
+import { height, scaleSizeUI } from '../utils/scaleSizeUI';
 import Sizes from '../constants/Size';
 import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
 import CustomButton from '../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
+import { useSelector } from 'react-redux';
 
-const RatingScreen = () => {
+const RatingScreen = ({ route }) => {
   const [isFocus, setIsFocus] = useState(false);
   const [defaultRating, setDefaultRating] = useState(1);
   const [comment, setComment] = useState('');
   const currentDate = new Date();
   const navigation = useNavigation();
+  const { foodDetail } = route.params;
 
   const handlePressRating = (item) => {
     setDefaultRating(item);
   };
 
-  const handleSubmitComment = () => {
+  const handleSubmitComment = async () => {
     const formValues = {
       image: Images.IMAGES.AVATAR,
       comment: comment,
       rate: defaultRating,
       dayPost: currentDate.toLocaleDateString(),
     };
+    const foodData = await firestore.collection('food').doc(foodDetail.id).get();
+    const reviews = foodData.data().reviews;
+    try {
+      await firestore.collection('food').doc(foodDetail.id).update({
+        reviews: [],
+      });
+    } catch (error) {
+      console.log('Error: ', error);
+    }
     navigation.navigate('Review', { userReview: formValues });
   };
 
@@ -39,17 +51,19 @@ const RatingScreen = () => {
         <View style={styles.header}>
           <Image source={Images.IMAGES.RATING_RESTAURANT} style={styles.headingImage} />
           <View style={styles.cornerButton}>
-            <CornerButton sourceImage={Images.ICON.ARROW_LEFT} />
+            <CornerButton
+              sourceImage={Images.ICON.ARROW_LEFT}
+              handlePress={() => navigation.goBack()}
+            />
           </View>
           <View style={styles.avaContainer}>
             <View style={[styles.avaBorder, LayoutStyles.layoutShadowRed]}>
-              <Image source={Images.IMAGES.RESTAURANT_AVATAR} style={styles.restaurantAva} />
+              <Image source={{ uri: foodDetail.image }} style={styles.restaurantAva} />
             </View>
           </View>
         </View>
         <View style={styles.restaurantInfo}>
-          <Text style={[TextStyles.h3]}>Pizza Hut</Text>
-          <Text style={[TextStyles.textMain]}>4102 Pretty View Lanenda</Text>
+          <Text style={[TextStyles.h3]}>{foodDetail.name}</Text>
           <Text style={[TextStyles.textMain, styles.orderDeli]}>Order Delivered</Text>
         </View>
         <View style={styles.ratingContainer}>
@@ -81,6 +95,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingTop: 25,
     backgroundColor: Colors.white,
+    height: height,
   },
   header: {
     position: 'relative',
@@ -120,8 +135,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   restaurantAva: {
-    width: scaleSizeUI(56),
-    height: scaleSizeUI(56),
+    width: '100%',
+    height: '100%',
+    borderRadius: 99999,
   },
   orderDeli: {
     color: Colors.green,
