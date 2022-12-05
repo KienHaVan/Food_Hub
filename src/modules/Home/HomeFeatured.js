@@ -1,31 +1,33 @@
 import React, { useEffect } from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 //region Import styling
-import TextStyles from '../../styles/TextStyles';
-import LayoutStyles from '../../styles/Layout';
 import Colors from '../../constants/Color';
 import Sizes from '../../constants/Size';
+import LayoutStyles from '../../styles/Layout';
+import TextStyles from '../../styles/TextStyles';
 //endregion
-import RestaurantCard from '../../components/RestaurantCard';
-import { Images } from '../../../assets';
-import { scaleSizeUI } from '../../utils/scaleSizeUI';
+import auth from '@react-native-firebase/auth';
 import { useDispatch, useSelector } from 'react-redux';
+import { Images } from '../../../assets';
+import RestaurantCard from '../../components/RestaurantCard';
 import { fetchAllRestaurants } from '../../features/restaurantSlice';
+import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import HomeFeaturedSkeleton from './HomeFeaturedSkeleton';
 
 const HomeFeatured = ({ isScreenFocused }) => {
   const restaurants = useSelector((state) => state.restaurant.restaurants);
   const isLoading = useSelector((state) => state.restaurant.isLoading);
   const dispatch = useDispatch();
+  const id = auth()?.currentUser?.uid;
 
   useEffect(() => {
     if (isScreenFocused) {
       dispatch(fetchAllRestaurants());
     }
-  }, [dispatch, isScreenFocused]);
+  }, [dispatch, isScreenFocused, id]);
 
   const renderCard = ({ item }) => {
-    return <RestaurantCard data={item} />;
+    return <RestaurantCard data={item} is />;
   };
 
   return (

@@ -10,8 +10,11 @@ import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
 import { getFireStoreUserData } from '../features/userSlice';
+import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
+import { addUserToFirebaseWithID } from '../utils/authentication';
 import { height, scaleSizeUI } from '../utils/scaleSizeUI';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 const ProfileScreen = () => {
   const [fullName, setFullname] = useState('');
@@ -31,6 +34,19 @@ const ProfileScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, dispatch]);
 
+  const handleChoosePhoto = () => {
+    launchImageLibrary({}, (res) => {
+      if (res?.assets[0]?.uri) {
+        addUserToFirebaseWithID(
+          { ...currentUserFirestoreData, photoURL: res?.assets[0]?.uri },
+          currentUser.id
+        );
+      } else {
+        return;
+      }
+    });
+  };
+
   return (
     <KeyBoardAvoidingWaraper>
       <ImageBackground
@@ -41,8 +57,15 @@ const ProfileScreen = () => {
           sourceImage={Images.ICON.ARROW_LEFT}
           handlePress={() => navigation.navigate('HomeStack')}
         />
-        <View style={styles.avatarContainer}>
-          <Image resizeMode='cover' source={{ uri: currentUser.photoURL }} style={styles.avatar} />
+        <View style={[styles.avatarContainer, LayoutStyles.layoutShadowRed]}>
+          <Image
+            resizeMode='cover'
+            source={{ uri: currentUserFirestoreData.photoURL }}
+            style={styles.avatar}
+          />
+          <TouchableOpacity onPress={handleChoosePhoto} style={styles.choosePicture}>
+            <Image source={Images.ICON.CAMERA} />
+          </TouchableOpacity>
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.name}>{currentUser.fullname}</Text>
@@ -110,6 +133,7 @@ const styles = StyleSheet.create({
     borderRadius: 99999,
     marginTop: Sizes.sizeLargeH,
     alignSelf: 'center',
+    position: 'relative',
   },
   avatar: {
     width: '100%',
@@ -143,5 +167,16 @@ const styles = StyleSheet.create({
     width: scaleSizeUI(248),
     height: scaleSizeUI(40),
     alignSelf: 'center',
+  },
+  choosePicture: {
+    width: 27,
+    height: 27,
+    borderRadius: 9999,
+    backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 8,
+    right: 10,
   },
 });

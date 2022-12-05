@@ -27,25 +27,6 @@ const userSlice = createSlice({
     updateCurrentUser: (state, action) => {
       state.currentUserFirestoreData = { ...state.currentUser, ...action.payload };
     },
-    addToFavoriteFoodList: (state, action) => {
-      return { ...state, favoriteFoodList: [...state.favoriteFoodList, action.payload] };
-    },
-    removeToFavoriteFoodList: (state, action) => {
-      const newList = [...state.favoriteFoodList];
-      newList.splice(action.payload, 1);
-      return { ...state, favoriteFoodList: [...newList] };
-    },
-    addToFavoriteRestaurantList: (state, action) => {
-      return {
-        ...state,
-        favoriteRestaurantList: [...state.favoriteRestaurantList, action.payload],
-      };
-    },
-    removeToFavoriteRestaurantList: (state, action) => {
-      const newList = [...state.favoriteRestaurantList];
-      newList.splice(action.payload, 1);
-      return { ...state, favoriteRestaurantList: [...newList] };
-    },
     updateUserPayment: (state, action) => {
       state.currentUser.paymentMethod = [...state.currentUser.paymentMethod, action.payload];
     },
@@ -67,14 +48,6 @@ const userSlice = createSlice({
   },
 });
 
-export const {
-  addCurrentUser,
-  updateCurrentUser,
-  updateUserPayment,
-  initUserPayment,
-  addToFavoriteFoodList,
-  removeToFavoriteFoodList,
-  addToFavoriteRestaurantList,
-  removeToFavoriteRestaurantList,
-} = userSlice.actions;
+export const { addCurrentUser, updateCurrentUser, updateUserPayment, initUserPayment } =
+  userSlice.actions;
 export default userSlice.reducer;

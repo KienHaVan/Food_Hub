@@ -1,15 +1,16 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
-import CornerButton from '../components/CornerButton';
-import { Images } from '../../assets';
-import Colors from '../constants/Color';
-import TextStyles from '../styles/TextStyles';
-import { useState } from 'react';
-import MealCard from '../components/MealCard';
-import { useSelector } from 'react-redux';
-import Sizes from '../constants/Size';
+import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { Images } from '../../assets';
+import CornerButton from '../components/CornerButton';
+import MealCard from '../components/MealCard';
 import RestaurantCard from '../components/RestaurantCard';
+import Colors from '../constants/Color';
+import Sizes from '../constants/Size';
+import { getFireStoreUserData } from '../features/userSlice';
+import TextStyles from '../styles/TextStyles';
 
 const buttons = [
   { id: 1, name: 'Food items' },
@@ -19,7 +20,13 @@ const FavoriteScreen = () => {
   const [currentButton, setCurrentButon] = useState(1);
   const [isFoodItem, setIsFoodItems] = useState(false);
   const navigation = useNavigation();
-  const { favoriteFoodList, favoriteRestaurantList } = useSelector((state) => state.user);
+  const currentUserFirestoreData = useSelector((state) => state.user.currentUserFirestoreData);
+  const dispatch = useDispatch();
+  const id = auth()?.currentUser?.uid;
+
+  useEffect(() => {
+    dispatch(getFireStoreUserData(id));
+  }, [dispatch, id]);
 
   const handlePress = (item) => {
     setCurrentButon(item.id);
@@ -39,7 +46,7 @@ const FavoriteScreen = () => {
           </View>
         ) : (
           <View style={styles.cardRestaurant}>
-            <RestaurantCard data={item} isFavorite={true} />
+            <RestaurantCard data={item} isFavorite={true} isFullWidth />
           </View>
         )}
       </View>
@@ -54,7 +61,7 @@ const FavoriteScreen = () => {
           handlePress={() => navigation.goBack('HomeStack')}
         />
         <Text style={TextStyles.h3}>Favorites</Text>
-        <Image source={Images.IMAGES.AVATAR} />
+        <Image source={{ uri: currentUserFirestoreData.photoURL }} style={styles.avatar} />
       </View>
       <View style={styles.buttonContainer}>
         {buttons.map((item) => (
@@ -78,7 +85,11 @@ const FavoriteScreen = () => {
       <View style={styles.foodList}>
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={isFoodItem ? favoriteFoodList : favoriteRestaurantList}
+          data={
+            isFoodItem
+              ? currentUserFirestoreData.favoriteFood
+              : currentUserFirestoreData.favoriteRestaurant
+          }
           keyExtractor={(item) => item.id}
           renderItem={showFood}
           ListFooterComponent={<View />}
@@ -140,6 +151,11 @@ const styles = StyleSheet.create({
     marginHorizontal: -Sizes.sizeBig,
   },
   cardRestaurant: {
-    width: '100%',
+    marginHorizontal: -24,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
   },
 });

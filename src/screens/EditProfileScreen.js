@@ -13,6 +13,7 @@ import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { addUserToFirebaseWithID } from '../utils/authentication';
 import { height, scaleSizeUI } from '../utils/scaleSizeUI';
+import auth from '@react-native-firebase/auth';
 
 const EditProfileScreen = () => {
   const [fullname, setFullname] = useState('');
@@ -20,34 +21,31 @@ const EditProfileScreen = () => {
   const [region, setRegion] = useState('');
   const [city, setCity] = useState('');
   const [street, setStreet] = useState('');
-  const { currentUser, currentUserFirestoreData } = useSelector((state) => state.user);
+  const currentUserFirestoreData = useSelector((state) => state.user.currentUserFirestoreData);
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
-  console.log(currentUserFirestoreData);
+  const id = auth()?.currentUser?.uid;
 
   useEffect(() => {
-    dispatch(getFireStoreUserData(currentUser.id));
+    dispatch(getFireStoreUserData(id));
     if (currentUserFirestoreData) {
+      const address = currentUserFirestoreData.address.split(',');
       setFullname(currentUserFirestoreData.fullname);
       setPhoneNumber(currentUserFirestoreData.phoneNumber);
-      setRegion(currentUserFirestoreData.region);
-      setCity(currentUserFirestoreData.city);
-      setStreet(currentUserFirestoreData.street);
+      setRegion(address[2]);
+      setCity(address[1]);
+      setStreet(address[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser.id]);
+  }, [id]);
 
   const handleUpdateUserDetail = () => {
     const formValues = {
-      fullname: fullname,
       phoneNumber: phoneNumber,
-      region: region,
-      city: city,
-      street: street,
+      address: `${street}, ${city}, ${region}`,
     };
     dispatch(updateCurrentUser(formValues));
-    addUserToFirebaseWithID({ ...currentUserFirestoreData, ...formValues }, currentUser.id);
+    addUserToFirebaseWithID({ ...currentUserFirestoreData, ...formValues }, id);
     navigation.navigate('HomeStack');
   };
   return (

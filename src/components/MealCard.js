@@ -1,15 +1,11 @@
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { Images } from '../../assets';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
-import {
-  addToFavoriteFoodList,
-  getFireStoreUserData,
-  removeToFavoriteFoodList,
-} from '../features/userSlice';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { addUserToFirebaseWithID } from '../utils/authentication';
@@ -20,39 +16,51 @@ import FavoriteButton from './FavoriteButton';
 const MealCard = ({ data, isFavorite = false }) => {
   const navigation = useNavigation();
   const [fav, setFav] = useState(isFavorite);
-  const dispatch = useDispatch();
-  const { currentUser, currentUserFirestoreData, favoriteFoodList } = useSelector(
-    (state) => state.user
-  );
+  const id = auth()?.currentUser?.uid;
 
   useEffect(() => {
-    dispatch(getFireStoreUserData(currentUser.id));
-    // console.log('fireStore:', currentUserFirestoreData);
-    // const result = { ...currentUserFirestoreData, favoriteFood: [...favoriteFoodList] };
-    // console.log(result);
-    // addUserToFirebaseWithID(result, currentUser.id);
+    const checkFavoriteFood = async () => {
+      const userData = await firestore().collection('users').doc(id).get();
+      const favoriteFood = userData.data().favoriteFood;
+      if (!favoriteFood) {
+        await addUserToFirebaseWithID(
+          {
+            ...userData.data(),
+            favoriteFood: [],
+          },
+          auth()?.currentUser?.uid
+        );
+      }
+    };
+    checkFavoriteFood();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser.id, dispatch]);
+  }, []);
 
   const handlePress = async (item) => {
     setFav(!fav);
-    if (!fav) {
-      dispatch(addToFavoriteFoodList(item));
-    } else {
-      dispatch(removeToFavoriteFoodList(item));
+    const userData = await firestore().collection('users').doc(id).get();
+    const favoriteFood = userData.data().favoriteFood;
+    try {
+      if (!fav) {
+        await firestore()
+          .collection('users')
+          .doc(id)
+          .update({
+            favoriteFood: [...favoriteFood, { ...item }],
+          });
+      } else {
+        const updateItem = favoriteFood.filter((foodData) => foodData.id !== item.id);
+        await firestore()
+          .collection('users')
+          .doc(id)
+          .update({
+            favoriteFood: [...updateItem],
+          });
+      }
+    } catch (error) {
+      console.log(error);
     }
-    const result = { ...currentUserFirestoreData, favoriteFood: [...item] };
-    await addUserToFirebaseWithID(result, currentUser.id);
   };
-
-  // useEffect(() => {
-  //   dispatch(getFireStoreUserData(currentUser.id));
-  //   console.log('fireStore:', currentUserFirestoreData);
-  //   const result = { ...currentUserFirestoreData, favoriteFood: [...favoriteFoodList] };
-  //   console.log(result);
-  //   addUserToFirebaseWithID(result, currentUser.id);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [currentUser.id, dispatch, favoriteFoodList]);
 
   return (
     <TouchableOpacity
