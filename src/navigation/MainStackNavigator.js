@@ -11,6 +11,8 @@ import {
   SearchScreen,
 } from '../screens';
 import AddCreditCard from '../screens/AddCreditCard';
+import CheckoutOrderScreen from '../screens/CheckoutOrderScreen';
+import CheckoutPaymentScreen from '../screens/CheckoutPaymentScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import ManageCreditCard from '../screens/ManageCreditCard';
 import RatingScreen from '../screens/RatingScreen';
@@ -42,6 +44,8 @@ const MainStackNavigator = () => {
       <Stack.Screen name='Review' component={ReviewScreen} />
       <Stack.Screen name='ManageCreditCard' component={ManageCreditCard} />
       <Stack.Screen name='AddCreditCard' component={AddCreditCard} />
+      <Stack.Screen name='CheckoutPayment' component={CheckoutPaymentScreen} />
+      <Stack.Screen name='CheckoutOrder' component={CheckoutOrderScreen} />
     </Stack.Navigator>
   );
 };

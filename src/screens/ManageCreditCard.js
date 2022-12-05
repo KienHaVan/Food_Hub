@@ -14,6 +14,10 @@ const ManageCreditCard = () => {
   const navigation = useNavigation();
   const [creditCardList, setCreditCardList] = useState([]);
   useEffect(() => {
+    if (!auth().currentUser.email) {
+      navigation.navigate('Welcome');
+      return;
+    }
     const id = auth()?.currentUser?.uid;
     const subscriber = firestore()
       .collection('users')
@@ -22,6 +26,7 @@ const ManageCreditCard = () => {
         setCreditCardList(documentSnapshot.data().payment || []);
       });
     return () => subscriber();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <View style={styles.container}>

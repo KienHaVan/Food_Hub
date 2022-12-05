@@ -20,6 +20,12 @@ const userSlice = createSlice({
     updateCurrentUser: (state, action) => {
       state.currentUser = { ...state.currentUser, ...action.payload };
     },
+    updateUserPayment: (state, action) => {
+      state.currentUser.paymentMethod = [...state.currentUser.paymentMethod, action.payload];
+    },
+    initUserPayment: (state) => {
+      state.currentUser.paymentMethod = [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -32,5 +38,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { addCurrentUser, updateCurrentUser } = userSlice.actions;
+export const { addCurrentUser, updateCurrentUser, updateUserPayment, initUserPayment } =
+  userSlice.actions;
 export default userSlice.reducer;

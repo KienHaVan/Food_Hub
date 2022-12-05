@@ -59,5 +59,7 @@ export const Images = {
     HEART_BOTTOM: require('./icons/icon_heart_bottom.png'),
     LOCATION: require('./icons/icon_location.png'),
     LOGOUT: require('./icons/icon_logout.png'),
+    CASH: require('./icons/icon_cash.png'),
+    WALLET: require('./icons/icon_wallet.png'),
   },
 };
