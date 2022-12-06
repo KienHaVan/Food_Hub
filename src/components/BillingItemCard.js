@@ -60,7 +60,10 @@ const BillingItemCard = ({ item }) => {
   };
   return (
     <View style={[LayoutStyles.layoutShadowGrey, styles.card]}>
-      <TouchableOpacity style={styles.cardRemover} onPress={handleCancell}>
+      <TouchableOpacity
+        style={[LayoutStyles.layoutShadowGrey, styles.cardRemover]}
+        onPress={handleCancell}
+      >
         <Image source={Images.ICON.CLOSE} />
       </TouchableOpacity>
       <Image source={{ uri: item.image }} style={styles.cardThumbnail} />
@@ -143,8 +146,11 @@ const styles = StyleSheet.create({
   },
   cardRemover: {
     position: 'absolute',
-    top: Sizes.sizeSmall,
-    right: Sizes.sizeSmall,
+    top: -Sizes.sizeSmallerH,
+    right: -Sizes.sizeSmaller,
+    backgroundColor: Colors.white,
+    padding: Sizes.sizeSmaller,
+    borderRadius: 100,
   },
   contentBottom: {
     flexDirection: 'row',
