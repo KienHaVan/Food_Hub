@@ -24,7 +24,6 @@ import { useEffect } from 'react';
 const CheckoutOrderScreen = () => {
   const [showLoader, setShowLoader] = useState(false);
   const [address, setAddress] = useState('');
-  console.log('🚀 ~ file: CheckoutOrderScreen.js:27 ~ CheckoutOrderScreen ~ address', address);
   const navigation = useNavigation();
   const route = useRoute();
   const carts = useSelector((state) => state.cart.carts);
