@@ -15,11 +15,6 @@ export const MenuItems = [
   },
   {
     id: 2,
-    name: 'Delivery Address',
-    icon: Images.ICON.ADDRESS,
-  },
-  {
-    id: 3,
     name: 'Payment Methods',
     icon: Images.ICON.PAYMENT,
     toScreen: 'ManageCreditCard',

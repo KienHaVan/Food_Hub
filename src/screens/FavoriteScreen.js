@@ -19,10 +19,11 @@ const buttons = [
 const FavoriteScreen = () => {
   const [currentButton, setCurrentButon] = useState(1);
   const [isFoodItem, setIsFoodItems] = useState(true);
-  const navigation = useNavigation();
   const currentUserFirestoreData = useSelector((state) => state.user.currentUserFirestoreData);
   const id = auth()?.currentUser?.uid;
   const [userData, setUserData] = useState([]);
+  const [photoURL, setPhotoURL] = useState('');
+  const navigation = useNavigation();
 
   useEffect(() => {
     const subscriber = firestore()
@@ -34,6 +35,7 @@ const FavoriteScreen = () => {
             ? documentSnapshot.data().favoriteFood || []
             : documentSnapshot.data().favoriteRestaurant || []
         );
+        setPhotoURL(documentSnapshot.data().photoURL || '');
       });
     return () => subscriber();
   }, [id, isFoodItem]);
@@ -71,7 +73,10 @@ const FavoriteScreen = () => {
           handlePress={() => navigation.goBack('HomeStack')}
         />
         <Text style={TextStyles.h3}>Favorites</Text>
-        <Image source={{ uri: currentUserFirestoreData.photoURL }} style={styles.avatar} />
+        <Image
+          source={{ uri: photoURL || currentUserFirestoreData.photoURL }}
+          style={styles.avatar}
+        />
       </View>
       <View style={styles.buttonContainer}>
         {buttons.map((item) => (
@@ -163,5 +168,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 8,
+  },
+  space: {
+    width: 40,
+    height: 40,
   },
 });
