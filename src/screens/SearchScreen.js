@@ -14,7 +14,6 @@ import InputField from '../components/InputField';
 import Popup from '../components/Popup';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import { useSelector, useDispatch } from 'react-redux';
-import { useFocusEffect } from '@react-navigation/native';
 import { fetchFood } from '../features/foodSlice';
 import FilterPopup from '../modules/Search/FilterPopup';
 import { SearchCriterias } from '../data/SearchCriterias';

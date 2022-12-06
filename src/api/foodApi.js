@@ -5,40 +5,24 @@ const foodCollection = firestore().collection('food');
 export const fetchFoodApi = async (category, searchTerm, sortCriteria) => {
   let results = [];
   //If category is passed into the function => search by both category and searchTerm
-  if (category) {
-    await foodCollection
-      .where('categories', 'array-contains', category)
-      .orderBy(sortCriteria, 'desc')
-      .get()
-      .then((collections) =>
-        collections.forEach((documentSnapshot) => {
-          if (
-            documentSnapshot.data().name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            documentSnapshot.data().description.toLowerCase().includes(searchTerm.toLowerCase())
-          ) {
-            results = [...results, { id: documentSnapshot.id, ...documentSnapshot.data() }];
-          }
-        })
-      );
-    return results;
-  }
-  //If category is not passed into the function => search by searchTerm only
-  if (!category) {
-    await foodCollection
-      .orderBy(sortCriteria, 'desc')
-      .get()
-      .then((collections) =>
-        collections.forEach((documentSnapshot) => {
-          if (
-            documentSnapshot.data().name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            documentSnapshot.data().description.toLowerCase().includes(searchTerm.toLowerCase())
-          ) {
-            results = [...results, { id: documentSnapshot.id, ...documentSnapshot.data() }];
-          }
-        })
-      );
-    return results;
-  }
+  let fetchedFoodList = category
+    ? await foodCollection.where('categories', 'array-contains', category)
+    : await foodCollection;
+  fetchedFoodList = await fetchedFoodList.orderBy(sortCriteria, 'desc');
+  await fetchedFoodList
+    .limit(5)
+    .get()
+    .then((collections) => {
+      collections.forEach((documentSnapshot) => {
+        if (
+          documentSnapshot.data().name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          documentSnapshot.data().description.toLowerCase().includes(searchTerm.toLowerCase())
+        ) {
+          results = [...results, { id: documentSnapshot.id, ...documentSnapshot.data() }];
+        }
+      });
+    });
+  return results;
 };
 
 export const fetchPopularFoodApi = async () => {
