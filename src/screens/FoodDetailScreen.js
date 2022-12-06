@@ -100,7 +100,10 @@ const FoodDetailScreen = ({ navigation, route }) => {
             >
               <Text style={[TextStyles.textMain, styles.ratingLinkText]}>Feedback</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.ratingLink}>
+            <TouchableOpacity
+              style={styles.ratingLink}
+              onPress={() => navigation.navigate('Review', { foodDetail: data })}
+            >
               <Text style={[TextStyles.textMain, styles.ratingLinkText]}>See Reviews</Text>
             </TouchableOpacity>
           </View>

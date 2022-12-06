@@ -1,5 +1,6 @@
+import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
@@ -7,8 +8,21 @@ import Colors from '../constants/Color';
 import TextStyles from '../styles/TextStyles';
 
 const ReviewScreen = ({ route }) => {
-  const { userReview } = route.params;
   const navigation = useNavigation();
+  const { foodDetail } = route.params;
+  const [reviewData, setReviewData] = useState([]);
+
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('food')
+      .doc(foodDetail.id)
+      .onSnapshot((documentSnapshot) => {
+        setReviewData(documentSnapshot.data().reviews || []);
+      });
+    return () => subscriber();
+  }, [foodDetail]);
+
+  console.log(reviewData);
 
   return (
     <View style={styles.reviewScreen}>
@@ -21,23 +35,27 @@ const ReviewScreen = ({ route }) => {
           <Text style={TextStyles.h3}>Reviews</Text>
           <View style={styles.space} />
         </View>
-        <View style={styles.commentContainer}>
-          <View style={styles.userInfo}>
-            <View>
-              <Image source={userReview.image} style={styles.avatar} />
-              <View style={styles.rating}>
-                <Text style={[TextStyles.textSmall, styles.ratePoint]}>{userReview.rate}.0</Text>
+        <View>
+          {reviewData.map((item) => (
+            <View style={styles.commentContainer}>
+              <View style={styles.userInfo}>
+                <View>
+                  <Image source={{ uri: item.image }} style={styles.avatar} />
+                  <View style={styles.rating}>
+                    <Text style={[TextStyles.textSmall, styles.ratePoint]}>{item.rate}.0</Text>
+                  </View>
+                </View>
+                <View>
+                  <Text style={TextStyles.h3}>{item.name}</Text>
+                  <Text style={TextStyles.textSmall}>{item.dayPost}</Text>
+                </View>
+                <TouchableOpacity style={styles.option}>
+                  <Image source={Images.ICON.OPTIONS} />
+                </TouchableOpacity>
               </View>
+              <Text style={[TextStyles.textMain, styles.comment]}>{item.comment}</Text>
             </View>
-            <View>
-              <Text style={TextStyles.h3}>Alyce Lambo</Text>
-              <Text style={TextStyles.textSmall}>{userReview.dayPost}</Text>
-            </View>
-            <TouchableOpacity style={styles.option}>
-              <Image source={Images.ICON.OPTIONS} />
-            </TouchableOpacity>
-          </View>
-          <Text style={[TextStyles.h3, styles.comment]}>{userReview.comment}</Text>
+          ))}
         </View>
       </ScrollView>
     </View>
@@ -73,8 +91,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   avatar: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     borderRadius: 99999,
     position: 'relative',
     marginRight: 20,
@@ -101,7 +119,6 @@ const styles = StyleSheet.create({
     height: 20,
   },
   comment: {
-    fontSize: 15,
-    marginTop: 20,
+    marginTop: 16,
   },
 });

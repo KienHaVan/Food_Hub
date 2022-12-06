@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
+import CustomButton from '../components/CustomButton';
+import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
 import Rating from '../components/Rating';
 import Colors from '../constants/Color';
+import Sizes from '../constants/Size';
+import { getFireStoreUserData } from '../features/userSlice';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { height, scaleSizeUI } from '../utils/scaleSizeUI';
-import Sizes from '../constants/Size';
-import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
-import CustomButton from '../components/CustomButton';
-import { useNavigation } from '@react-navigation/native';
-import firestore from '@react-native-firebase/firestore';
-import { useSelector } from 'react-redux';
 
 const RatingScreen = ({ route }) => {
   const [isFocus, setIsFocus] = useState(false);
@@ -21,6 +23,25 @@ const RatingScreen = ({ route }) => {
   const currentDate = new Date();
   const navigation = useNavigation();
   const { foodDetail } = route.params;
+  const currentUserFirestoreData = useSelector((state) => state.user.currentUserFirestoreData);
+  const dispatch = useDispatch();
+  const id = auth()?.currentUser?.uid;
+
+  useEffect(() => {
+    dispatch(getFireStoreUserData(id));
+    const checkUserReview = async () => {
+      const foodData = await firestore().collection('food').doc(foodDetail.id).get();
+      const reviews = foodData.data().reviews;
+      if (!reviews) {
+        await firestore()
+          .collection('food')
+          .doc(foodDetail.id)
+          .set({ ...foodData.data(), reviews: [] });
+      }
+    };
+    checkUserReview();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handlePressRating = (item) => {
     setDefaultRating(item);
@@ -28,21 +49,25 @@ const RatingScreen = ({ route }) => {
 
   const handleSubmitComment = async () => {
     const formValues = {
-      image: Images.IMAGES.AVATAR,
+      name: currentUserFirestoreData.fullname,
+      image: currentUserFirestoreData.photoURL,
       comment: comment,
       rate: defaultRating,
       dayPost: currentDate.toLocaleDateString(),
     };
-    const foodData = await firestore.collection('food').doc(foodDetail.id).get();
+    const foodData = await firestore().collection('food').doc(foodDetail.id).get();
     const reviews = foodData.data().reviews;
     try {
-      await firestore.collection('food').doc(foodDetail.id).update({
-        reviews: [],
-      });
+      await firestore()
+        .collection('food')
+        .doc(foodDetail.id)
+        .update({
+          reviews: [...reviews, { ...formValues }],
+        });
     } catch (error) {
       console.log('Error: ', error);
     }
-    navigation.navigate('Review', { userReview: formValues });
+    navigation.navigate('Review', { foodDetail: foodDetail });
   };
 
   return (
