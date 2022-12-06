@@ -14,6 +14,7 @@ import TextStyles from '../styles/TextStyles';
 import { addUserToFirebaseWithID } from '../utils/authentication';
 import { height, scaleSizeUI } from '../utils/scaleSizeUI';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const EditProfileScreen = () => {
   const [fullname, setFullname] = useState('');
@@ -21,36 +22,56 @@ const EditProfileScreen = () => {
   const [region, setRegion] = useState('');
   const [city, setCity] = useState('');
   const [street, setStreet] = useState('');
-  const currentUserFirestoreData = useSelector((state) => state.user.currentUserFirestoreData);
-  const dispatch = useDispatch();
   const navigation = useNavigation();
   const id = auth()?.currentUser?.uid;
 
   useEffect(() => {
-    dispatch(getFireStoreUserData(id));
-    if (currentUserFirestoreData) {
-      const address =
-        currentUserFirestoreData.address && currentUserFirestoreData.address.split(', ');
-      setFullname(currentUserFirestoreData.fullname);
-      setPhoneNumber(currentUserFirestoreData.phoneNumber);
-      if (address?.length) {
-        setRegion(address[2]);
-        setCity(address[1]);
-        setStreet(address[0]);
+    const checkAddress = async () => {
+      const userData = await firestore().collection('users').doc(id).get();
+      const address = userData.data().address;
+      if (!address) {
+        await addUserToFirebaseWithID(
+          {
+            ...userData.data(),
+            address: '',
+          },
+          auth()?.currentUser?.uid
+        );
       }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, id]);
-
-  const handleUpdateUserDetail = () => {
-    const formValues = {
-      fullname: fullname,
-      phoneNumber: phoneNumber,
-      address: `${street}, ${city}, ${region}`,
     };
-    dispatch(updateCurrentUser(formValues));
-    addUserToFirebaseWithID({ ...currentUserFirestoreData, ...formValues }, id);
-    navigation.navigate('HomeStack');
+    checkAddress();
+    const subscriber = firestore()
+      .collection('users')
+      .doc(id)
+      .onSnapshot((documentSnapshot) => {
+        const data = documentSnapshot.data();
+        setFullname(data.fullname || '');
+        setPhoneNumber(data.phoneNumber || '');
+        if (data.address.length) {
+          const userAddress = data.address.split(', ');
+          setRegion(userAddress[2]);
+          setCity(userAddress[1]);
+          setStreet(userAddress[0]);
+        }
+      });
+    return () => subscriber();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleUpdateUserDetail = async () => {
+    try {
+      await firestore()
+        .collection('users')
+        .doc(id)
+        .update({
+          fullname: fullname,
+          phoneNumber: phoneNumber,
+          address: `${street}, ${city}, ${region}`,
+        });
+    } catch (error) {
+      console.log('Error: ', error);
+    }
+    navigation.navigate('Profile');
   };
   return (
     <KeyBoardAvoidingWaraper>
@@ -80,7 +101,7 @@ const EditProfileScreen = () => {
             />
           </View>
           <View style={styles.textInput}>
-            <InputField label='State' value={region} onChangeText={(text) => setRegion(text)} />
+            <InputField label='District' value={region} onChangeText={(text) => setRegion(text)} />
           </View>
           <View style={styles.textInput}>
             <InputField label='City' value={city} onChangeText={(text) => setCity(text)} />
