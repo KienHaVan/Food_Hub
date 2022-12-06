@@ -22,8 +22,6 @@ const ReviewScreen = ({ route }) => {
     return () => subscriber();
   }, [foodDetail]);
 
-  console.log(reviewData);
-
   return (
     <View style={styles.reviewScreen}>
       <ScrollView>
@@ -36,24 +34,24 @@ const ReviewScreen = ({ route }) => {
           <View style={styles.space} />
         </View>
         <View>
-          {reviewData.map((item) => (
-            <View style={styles.commentContainer}>
+          {reviewData.map((item, index) => (
+            <View style={styles.commentContainer} key={index.toString()}>
               <View style={styles.userInfo}>
                 <View>
-                  <Image source={{ uri: item.image }} style={styles.avatar} />
+                  <Image source={{ uri: item.userAvatar }} style={styles.avatar} />
                   <View style={styles.rating}>
-                    <Text style={[TextStyles.textSmall, styles.ratePoint]}>{item.rate}.0</Text>
+                    <Text style={[TextStyles.textSmall, styles.ratePoint]}>{item.rating}.0</Text>
                   </View>
                 </View>
                 <View>
-                  <Text style={TextStyles.h3}>{item.name}</Text>
-                  <Text style={TextStyles.textSmall}>{item.dayPost}</Text>
+                  <Text style={TextStyles.h3}>{item.userName}</Text>
+                  <Text style={TextStyles.textSmall}>{item.date}</Text>
                 </View>
                 <TouchableOpacity style={styles.option}>
                   <Image source={Images.ICON.OPTIONS} />
                 </TouchableOpacity>
               </View>
-              <Text style={[TextStyles.textMain, styles.comment]}>{item.comment}</Text>
+              <Text style={[TextStyles.textMain, styles.comment]}>{item.userReview}</Text>
             </View>
           ))}
         </View>
@@ -67,15 +65,16 @@ export default ReviewScreen;
 const styles = StyleSheet.create({
   reviewScreen: {
     flex: 1,
-    paddingHorizontal: 26,
-    paddingTop: 37,
+    // paddingHorizontal: 26,
+    // paddingTop: 37,
     backgroundColor: Colors.white,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 40,
+    marginVertical: 40,
+    marginHorizontal: 26,
   },
   space: {
     width: 40,
@@ -83,6 +82,7 @@ const styles = StyleSheet.create({
   },
   commentContainer: {
     marginBottom: 30,
+    marginHorizontal: 26,
   },
   userInfo: {
     width: '100%',
