@@ -90,7 +90,12 @@ const CheckoutPaymentScreen = () => {
           />
         </View>
         <View style={styles.bottomButton}>
-          <CustomButton text='Apply' onPress={() => navigation.navigate('CheckoutOrder')} />
+          <CustomButton
+            text='Apply'
+            onPress={() =>
+              navigation.navigate('CheckoutOrder', { paymentMethod: theList[checked] })
+            }
+          />
         </View>
       </View>
     </View>

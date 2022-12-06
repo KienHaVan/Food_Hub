@@ -2,33 +2,80 @@ import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-nativ
 import React from 'react';
 import CornerButton from '../components/CornerButton';
 import { Images } from '../../assets';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import TextStyles from '../styles/TextStyles';
 import Color from '../constants/Color';
 import LayoutStyles from '../styles/Layout';
 import CartCard from '../components/CartCard';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Sizes from '../constants/Size';
 import CheckoutPaymentCard from '../components/CheckoutPaymentCard';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import CustomButton from '../components/CustomButton';
 import { formatPrice } from '../utils/formatter';
+import Loader from '../components/Loader';
+import { useState } from 'react';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import { addUserToFirebaseWithID } from '../utils/authentication';
+import { resetCart } from '../features/cartSlice';
 
 const CheckoutOrderScreen = () => {
+  const [showLoader, setShowLoader] = useState(false);
   const navigation = useNavigation();
+  const route = useRoute();
   const carts = useSelector((state) => state.cart.carts);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
   const currentUser = useSelector((state) => state.user.currentUser);
-
-  const renderCartItem = ({ item }) => {
-    return <CartCard item={item} />;
+  const paymentMethod = route.params.paymentMethod;
+  const dispatch = useDispatch();
+  const id = auth()?.currentUser?.uid;
+  const handlePlaceOrder = async () => {
+    setShowLoader(true);
+    const data = await firestore().collection('users').doc(id).get();
+    const orders = data.data().orders;
+    if (!orders) {
+      await addUserToFirebaseWithID(
+        {
+          ...data.data(),
+          orders: [],
+        },
+        auth()?.currentUser?.uid
+      );
+    }
+    // carts.map((one) => {
+    //   one.status = '0';
+    // });
+    await firestore()
+      .collection('users')
+      .doc(id)
+      .update({
+        orders: [...orders, ...carts],
+      })
+      .then(() => {
+        console.log('User updated!');
+      });
+    dispatch(resetCart());
+    // await firestore()
+    //   .collection('users')
+    //   .doc(id)
+    //   .update({
+    //     carts: [],
+    //   })
+    //   .then(() => {
+    //     console.log('User updated!');
+    //   });
+    setTimeout(() => {
+      navigation.navigate('Billing');
+      setShowLoader(false);
+    }, 5000);
   };
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <CornerButton
           sourceImage={Images.ICON.ARROW_LEFT}
-          handlePress={() => navigation.navigate('HomeStack')}
+          handlePress={() => navigation.goBack()}
         />
         <Text style={TextStyles.h3}>Checkout Orders</Text>
         <View style={styles.hidden}>
@@ -53,7 +100,12 @@ const CheckoutOrderScreen = () => {
           ))}
         </View>
         <View>
-          <CheckoutPaymentCard showingRadio={false} />
+          <CheckoutPaymentCard
+            showingRadio={false}
+            iconURL={paymentMethod.iconURL}
+            text={paymentMethod.text}
+            disabled={true}
+          />
         </View>
         <View style={[styles.summary, LayoutStyles.layoutShadowGrey]}>
           <View style={[LayoutStyles.layoutStretch, styles.summaryLine]}>
@@ -80,7 +132,10 @@ const CheckoutOrderScreen = () => {
         </View>
       </ScrollView>
       <View style={styles.bottomButton}>
-        <CustomButton text='Place Order' />
+        <CustomButton text='Place Order' onPress={handlePlaceOrder} />
+      </View>
+      <View>
+        <Loader loaderVisible={showLoader} JsonSource={require('../../assets/delivery.json')} />
       </View>
     </View>
   );
