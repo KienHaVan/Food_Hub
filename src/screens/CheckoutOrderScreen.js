@@ -19,9 +19,11 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import { addUserToFirebaseWithID } from '../utils/authentication';
 import { resetCart } from '../features/cartSlice';
+import { useEffect } from 'react';
 
 const CheckoutOrderScreen = () => {
   const [showLoader, setShowLoader] = useState(false);
+  const [address, setAddress] = useState('');
   const navigation = useNavigation();
   const route = useRoute();
   const carts = useSelector((state) => state.cart.carts);
@@ -30,6 +32,20 @@ const CheckoutOrderScreen = () => {
   const paymentMethod = route.params.paymentMethod;
   const dispatch = useDispatch();
   const id = auth()?.currentUser?.uid;
+  useEffect(() => {
+    const checkAddress = async () => {
+      const data = await firestore().collection('users').doc(id).get();
+      const address = data.data().address;
+      if (!address) {
+        navigation.navigate('EditProfile');
+      } else {
+        setAddress(address);
+      }
+    };
+    checkAddress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handlePlaceOrder = async () => {
     setShowLoader(true);
     const data = await firestore().collection('users').doc(id).get();
@@ -43,9 +59,6 @@ const CheckoutOrderScreen = () => {
         auth()?.currentUser?.uid
       );
     }
-    // carts.map((one) => {
-    //   one.status = '0';
-    // });
     await firestore()
       .collection('users')
       .doc(id)
@@ -89,7 +102,7 @@ const CheckoutOrderScreen = () => {
             <Image source={Images.ICON.CHECKOUT_LOCATION} style={styles.locationIcon} />
             <View style={styles.locationInfoRight}>
               <Text style={TextStyles.h3}>Home</Text>
-              <Text style={TextStyles.textMain}>Times Square NYC, Manhattan</Text>
+              <Text style={TextStyles.textMain}>{address}</Text>
             </View>
           </View>
         </View>

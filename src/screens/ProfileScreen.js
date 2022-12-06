@@ -1,6 +1,8 @@
+import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
@@ -9,24 +11,19 @@ import InputField from '../components/InputField';
 import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
-import { getFireStoreUserData } from '../features/userSlice';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
-import { addUserToFirebaseWithID } from '../utils/authentication';
 import { height, scaleSizeUI } from '../utils/scaleSizeUI';
-import { launchImageLibrary } from 'react-native-image-picker';
-import firestore from '@react-native-firebase/firestore';
 
 const ProfileScreen = () => {
   const [fullName, setFullname] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
+  const [photoURL, setPhotoURL] = useState('');
   const navigation = useNavigation();
-  const { currentUser, currentUserFirestoreData } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(getFireStoreUserData(currentUser.id));
     const subscriber = firestore()
       .collection('users')
       .doc(currentUser.id)
@@ -34,20 +31,17 @@ const ProfileScreen = () => {
         setFullname(documentSnapshot.data().fullname || '');
         setEmail(documentSnapshot.data().email || '');
         setPhoneNumber(documentSnapshot.data().phoneNumber || '');
+        setPhotoURL(documentSnapshot.data().photoURL || '');
       });
     return () => subscriber();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   const handleChoosePhoto = () => {
     launchImageLibrary({}, (res) => {
-      if (res?.assets[0]?.uri) {
-        addUserToFirebaseWithID(
-          { ...currentUserFirestoreData, photoURL: res?.assets[0]?.uri },
-          currentUser.id
-        );
-      } else {
-        return;
+      if (res?.assets) {
+        firestore().collection('users').doc(currentUser.id).update({
+          photoURL: res?.assets[0]?.uri,
+        });
       }
     });
   };
@@ -65,7 +59,7 @@ const ProfileScreen = () => {
         <View style={[styles.avatarContainer, LayoutStyles.layoutShadowRed]}>
           <Image
             resizeMode='cover'
-            source={{ uri: currentUserFirestoreData.photoURL }}
+            source={{ uri: photoURL || currentUser.photoURL }}
             style={styles.avatar}
           />
           <TouchableOpacity onPress={handleChoosePhoto} style={styles.choosePicture}>
