@@ -63,24 +63,41 @@ const LoginScreen = () => {
   });
   const onSubmit = async (data) => {
     if (!isValid) return;
-    try {
-      await SignInWithEmailAndPassword(data.email, data.password);
-      dispatch(
-        addCurrentUser({
-          fullname: auth()?.currentUser?.displayName,
-          email: auth()?.currentUser?.email,
-          photoURL: auth()?.currentUser?.photoURL,
-          id: auth()?.currentUser?.uid,
-        })
-      );
-      Toast.show({
-        type: 'success',
-        text1: 'Login successfully!',
+    await auth()
+      .signInWithEmailAndPassword(data.email, data.password)
+      .then(() => {
+        console.log('User account signed in!');
+        dispatch(
+          addCurrentUser({
+            fullname: auth()?.currentUser?.displayName,
+            email: auth()?.currentUser?.email,
+            photoURL: auth()?.currentUser?.photoURL,
+            id: auth()?.currentUser?.uid,
+          })
+        );
+        Toast.show({
+          type: 'success',
+          text1: 'Login successfully!',
+        });
+        navigation.navigate('HomeStack');
+      })
+      .catch((error) => {
+        switch (error.code) {
+          case 'auth/wrong-password':
+            Toast.show({
+              type: 'info',
+              text1: 'Wrong password',
+            });
+            break;
+          default:
+            console.log(error);
+            Toast.show({
+              type: 'info',
+              text1: { error },
+            });
+            break;
+        }
       });
-      navigation.navigate('HomeStack');
-    } catch (error) {
-      console.log('Error', error);
-    }
   };
   return (
     <ImageBackground

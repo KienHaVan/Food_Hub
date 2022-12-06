@@ -40,19 +40,12 @@ export const SignInWithEmailAndPassword = async (email, password) => {
       console.log('User account signed in!');
     })
     .catch((error) => {
-      if (error.code === 'auth/wrong-password') {
-        console.log('Wrong password!');
-        return;
+      switch (error.code) {
+        case 'auth/wrong-password':
+          break;
+        default:
+          console.log(error);
       }
-      if (error.message.includes('wrong-password')) {
-        console.log('Wrong password!');
-      }
-
-      if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!');
-      }
-
-      console.error(error);
     });
 };
 
