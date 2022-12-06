@@ -1,17 +1,19 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
+import CustomButton from '../components/CustomButton';
 import InputField from '../components/InputField';
 import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
+import Colors from '../constants/Color';
+import { getFireStoreUserData, updateCurrentUser } from '../features/userSlice';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
-import CustomButton from '../components/CustomButton';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateCurrentUser } from '../features/userSlice';
 import { addUserToFirebaseWithID } from '../utils/authentication';
+import { height, scaleSizeUI } from '../utils/scaleSizeUI';
+import auth from '@react-native-firebase/auth';
 
 const EditProfileScreen = () => {
   const [fullname, setFullname] = useState('');
@@ -19,32 +21,36 @@ const EditProfileScreen = () => {
   const [region, setRegion] = useState('');
   const [city, setCity] = useState('');
   const [street, setStreet] = useState('');
-  const { currentUser } = useSelector((state) => state.user);
+  const currentUserFirestoreData = useSelector((state) => state.user.currentUserFirestoreData);
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const id = auth()?.currentUser?.uid;
 
   useEffect(() => {
-    if (currentUser) {
-      setFullname(currentUser.fullname);
-      setPhoneNumber(currentUser.phoneNumber);
-      setRegion(currentUser.region);
-      setCity(currentUser.city);
-      setStreet(currentUser.street);
+    dispatch(getFireStoreUserData(id));
+    if (currentUserFirestoreData) {
+      const address =
+        currentUserFirestoreData.address && currentUserFirestoreData.address.split(', ');
+      setFullname(currentUserFirestoreData.fullname);
+      setPhoneNumber(currentUserFirestoreData.phoneNumber);
+      if (address?.length) {
+        setRegion(address[2]);
+        setCity(address[1]);
+        setStreet(address[0]);
+      }
     }
-  }, [currentUser]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, id]);
 
-  const handleUpdateUserDetail = async () => {
+  const handleUpdateUserDetail = () => {
     const formValues = {
       fullname: fullname,
       phoneNumber: phoneNumber,
-      region: region,
-      city: city,
-      street: street,
+      address: `${street}, ${city}, ${region}`,
     };
     dispatch(updateCurrentUser(formValues));
-    await addUserToFirebaseWithID(formValues, currentUser.id);
-    navigation.navigate('Profile');
-    console.log(currentUser);
+    addUserToFirebaseWithID({ ...currentUserFirestoreData, ...formValues }, id);
+    navigation.navigate('HomeStack');
   };
   return (
     <KeyBoardAvoidingWaraper>
@@ -70,6 +76,7 @@ const EditProfileScreen = () => {
               label='Mobile number'
               value={phoneNumber}
               onChangeText={(text) => setPhoneNumber(text)}
+              keyboardType='numeric'
             />
           </View>
           <View style={styles.textInput}>
@@ -101,6 +108,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: scaleSizeUI(30),
     paddingHorizontal: scaleSizeUI(26),
+    backgroundColor: Colors.white,
+    height: height,
   },
   space: {
     width: 40,

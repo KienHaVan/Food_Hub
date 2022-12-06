@@ -1,5 +1,9 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { updateUserApi } from '../api/userApi';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { fetchUserById, updateUserApi } from '../api/userApi';
+
+export const getFireStoreUserData = createAsyncThunk('User/getFireStoreUserData', async (id) => {
+  return await fetchUserById(id);
+});
 
 export const updateUser = createAsyncThunk('User/updateUser', async (data, thunkApi) => {
   return await updateUserApi(data.userId, data.newData);
@@ -7,6 +11,9 @@ export const updateUser = createAsyncThunk('User/updateUser', async (data, thunk
 
 const initialState = {
   currentUser: {},
+  currentUserFirestoreData: {},
+  favoriteFoodList: [],
+  favoriteRestaurantList: [],
   isLoading: false,
 };
 
@@ -15,10 +22,10 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     addCurrentUser: (state, action) => {
-      state.currentUser = { ...action.payload };
+      return { ...state, currentUser: { ...action.payload } };
     },
     updateCurrentUser: (state, action) => {
-      state.currentUser = { ...state.currentUser, ...action.payload };
+      state.currentUserFirestoreData = { ...state.currentUser, ...action.payload };
     },
     updateUserPayment: (state, action) => {
       state.currentUser.paymentMethod = [...state.currentUser.paymentMethod, action.payload];
@@ -29,6 +36,9 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getFireStoreUserData.fulfilled, (state, action) => {
+        state.currentUserFirestoreData = action.payload;
+      })
       .addCase(updateUser.pending, (state, action) => {
         state.isLoading = true;
       })

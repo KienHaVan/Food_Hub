@@ -1,36 +1,73 @@
-import React, { useState } from 'react';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
+import CustomButton from '../components/CustomButton';
+import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
 import Rating from '../components/Rating';
 import Colors from '../constants/Color';
+import Sizes from '../constants/Size';
+import { getFireStoreUserData } from '../features/userSlice';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
-import Sizes from '../constants/Size';
-import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
-import CustomButton from '../components/CustomButton';
-import { useNavigation } from '@react-navigation/native';
+import { height, scaleSizeUI } from '../utils/scaleSizeUI';
 
-const RatingScreen = () => {
+const RatingScreen = ({ route }) => {
   const [isFocus, setIsFocus] = useState(false);
   const [defaultRating, setDefaultRating] = useState(1);
   const [comment, setComment] = useState('');
   const currentDate = new Date();
   const navigation = useNavigation();
+  const { foodDetail } = route.params;
+  const currentUserFirestoreData = useSelector((state) => state.user.currentUserFirestoreData);
+  const dispatch = useDispatch();
+  const id = auth()?.currentUser?.uid;
+
+  useEffect(() => {
+    dispatch(getFireStoreUserData(id));
+    const checkUserReview = async () => {
+      const foodData = await firestore().collection('food').doc(foodDetail.id).get();
+      const reviews = foodData.data().reviews;
+      if (!reviews) {
+        await firestore()
+          .collection('food')
+          .doc(foodDetail.id)
+          .set({ ...foodData.data(), reviews: [] });
+      }
+    };
+    checkUserReview();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handlePressRating = (item) => {
     setDefaultRating(item);
   };
 
-  const handleSubmitComment = () => {
+  const handleSubmitComment = async () => {
     const formValues = {
-      image: Images.IMAGES.AVATAR,
+      name: currentUserFirestoreData.fullname,
+      image: currentUserFirestoreData.photoURL,
       comment: comment,
       rate: defaultRating,
       dayPost: currentDate.toLocaleDateString(),
     };
-    navigation.navigate('Review', { userReview: formValues });
+    const foodData = await firestore().collection('food').doc(foodDetail.id).get();
+    const reviews = foodData.data().reviews;
+    try {
+      await firestore()
+        .collection('food')
+        .doc(foodDetail.id)
+        .update({
+          reviews: [...reviews, { ...formValues }],
+        });
+    } catch (error) {
+      console.log('Error: ', error);
+    }
+    navigation.navigate('Review', { foodDetail: foodDetail });
   };
 
   return (
@@ -39,17 +76,19 @@ const RatingScreen = () => {
         <View style={styles.header}>
           <Image source={Images.IMAGES.RATING_RESTAURANT} style={styles.headingImage} />
           <View style={styles.cornerButton}>
-            <CornerButton sourceImage={Images.ICON.ARROW_LEFT} />
+            <CornerButton
+              sourceImage={Images.ICON.ARROW_LEFT}
+              handlePress={() => navigation.goBack()}
+            />
           </View>
           <View style={styles.avaContainer}>
             <View style={[styles.avaBorder, LayoutStyles.layoutShadowRed]}>
-              <Image source={Images.IMAGES.RESTAURANT_AVATAR} style={styles.restaurantAva} />
+              <Image source={{ uri: foodDetail.image }} style={styles.restaurantAva} />
             </View>
           </View>
         </View>
         <View style={styles.restaurantInfo}>
-          <Text style={[TextStyles.h3]}>Pizza Hut</Text>
-          <Text style={[TextStyles.textMain]}>4102 Pretty View Lanenda</Text>
+          <Text style={[TextStyles.h3]}>{foodDetail.name}</Text>
           <Text style={[TextStyles.textMain, styles.orderDeli]}>Order Delivered</Text>
         </View>
         <View style={styles.ratingContainer}>
@@ -81,6 +120,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingTop: 25,
     backgroundColor: Colors.white,
+    height: height,
   },
   header: {
     position: 'relative',
@@ -120,8 +160,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   restaurantAva: {
-    width: scaleSizeUI(56),
-    height: scaleSizeUI(56),
+    width: '100%',
+    height: '100%',
+    borderRadius: 99999,
   },
   orderDeli: {
     color: Colors.green,
