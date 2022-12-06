@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Images } from '../../../assets';
@@ -8,10 +8,27 @@ import Colors from '../../constants/Color';
 import Sizes from '../../constants/Size';
 import LayoutStyles from '../../styles/Layout';
 import TextStyles from '../../styles/TextStyles';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const HomeHeader = ({ handleShowMenu }) => {
   const navigation = useNavigation();
   const currentUser = useSelector((state) => state.user.currentUserFirestoreData);
+  const [userAddress, setUserAddress] = useState('');
+  const [photoURL, setPhotoURL] = useState('');
+  const id = auth()?.currentUser?.uid;
+
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('users')
+      .doc(id)
+      .onSnapshot((documentSnapshot) => {
+        setUserAddress(documentSnapshot.data().address || '');
+        setPhotoURL(documentSnapshot.data().photoURL || '');
+      });
+    return () => subscriber();
+  }, [id]);
+
   return (
     <View style={[LayoutStyles.layoutStretch, styles.header]}>
       <CornerButton sourceImage={Images.ICON.BURGER} handlePress={handleShowMenu} />
@@ -19,14 +36,14 @@ const HomeHeader = ({ handleShowMenu }) => {
         <Text style={TextStyles.textSmall}>
           Deliver to <Image source={Images.ICON.ARROW_DOWN} />
         </Text>
-        <Text style={[TextStyles.textMain, styles.addressText]}>4102 Pretty View Lane</Text>
+        <Text style={[TextStyles.textMain, styles.addressText]}>{userAddress}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={[LayoutStyles.layoutShadowRed, styles.avatar]}
         onPress={() => navigation.navigate('Profile')}
       >
-        <Image source={{ uri: currentUser?.photoURL }} style={styles.avatar} />
+        <Image source={{ uri: photoURL || currentUser.photoURL }} style={styles.avatar} />
       </TouchableOpacity>
     </View>
   );
