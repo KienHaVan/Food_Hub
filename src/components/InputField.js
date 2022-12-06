@@ -12,6 +12,11 @@ const InputField = ({
   label,
   preIcon,
   isPassword,
+  keyboardType,
+  isShowKeyboard,
+  isDisabled,
+  isEditable,
+  isSelected,
   defaultValue = '',
   value,
   onChangeText,
@@ -29,7 +34,7 @@ const InputField = ({
         style={[
           LayoutStyles.layoutStretch,
           LayoutStyles.layoutShadowGrey,
-          styles.inputContainer,
+          isDisabled ? styles.disabled : styles.inputContainer,
           preIcon !== undefined ? styles.inputWithIcon : null,
           isFocus ? styles.inputFocus : styles.inputOnBlur,
         ]}
@@ -54,6 +59,10 @@ const InputField = ({
             defaultValue={defaultValue}
             value={value}
             onChangeText={onChangeText}
+            keyboardType={keyboardType}
+            showSoftInputOnFocus={isShowKeyboard}
+            editable={isEditable}
+            selectTextOnFocus={isSelected}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onSubmitEditing={onSubmitted}
@@ -82,6 +91,12 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: Sizes.sizeSmall,
     backgroundColor: Colors.white,
+  },
+  disabled: {
+    backgroundColor: Colors.grey,
+    borderWidth: 2,
+    borderRadius: Sizes.sizeSmall,
+    opacity: 0.3,
   },
   inputFocus: {
     borderColor: Colors.primary,

@@ -6,17 +6,15 @@ import Colors from '../constants/Color';
 
 import { Images } from '../../assets';
 
-const FavoriteButton = () => {
-  const [fav, setFav] = useState(false);
-
+const FavoriteButton = ({ handlePress, isFavorite }) => {
   return (
     <TouchableOpacity
-      onPress={() => setFav(!fav)}
+      onPress={handlePress}
       style={[
         LayoutStyles.layoutCenter,
         LayoutStyles.layoutShadowGrey,
         styles.favorite,
-        fav && styles.favoriteActive,
+        isFavorite && styles.favoriteActive,
       ]}
     >
       <Image source={Images.ICON.HEART} />

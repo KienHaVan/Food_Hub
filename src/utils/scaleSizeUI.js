@@ -1,13 +1,11 @@
-import {Dimensions} from 'react-native';
+import { Dimensions } from 'react-native';
 
-const {width, height} = Dimensions.get('window');
+export const { width, height } = Dimensions.get('window');
 
 export const scaleSizeUI = (param, isHeight) => {
-    const widthDesign = 375;
+  const widthDesign = 375;
 
-    const heightDesign = 812;
+  const heightDesign = 812;
 
-    return isHeight
-        ? (param * height) / heightDesign
-        : (param * width) / widthDesign;
+  return isHeight ? (param * height) / heightDesign : (param * width) / widthDesign;
 };
