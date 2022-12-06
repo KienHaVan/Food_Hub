@@ -27,7 +27,7 @@ const MealCard = ({ data }) => {
       <Image source={{ uri: data.image }} style={styles.cardThumbnail} />
       <View style={styles.cardContent}>
         <View style={[LayoutStyles.layoutShadowGrey, styles.rating]}>
-          <Image source={Images.ICON.STAR} />
+          <Image source={Images.ICON.STAR} style={styles.cardIcon} />
           <Text style={[TextStyles.textMain, styles.cardRatingText]}>
             {formatRating(data.rating)}
           </Text>
@@ -92,5 +92,9 @@ const styles = StyleSheet.create({
   },
   priceText: {
     color: Colors.primary,
+  },
+  cardIcon: {
+    width: Sizes.sizeModerate,
+    height: Sizes.sizeModerate,
   },
 });

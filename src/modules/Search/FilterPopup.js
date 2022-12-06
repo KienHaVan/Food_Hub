@@ -10,7 +10,7 @@ import { scaleSizeUI } from '../../utils/scaleSizeUI';
 const FilterPopup = ({ data, hidePopup, onSelect, onConfirmed, currentCriteria }) => {
   const handleSorting = () => {
     hidePopup();
-    onConfirmed(data[currentCriteria - 1].criteria);
+    onConfirmed();
   };
 
   return (

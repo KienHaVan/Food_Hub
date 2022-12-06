@@ -14,7 +14,7 @@ import { SearchCriterias } from '../../data/SearchCriterias';
 const HomeSearch = () => {
   const navigation = useNavigation();
   const [isPopupShown, setIsPopupShown] = useState(false);
-  const [currentCriteria, setCurrentCriteria] = useState(0);
+  const [currentCriteria, setCurrentCriteria] = useState(1);
 
   const handleSearch = (searchTerm) => {
     navigation.navigate('Search', { searchTerm });
@@ -30,7 +30,7 @@ const HomeSearch = () => {
           onSelect={setCurrentCriteria}
           onConfirmed={() =>
             navigation.navigate('Search', {
-              defaultSortCriteria: SearchCriterias[currentCriteria - 1].criteria,
+              defaultSortCriteria: currentCriteria,
             })
           }
           hidePopup={() => setIsPopupShown(false)}
