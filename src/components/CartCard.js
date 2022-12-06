@@ -12,14 +12,22 @@ import { addToCart, removeFromCart } from '../features/cartSlice';
 import { Images } from '../../assets';
 import { formatPrice } from '../utils/formatter';
 
-const CartCard = ({ item }) => {
+const CartCard = ({ item, onConfirmRemove }) => {
   const dispatch = useDispatch();
+
+  const handleRemoveItem = (item, itemQuantity) => {
+    if (item.quantity === itemQuantity) {
+      onConfirmRemove();
+    } else {
+      dispatch(removeFromCart({ ...item, quantity: itemQuantity }));
+    }
+  };
 
   return (
     <View style={[LayoutStyles.layoutShadowGrey, styles.card]}>
       <TouchableOpacity
-        style={styles.cardRemover}
-        onPress={() => dispatch(removeFromCart({ ...item, quantity: item.quantity }))}
+        style={[LayoutStyles.layoutShadowGrey, styles.cardRemover]}
+        onPress={() => handleRemoveItem(item, item.quantity)}
       >
         <Image source={Images.ICON.CLOSE} />
       </TouchableOpacity>
@@ -36,7 +44,7 @@ const CartCard = ({ item }) => {
         <Counter
           defaultValue={item.quantity}
           onIncrease={() => dispatch(addToCart({ ...item, quantity: 1 }))}
-          onDecrease={() => dispatch(removeFromCart({ ...item, quantity: 1 }))}
+          onDecrease={() => handleRemoveItem(item, 1)}
         />
       </View>
     </View>
@@ -77,7 +85,10 @@ const styles = StyleSheet.create({
   },
   cardRemover: {
     position: 'absolute',
-    top: Sizes.sizeSmall,
-    right: Sizes.sizeSmall,
+    top: -Sizes.sizeSmallerH,
+    right: -Sizes.sizeSmaller,
+    backgroundColor: Colors.white,
+    padding: Sizes.sizeSmaller,
+    borderRadius: 100,
   },
 });

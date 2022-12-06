@@ -15,6 +15,7 @@ import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
 import Loader from '../components/Loader';
 import CornerButton from '../components/CornerButton';
+import FavoriteButton from '../components/FavoriteButton';
 import { Images } from '../../assets';
 import { useSelector, useDispatch } from 'react-redux';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
@@ -55,6 +56,8 @@ const RestaurantDetailScreen = ({ navigation, route }) => {
           handlePress={() => navigation.goBack()}
         />
       </View>
+
+      <FavoriteButton />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <ImageBackground source={{ uri: data.image }} style={styles.screenThumbnail} />
