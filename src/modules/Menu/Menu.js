@@ -19,7 +19,7 @@ import LogoutConfirm from '../Logout/LogoutConfirm';
 import { useState } from 'react';
 
 const Menu = ({ isMenuShown, handleShowMenu }) => {
-  const currentUser = useSelector((state) => state.user.currentUser);
+  const currentUser = useSelector((state) => state.user.currentUserFirestoreData);
   const navigation = useNavigation();
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const renderItem = (item) => {

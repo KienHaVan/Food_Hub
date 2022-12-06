@@ -9,19 +9,16 @@ export const fetchFoodApi = async (category, searchTerm, sortCriteria) => {
     ? await foodCollection.where('categories', 'array-contains', category)
     : await foodCollection;
   fetchedFoodList = await fetchedFoodList.orderBy(sortCriteria, 'desc');
-  await fetchedFoodList
-    .limit(5)
-    .get()
-    .then((collections) => {
-      collections.forEach((documentSnapshot) => {
-        if (
-          documentSnapshot.data().name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          documentSnapshot.data().description.toLowerCase().includes(searchTerm.toLowerCase())
-        ) {
-          results = [...results, { id: documentSnapshot.id, ...documentSnapshot.data() }];
-        }
-      });
+  await fetchedFoodList.get().then((collections) => {
+    collections.forEach((documentSnapshot) => {
+      if (
+        documentSnapshot.data().name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        documentSnapshot.data().description.toLowerCase().includes(searchTerm.toLowerCase())
+      ) {
+        results = [...results, { id: documentSnapshot.id, ...documentSnapshot.data() }];
+      }
     });
+  });
   return results;
 };
 

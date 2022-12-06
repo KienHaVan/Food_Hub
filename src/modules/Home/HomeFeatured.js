@@ -10,7 +10,7 @@ import auth from '@react-native-firebase/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { Images } from '../../../assets';
 import RestaurantCard from '../../components/RestaurantCard';
-import { fetchAllRestaurants } from '../../features/restaurantSlice';
+import { fetchRestaurants } from '../../features/restaurantSlice';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import HomeFeaturedSkeleton from './HomeFeaturedSkeleton';
 import firestore from '@react-native-firebase/firestore';
@@ -23,7 +23,7 @@ const HomeFeatured = ({ isScreenFocused }) => {
 
   useEffect(() => {
     if (isScreenFocused) {
-      dispatch(fetchAllRestaurants());
+      dispatch(fetchRestaurants({ areFeatured: true }));
     }
   }, [dispatch, isScreenFocused, id]);
 
@@ -40,7 +40,7 @@ const HomeFeatured = ({ isScreenFocused }) => {
           onPress={() => {
             firestore()
               .collection('food')
-              .doc('ZRXDwS627YITlwMckKHU')
+              .doc('SwwBUYG3ZDu1aHNNWWDo')
               .update({
                 reviews: [
                   {

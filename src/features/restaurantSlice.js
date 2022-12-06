@@ -1,9 +1,22 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchAllRestaurantsApi, addRestaurantApi } from '../api/restaurantApi';
+import {
+  fetchPopularRestaurantsApi,
+  fetchRestaurantApi,
+  addRestaurantApi,
+} from '../api/restaurantApi';
 
-export const fetchAllRestaurants = createAsyncThunk('Restaurant/fetchAllRestaurants', async () => {
-  return await fetchAllRestaurantsApi();
-});
+export const fetchRestaurants = createAsyncThunk(
+  'Restaurant/fetchAllRestaurants',
+  async ({ areFeatured = false, category, searchTerm = '', sortCriteria = 'rating' }) => {
+    // console.log('are featured?', areFeatured);
+    // console.log('category?', category);
+    // console.log('search term?', searchTerm);
+    // console.log('sort criteria?', sortCriteria);
+    return areFeatured
+      ? await fetchPopularRestaurantsApi()
+      : await fetchRestaurantApi(category, searchTerm, sortCriteria);
+  }
+);
 
 export const addRestaurant = createAsyncThunk(
   'Restaurant/addRestaurant',
@@ -23,14 +36,14 @@ const restaurantSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllRestaurants.pending, (state, action) => {
+      .addCase(fetchRestaurants.pending, (state, action) => {
         state.isLoading = true;
       })
-      .addCase(fetchAllRestaurants.fulfilled, (state, action) => {
+      .addCase(fetchRestaurants.fulfilled, (state, action) => {
         state.restaurants = action.payload;
         state.isLoading = false;
       })
-      .addCase(fetchAllRestaurants.rejected, (state, action) => {
+      .addCase(fetchRestaurants.rejected, (state, action) => {
         console.log('error', action.error.message);
       });
     builder

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import TextStyles from '../../styles/TextStyles';
 import LayoutStyles from '../../styles/Layout';
@@ -6,8 +6,28 @@ import CustomButton from '../../components/CustomButton';
 import Colors from '../../constants/Color';
 import Sizes from '../../constants/Size';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearchTheme } from '../../features/categorySlice';
+
+const SearchThemes = [
+  {
+    id: 0,
+    theme: 'Food',
+  },
+  {
+    id: 1,
+    theme: 'Restaurants',
+  },
+];
 
 const FilterPopup = ({ data, hidePopup, onSelect, onConfirmed, currentCriteria }) => {
+  const dispatch = useDispatch();
+  const searchTheme = useSelector((state) => state.category.searchTheme);
+
+  useEffect(() => {
+    if (currentCriteria === 3 && searchTheme === 1) onSelect(currentCriteria - 2);
+  }, [searchTheme]);
+
   const handleSorting = () => {
     hidePopup();
     onConfirmed();
@@ -15,13 +35,35 @@ const FilterPopup = ({ data, hidePopup, onSelect, onConfirmed, currentCriteria }
 
   return (
     <View style={styles.popup}>
-      <Text style={TextStyles.h3}>Sort food by</Text>
+      <Text style={TextStyles.h3}>Select one</Text>
       <View style={styles.dataList}>
-        {data.map((item) => {
+        {SearchThemes.map((item) => {
           return (
             <TouchableOpacity
               key={item.id}
               style={[LayoutStyles.layoutStretch, styles.dataItem]}
+              onPress={() => dispatch(setSearchTheme(item.id))}
+            >
+              <Text style={[TextStyles.textMain, styles.dataItemText]}>{item.theme}</Text>
+              <View style={[styles.radioWrapper, LayoutStyles.layoutCenter]}>
+                {searchTheme === item.id ? <View style={styles.radio} /> : null}
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+      <Text style={TextStyles.h3}>Sort by</Text>
+      <View style={styles.dataList}>
+        {data.map((item) => {
+          return (
+            <TouchableOpacity
+              disabled={item.id === 3 && searchTheme === 1}
+              key={item.id}
+              style={[
+                LayoutStyles.layoutStretch,
+                styles.dataItem,
+                item.id === 3 && searchTheme === 1 && styles.dataItemInactive,
+              ]}
               onPress={() => onSelect(item.id)}
             >
               <Text style={[TextStyles.textMain, styles.dataItemText]}>{item.name}</Text>
@@ -43,7 +85,7 @@ export default FilterPopup;
 
 const styles = StyleSheet.create({
   popup: {
-    width: '70%',
+    width: '80%',
     marginLeft: 'auto',
     marginRight: 'auto',
     backgroundColor: Colors.white,
@@ -56,6 +98,9 @@ const styles = StyleSheet.create({
   },
   dataItem: {
     marginBottom: Sizes.sizeModerateH,
+  },
+  dataItemInactive: {
+    opacity: 0.2,
   },
   dataItemText: {
     color: Colors.secondaryDarker,

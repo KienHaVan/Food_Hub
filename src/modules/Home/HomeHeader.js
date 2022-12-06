@@ -11,7 +11,7 @@ import TextStyles from '../../styles/TextStyles';
 
 const HomeHeader = ({ handleShowMenu }) => {
   const navigation = useNavigation();
-  const { currentUser } = useSelector((state) => state.user);
+  const currentUser = useSelector((state) => state.user.currentUserFirestoreData);
   return (
     <View style={[LayoutStyles.layoutStretch, styles.header]}>
       <CornerButton sourceImage={Images.ICON.BURGER} handlePress={handleShowMenu} />
@@ -26,7 +26,7 @@ const HomeHeader = ({ handleShowMenu }) => {
         style={[LayoutStyles.layoutShadowRed, styles.avatar]}
         onPress={() => navigation.navigate('Profile')}
       >
-        <Image source={{ uri: currentUser.photoURL }} style={styles.avatar} />
+        <Image source={{ uri: currentUser?.photoURL }} style={styles.avatar} />
       </TouchableOpacity>
     </View>
   );

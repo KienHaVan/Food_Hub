@@ -15,14 +15,19 @@ import Popup from '../components/Popup';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchFood } from '../features/foodSlice';
+import { fetchRestaurants } from '../features/restaurantSlice';
 import FilterPopup from '../modules/Search/FilterPopup';
 import { SearchCriterias } from '../data/SearchCriterias';
+import RestaurantCard from '../components/RestaurantCard';
 
 const SearchScreen = ({ navigation, route }) => {
   const { category, searchTerm, defaultSortCriteria } = route.params;
   const dispatch = useDispatch();
   const foodList = useSelector((state) => state.food.food);
+  const restaurantList = useSelector((state) => state.restaurant.restaurants);
   const foodLoading = useSelector((state) => state.food.isLoading);
+  const restaurantLoading = useSelector((state) => state.restaurant.isLoading);
+  const searchTheme = useSelector((state) => state.category.searchTheme);
   const [isPopupShown, setIsPopupShown] = useState(false);
   const [currentCriteria, setCurrentCriteria] = useState(defaultSortCriteria || 1);
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
@@ -35,15 +40,29 @@ const SearchScreen = ({ navigation, route }) => {
     return <MealCard data={item} />;
   };
 
+  const showRestaurant = ({ item }) => {
+    return <RestaurantCard data={item} isFullWidth />;
+  };
+
   const handleFilter = (criteria) => {
     dispatch(
-      fetchFood({ category: category?.name, searchTerm: localSearchTerm, sortCriteria: criteria })
+      searchTheme === 0
+        ? fetchFood({
+            category: category?.name,
+            searchTerm: localSearchTerm,
+            sortCriteria: criteria,
+          })
+        : fetchRestaurants({
+            category: category?.name,
+            searchTerm: localSearchTerm,
+            sortCriteria: criteria,
+          })
     );
   };
 
   return (
     <View style={[LayoutStyles.layoutScreen, styles.screen]}>
-      <Loader loaderVisible={foodLoading} />
+      <Loader loaderVisible={foodLoading || restaurantLoading} />
       <Popup isVisible={isPopupShown} hidePopup={() => setIsPopupShown(false)}>
         <FilterPopup
           data={SearchCriterias}
@@ -79,7 +98,13 @@ const SearchScreen = ({ navigation, route }) => {
       {category ? (
         <View style={styles.searchHeader}>
           <Text style={[TextStyles.h1, styles.searchHeading]}>{category.name}</Text>
-          <Text style={TextStyles.textMain}>We found {foodList.length} for you</Text>
+          <Text style={[TextStyles.textMain, styles.searchHeaderText]}>
+            We found{' '}
+            {searchTheme === 0
+              ? `${foodList.length} meal(s)`
+              : `${restaurantList.length} restaurant(s)`}{' '}
+            for you
+          </Text>
         </View>
       ) : null}
 
@@ -92,8 +117,9 @@ const SearchScreen = ({ navigation, route }) => {
         <View style={[LayoutStyles.layoutStretch, styles.searchFieldContainer]}>
           <View style={styles.inputContainer}>
             <InputField
-              placeholder='Search for food...'
+              placeholder='Search for food or restaurant...'
               defaultValue={searchTerm}
+              returnKeyType='search'
               onSubmitted={(event) => setLocalSearchTerm(event.nativeEvent.text)}
             />
           </View>
@@ -107,11 +133,11 @@ const SearchScreen = ({ navigation, route }) => {
 
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={foodList}
+          data={searchTheme === 0 ? foodList : restaurantList}
           keyExtractor={(item) => item.id}
-          renderItem={showFood}
+          renderItem={searchTheme === 0 ? showFood : showRestaurant}
           ListFooterComponent={<View />}
-          ListFooterComponentStyle={{ height: Sizes.sizeMassiveH * 3 }}
+          ListFooterComponentStyle={{ height: Sizes.sizeMassiveH * 2 }}
         />
       </View>
     </View>
@@ -152,6 +178,9 @@ const styles = StyleSheet.create({
   searchHeading: {
     color: Colors.primary,
     lineHeight: 65,
+  },
+  searchHeaderText: {
+    width: '60%',
   },
   foodList: {
     paddingBottom: Sizes.sizeMassiveH * 2,
