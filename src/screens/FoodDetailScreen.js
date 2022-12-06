@@ -50,12 +50,14 @@ const FoodDetailScreen = ({ navigation, route }) => {
   //When new data is passed into the screen, the quantity of the item is reset
   useEffect(() => {
     dispatch(resetCurrentQuantity());
-  }, [data, dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   //When the cart is changed => update user in firestore
   //TODO: Bug here!!! navigating to this screen also calls API
   useEffect(() => {
     dispatch(updateUser({ userId: currentUser.id, newData: { carts } }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [carts]);
 
   //Handle adding to cart action after pressing Add to cart
@@ -99,7 +101,16 @@ const FoodDetailScreen = ({ navigation, route }) => {
             <Image source={Images.ICON.STAR_LARGE} style={styles.ratingIcon} />
             <Text style={[TextStyles.textMain, styles.ratingText]}>{data.rating}</Text>
             <Text style={TextStyles.textMain}>({data.ratingAmount})</Text>
-            <TouchableOpacity style={styles.ratingLink} onPress={() => setShowReview(true)}>
+            <TouchableOpacity
+              style={styles.ratingLink}
+              onPress={() => navigation.navigate('Rating', { foodDetail: data })}
+            >
+              <Text style={[TextStyles.textMain, styles.ratingLinkText]}>Feedback</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.ratingLink}
+              onPress={() => navigation.navigate('Review', { foodDetail: data })}
+            >
               <Text style={[TextStyles.textMain, styles.ratingLinkText]}>See Reviews</Text>
             </TouchableOpacity>
           </View>
