@@ -52,65 +52,61 @@ const AddCreditCard = () => {
     checkPayment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const checkValid = () => {
-    if (!number) {
+  const checkNumber = () => {
+    if (number.toString().length === 0) {
       setError({ ...error, cardNumber: 'Please enter your card number!' });
-      return false;
     } else if (number.toString().length < 12) {
       setError({ ...error, cardNumber: 'Invalid card number!' });
-      return false;
-    } else if (number.toString().length >= 12) {
+    } else {
       setError({ ...error, cardNumber: undefined });
-      return true;
+      return 1;
     }
+  };
+  const checkDate = () => {
     if (!date) {
       setError({ ...error, expireDate: 'Enter expire date!' });
-      return false;
     } else if (date) {
       setError({ ...error, expireDate: undefined });
-      return true;
     }
+  };
+  const checkCVV = () => {
     if (!CVV) {
       setError({ ...error, CVV: 'Enter CVV!' });
-      return false;
     } else if (CVV) {
       setError({ ...error, CVV: undefined });
-      return true;
     }
+  };
+  const checkName = () => {
     if (!name) {
       setError({ ...error, cardHolder: 'Please enter your name!' });
-      return false;
     } else if (name) {
       setError({ ...error, cardHolder: undefined });
-      return true;
     }
   };
   const handleSave = async () => {
-    if (checkValid()) {
-      const data = await firestore().collection('users').doc(id).get();
-      const payment = data.data().payment;
-      try {
-        await firestore()
-          .collection('users')
-          .doc(id)
-          .update({
-            payment: [
-              ...payment,
-              {
-                number,
-                date,
-                CVV,
-                name,
-              },
-            ],
-          })
-          .then(() => {
-            console.log('User updated!');
-            navigation.goBack();
-          });
-      } catch (error) {
-        console.log(error);
-      }
+    const data = await firestore().collection('users').doc(id).get();
+    const payment = data.data().payment;
+    try {
+      await firestore()
+        .collection('users')
+        .doc(id)
+        .update({
+          payment: [
+            ...payment,
+            {
+              number,
+              date,
+              CVV,
+              name,
+            },
+          ],
+        })
+        .then(() => {
+          console.log('User updated!');
+          navigation.goBack();
+        });
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
