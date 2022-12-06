@@ -1,11 +1,17 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import Color from '../constants/Color';
 import { useState } from 'react';
 import BillingItemCard from '../components/BillingItemCard';
-
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { changeCartStatus, initCartStatus } from '../features/cartSlice';
+import { updateUser } from '../features/userSlice';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 const statusList = [
   {
     id: 0,
@@ -23,6 +29,49 @@ const statusList = [
 
 const OrderScreen = () => {
   const [checked, setChecked] = useState(0);
+  const [orderList, setOrderList] = useState([]);
+  const carts = useSelector((state) => state.cart.carts);
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!auth().currentUser.email) {
+      navigation.navigate('Welcome');
+      return;
+    }
+    dispatch(initCartStatus());
+    const id = auth()?.currentUser?.uid;
+    const subscriber = firestore()
+      .collection('users')
+      .doc(id)
+      .onSnapshot((documentSnapshot) => {
+        setOrderList(documentSnapshot.data().orders || []);
+      });
+    // const moveOrderToCompleted = async () => {
+    //   const data = await firestore().collection('users').doc(id).get();
+    //   const orders = data.data().orders;
+    //   await orders.map((item) => {
+    //     if (item.status === '0') {
+    //       setTimeout(() => {
+    //         item.status = '1';
+    //       }, 10000);
+    //     }
+    //   });
+    //   await firestore()
+    //     .collection('users')
+    //     .doc(id)
+    //     .update({
+    //       orders: [...orders],
+    //     })
+    //     .then(() => {
+    //       console.log('User updated!');
+    //     });
+    // };
+    // moveOrderToCompleted();
+    return () => subscriber();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={[TextStyles.h3, styles.heading]}>Orders</Text>
@@ -45,9 +94,13 @@ const OrderScreen = () => {
           </TouchableOpacity>
         ))}
       </View>
-      <View style={{ marginTop: 30 }}>
-        <BillingItemCard />
-      </View>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {orderList.map((item, index) => {
+          if (Number(item.status) === checked) {
+            return <BillingItemCard item={item} key={index.toString()} />;
+          }
+        })}
+      </ScrollView>
     </View>
   );
 };
@@ -57,7 +110,7 @@ export default OrderScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 20,
+    paddingTop: 20,
     backgroundColor: Color.white,
   },
   heading: {
@@ -85,5 +138,8 @@ const styles = StyleSheet.create({
   tagTextActive: {
     alignSelf: 'center',
     color: Color.primary,
+  },
+  content: {
+    marginTop: 30,
   },
 });
