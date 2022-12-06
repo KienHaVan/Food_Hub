@@ -55,14 +55,16 @@ const HomeCategoriesModal = ({ isModalShown }) => {
         activeOpacity={1}
         onPressOut={() => dispatch(toggleModal())}
       >
+        <TouchableOpacity
+          style={[LayoutStyles.layoutShadowRed, styles.modalCloseButton]}
+          onPress={() => dispatch(toggleModal())}
+        >
+          <Image source={Images.ICON.CLOSE} />
+        </TouchableOpacity>
         <TouchableWithoutFeedback>
           <View style={[LayoutStyles.layoutShadowGrey, styles.modal]}>
             <Loader loaderVisible={categoriesLoading} />
-
-            <Image source={Images.ICON.CLOSE} style={styles.modalCloseButton} />
-
             <Text style={[TextStyles.h2, styles.modalHeading]}>All Categories</Text>
-
             <FlatList
               showsVerticalScrollIndicator={false}
               numColumns={3}
@@ -97,8 +99,12 @@ const styles = StyleSheet.create({
   },
   modalCloseButton: {
     position: 'absolute',
-    top: Sizes.sizeLargeH,
+    zIndex: 4,
+    top: Sizes.sizeMassiveH * 3,
     right: Sizes.sizeLarge,
+    backgroundColor: Colors.white,
+    borderRadius: 100,
+    padding: Sizes.sizeSmall,
   },
   modalHeading: {
     marginBottom: Sizes.sizeMassiveH,

@@ -55,6 +55,18 @@ export const fetchPopularFoodApi = async () => {
   return results;
 };
 
+export const fetchFoodInRestaurantApi = async (foodIdList) => {
+  let results = [];
+  await foodCollection.get().then((collections) =>
+    collections.forEach((documentSnapshot) => {
+      if (foodIdList.includes(documentSnapshot.id)) {
+        results = [...results, { id: documentSnapshot.id, ...documentSnapshot.data() }];
+      }
+    })
+  );
+  return results;
+};
+
 export const addFoodApi = async (data) => {
   return await foodCollection.add(data).then((res) => res);
 };

@@ -30,9 +30,9 @@ const AddCreditCard = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
   useEffect(() => {
-    if (!currentUser?.paymentMethod) {
-      dispatch(initUserPayment());
-    }
+    // if (!currentUser?.paymentMethod) {
+    //   dispatch(initUserPayment());
+    // }
     const checkPayment = async () => {
       const data = await firestore().collection('users').doc(id).get();
       const payment = data.data().payment;
@@ -69,7 +69,6 @@ const AddCreditCard = () => {
           ],
         })
         .then(() => {
-          dispatch(updateUserPayment({ number, date, VCC, name }));
           console.log('User updated!');
           navigation.goBack();
         });

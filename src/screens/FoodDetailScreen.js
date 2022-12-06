@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   ImageBackground,
@@ -16,7 +16,6 @@ import {
   resetCurrentQuantity,
 } from '../features/cartSlice';
 import { updateUser } from '../features/userSlice';
-import Toast from 'react-native-toast-message';
 
 //region Import styling
 import Colors from '../constants/Color';
@@ -37,6 +36,7 @@ import { formatPrice } from '../utils/formatter';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import FoodAddonList from '../modules/FoodDetail/FoodAddonList';
 import Loader from '../components/Loader';
+import FoodReviewModal from '../modules/FoodDetail/FoodReviewModal';
 
 const FoodDetailScreen = ({ navigation, route }) => {
   const { data, isFavorite } = route.params;
@@ -45,6 +45,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
   const carts = useSelector((state) => state.cart.carts);
   const currentUser = useSelector((state) => state.user.currentUser);
   const updateUserLoading = useSelector((state) => state.user.isLoading);
+  const [showReview, setShowReview] = useState(false);
 
   //When new data is passed into the screen, the quantity of the item is reset
   useEffect(() => {
@@ -69,6 +70,12 @@ const FoodDetailScreen = ({ navigation, route }) => {
 
   return (
     <View style={[LayoutStyles.layoutScreen, styles.screen]}>
+      <FoodReviewModal
+        isModalShown={showReview}
+        data={data.reviews}
+        hideReview={() => setShowReview(false)}
+      />
+
       <Loader loaderVisible={updateUserLoading} />
 
       <View style={styles.backButton}>

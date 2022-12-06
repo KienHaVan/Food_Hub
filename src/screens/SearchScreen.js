@@ -28,14 +28,8 @@ const SearchScreen = ({ navigation, route }) => {
   const [currentCriteria, setCurrentCriteria] = useState(defaultSortCriteria || 1);
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     handleFilter(defaultSortCriteria);
-  //   }, [])
-  // );
-
   useEffect(() => {
-    handleFilter(defaultSortCriteria);
+    handleFilter(SearchCriterias[currentCriteria - 1].criteria);
   }, [localSearchTerm]);
 
   const showFood = ({ item }) => {
@@ -56,15 +50,24 @@ const SearchScreen = ({ navigation, route }) => {
           data={SearchCriterias}
           currentCriteria={currentCriteria}
           onSelect={setCurrentCriteria}
-          onConfirmed={handleFilter}
+          onConfirmed={() => handleFilter(SearchCriterias[currentCriteria - 1].criteria)}
           hidePopup={() => setIsPopupShown(false)}
         />
       </Popup>
 
-      <View style={styles.backButton}>
+      <View style={styles.screenHeader}>
         <CornerButton
           sourceImage={Images.ICON.ARROW_LEFT}
           handlePress={() => navigation.goBack()}
+        />
+
+        {!category ? <Text style={TextStyles.h3}>Search Results</Text> : null}
+
+        <View
+          style={{
+            width: Sizes.sizeLarge + Sizes.sizeSmaller,
+            height: Sizes.sizeLarge + Sizes.sizeSmaller,
+          }}
         />
       </View>
 
@@ -122,11 +125,15 @@ const styles = StyleSheet.create({
   screen: {
     paddingTop: Sizes.sizeMassiveH * 2,
   },
-  backButton: {
+  screenHeader: {
+    width: '95%',
     position: 'absolute',
     top: Sizes.sizeLargeH,
-    left: Sizes.sizeModerate,
+    marginHorizontal: Sizes.sizeModerate,
     zIndex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   searchThumbnailContainer: {
     position: 'absolute',
