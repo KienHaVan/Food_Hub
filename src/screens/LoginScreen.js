@@ -85,15 +85,27 @@ const LoginScreen = () => {
         switch (error.code) {
           case 'auth/wrong-password':
             Toast.show({
-              type: 'info',
+              type: 'error',
               text1: 'Wrong password',
+            });
+            break;
+          case 'auth/network-request-failed':
+            Toast.show({
+              type: 'error',
+              text1: 'Check your internet connection',
+            });
+            break;
+          case 'auth/too-many-requests':
+            Toast.show({
+              type: 'error',
+              text1: 'Try Again',
             });
             break;
           default:
             console.log(error);
             Toast.show({
-              type: 'info',
-              text1: { error },
+              type: 'error',
+              text1: 'Try Again',
             });
             break;
         }

@@ -11,12 +11,13 @@ import CornerButton from '../components/CornerButton';
 import { useNavigation } from '@react-navigation/native';
 import { passwordReset } from '../utils/authentication';
 import Toast from 'react-native-toast-message';
+import auth from '@react-native-firebase/auth';
 
 const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const navigation = useNavigation();
-  const handleResetPassword = () => {
+  const handleResetPassword = async () => {
     if (!email) {
       setError('Please enter your email!');
       return;
@@ -28,12 +29,38 @@ const ForgotPasswordScreen = () => {
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         )
     ) {
-      passwordReset(email);
-      Toast.show({
-        type: 'success',
-        text1: 'Check your email to reset password!',
-      });
-      navigation.navigate('Login');
+      auth()
+        .sendPasswordResetEmail(email)
+        .then(() => {
+          Toast.show({
+            type: 'success',
+            text1: 'Check your email to reset password!',
+          });
+          navigation.navigate('Login');
+        })
+        .catch((err) => {
+          switch (err.code) {
+            case 'auth/network-request-failed':
+              Toast.show({
+                type: 'error',
+                text1: 'Check your internet connection',
+              });
+              break;
+            case 'auth/too-many-requests':
+              Toast.show({
+                type: 'error',
+                text1: 'Try Again',
+              });
+              break;
+            default:
+              console.log(err);
+              Toast.show({
+                type: 'error',
+                text1: 'Try Again',
+              });
+              break;
+          }
+        });
     } else {
       setError('Invalid email');
     }
