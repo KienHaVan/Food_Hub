@@ -1,45 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Text,
-  ScrollView,
-  View,
-  StyleSheet,
   Image,
-  TouchableOpacity,
   ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  increaseCurrentQuantity,
-  decreaseCurrentQuantity,
-  resetCurrentQuantity,
   addToCart,
+  decreaseCurrentQuantity,
+  increaseCurrentQuantity,
+  resetCurrentQuantity,
 } from '../features/cartSlice';
 import { updateUser } from '../features/userSlice';
 
 //region Import styling
-import TextStyles from '../styles/TextStyles';
-import LayoutStyles from '../styles/Layout';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
+import LayoutStyles from '../styles/Layout';
+import TextStyles from '../styles/TextStyles';
 //endregion
 
 //region Import components
 import CornerButton from '../components/CornerButton';
-import FavoriteButton from '../components/FavoriteButton';
 import Counter from '../components/Counter';
 import CustomButton from '../components/CustomButton';
 //endregion
 
 import { Images } from '../../assets';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
+import FavoriteButton from '../components/FavoriteButton';
 import { formatPrice } from '../utils/formatter';
+import { scaleSizeUI } from '../utils/scaleSizeUI';
 import FoodAddonList from '../modules/FoodDetail/FoodAddonList';
 import Loader from '../components/Loader';
 import FoodReviewModal from '../modules/FoodDetail/FoodReviewModal';
 
 const FoodDetailScreen = ({ navigation, route }) => {
-  const { data } = route.params;
+  const { data, isFavorite } = route.params;
   const dispatch = useDispatch();
   const currentQuantity = useSelector((state) => state.cart.currentFoodQuantity);
   const carts = useSelector((state) => state.cart.carts);
@@ -50,12 +50,14 @@ const FoodDetailScreen = ({ navigation, route }) => {
   //When new data is passed into the screen, the quantity of the item is reset
   useEffect(() => {
     dispatch(resetCurrentQuantity());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   //When the cart is changed => update user in firestore
   //TODO: Bug here!!! navigating to this screen also calls API
   useEffect(() => {
     dispatch(updateUser({ userId: currentUser.id, newData: { carts } }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [carts]);
 
   //Handle adding to cart action after pressing Add to cart
@@ -88,7 +90,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
         style={styles.foodThumbnail}
         imageStyle={styles.foodThumbnailImage}
       >
-        <FavoriteButton />
+        <FavoriteButton isFavorite={isFavorite} />
       </ImageBackground>
 
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -99,7 +101,16 @@ const FoodDetailScreen = ({ navigation, route }) => {
             <Image source={Images.ICON.STAR_LARGE} style={styles.ratingIcon} />
             <Text style={[TextStyles.textMain, styles.ratingText]}>{data.rating}</Text>
             <Text style={TextStyles.textMain}>({data.ratingAmount})</Text>
-            <TouchableOpacity style={styles.ratingLink} onPress={() => setShowReview(true)}>
+            <TouchableOpacity
+              style={styles.ratingLink}
+              onPress={() => navigation.navigate('Rating', { foodDetail: data })}
+            >
+              <Text style={[TextStyles.textMain, styles.ratingLinkText]}>Feedback</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.ratingLink}
+              onPress={() => navigation.navigate('Review', { foodDetail: data })}
+            >
               <Text style={[TextStyles.textMain, styles.ratingLinkText]}>See Reviews</Text>
             </TouchableOpacity>
           </View>

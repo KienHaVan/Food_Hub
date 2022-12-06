@@ -14,11 +14,14 @@ import { MenuItems } from '../../data/MenuItems';
 import { SignOut } from '../../utils/authentication';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import { useSelector } from 'react-redux';
+import Popup from '../../components/Popup';
+import LogoutConfirm from '../Logout/LogoutConfirm';
+import { useState } from 'react';
 
 const Menu = ({ isMenuShown, handleShowMenu }) => {
   const currentUser = useSelector((state) => state.user.currentUser);
   const navigation = useNavigation();
-
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const renderItem = (item) => {
     return (
       <TouchableOpacity
@@ -32,24 +35,19 @@ const Menu = ({ isMenuShown, handleShowMenu }) => {
     );
   };
   const handleSignOut = () => {
-    Alert.alert('Logout', 'Are you sure you want to log out?', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel'),
-        style: 'cancel',
-      },
-      {
-        text: 'Yes, Log out',
-        onPress: () => {
-          SignOut();
-          navigation.navigate('Welcome');
-          handleShowMenu();
-        },
-      },
-    ]);
+    setIsPopupVisible(true);
+  };
+  const onLogout = () => {
+    SignOut();
+    navigation.navigate('Welcome');
+    setIsPopupVisible(false);
+    handleShowMenu();
   };
   return (
     <View style={[styles.menu, { zIndex: isMenuShown ? 1 : -1 }]}>
+      <Popup isVisible={isPopupVisible} hidePopup={() => setIsPopupVisible(false)}>
+        <LogoutConfirm onCancel={() => setIsPopupVisible(false)} onLogout={onLogout} />
+      </Popup>
       <View style={LayoutStyles.layoutShadowRed}>
         <Image source={{ uri: currentUser.photoURL }} style={styles.avatar} />
       </View>

@@ -1,30 +1,56 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
+import CustomButton from '../components/CustomButton';
 import InputField from '../components/InputField';
 import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
+import { getFireStoreUserData } from '../features/userSlice';
+import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
+import { addUserToFirebaseWithID } from '../utils/authentication';
+import { height, scaleSizeUI } from '../utils/scaleSizeUI';
+import { launchImageLibrary } from 'react-native-image-picker';
+import firestore from '@react-native-firebase/firestore';
 
 const ProfileScreen = () => {
   const [fullName, setFullname] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const navigation = useNavigation();
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, currentUserFirestoreData } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (currentUser) {
-      setFullname(currentUser?.fullname);
-      setPhoneNumber(currentUser?.phoneNumber);
-      setEmail(currentUser?.email);
-    }
+    dispatch(getFireStoreUserData(currentUser.id));
+    const subscriber = firestore()
+      .collection('users')
+      .doc(currentUser.id)
+      .onSnapshot((documentSnapshot) => {
+        setFullname(documentSnapshot.data().fullname || '');
+        setEmail(documentSnapshot.data().email || '');
+        setPhoneNumber(documentSnapshot.data().phoneNumber || '');
+      });
+    return () => subscriber();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
+
+  const handleChoosePhoto = () => {
+    launchImageLibrary({}, (res) => {
+      if (res?.assets[0]?.uri) {
+        addUserToFirebaseWithID(
+          { ...currentUserFirestoreData, photoURL: res?.assets[0]?.uri },
+          currentUser.id
+        );
+      } else {
+        return;
+      }
+    });
+  };
 
   return (
     <KeyBoardAvoidingWaraper>
@@ -36,8 +62,15 @@ const ProfileScreen = () => {
           sourceImage={Images.ICON.ARROW_LEFT}
           handlePress={() => navigation.navigate('HomeStack')}
         />
-        <View style={styles.avatarContainer}>
-          <Image resizeMode='cover' source={{ uri: currentUser.photoURL }} style={styles.avatar} />
+        <View style={[styles.avatarContainer, LayoutStyles.layoutShadowRed]}>
+          <Image
+            resizeMode='cover'
+            source={{ uri: currentUserFirestoreData.photoURL }}
+            style={styles.avatar}
+          />
+          <TouchableOpacity onPress={handleChoosePhoto} style={styles.choosePicture}>
+            <Image source={Images.ICON.CAMERA} />
+          </TouchableOpacity>
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.name}>{currentUser.fullname}</Text>
@@ -47,18 +80,40 @@ const ProfileScreen = () => {
         </View>
         <View style={styles.textFieldContainer}>
           <View style={styles.textInput}>
-            <InputField label='Full name' value={fullName} />
+            <InputField
+              label='Full name'
+              value={fullName}
+              isDisabled
+              isEditable={false}
+              isShowKeyboard={false}
+              isSelected={false}
+            />
           </View>
           <View style={styles.textInput}>
-            <InputField label='Email' value={email} />
+            <InputField
+              label='Email'
+              value={email}
+              isDisabled
+              isEditable={false}
+              isShowKeyboard={false}
+              isSelected={false}
+            />
           </View>
           <View style={styles.textInput}>
-            <InputField label='Phone number' value={phoneNumber} />
-            {!currentUser.phoneNumber && (
-              <Text style={[TextStyles.textMain, styles.warning]}>
-                Update your phone number in Edit page
-              </Text>
-            )}
+            <InputField
+              label='Phone number'
+              value={phoneNumber}
+              isDisabled
+              isEditable={false}
+              isShowKeyboard={false}
+              isSelected={false}
+            />
+          </View>
+          <View style={styles.navigationButton}>
+            <CustomButton
+              text='Go to edit profile'
+              onPress={() => navigation.navigate('EditProfile')}
+            />
           </View>
         </View>
       </ImageBackground>
@@ -73,6 +128,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: Sizes.sizeLargeH,
     paddingHorizontal: Sizes.sizeBigH,
+    height: height,
   },
   avatarContainer: {
     width: scaleSizeUI(108),
@@ -82,6 +138,7 @@ const styles = StyleSheet.create({
     borderRadius: 99999,
     marginTop: Sizes.sizeLargeH,
     alignSelf: 'center',
+    position: 'relative',
   },
   avatar: {
     width: '100%',
@@ -96,6 +153,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
     color: Colors.secondaryDarker,
+    textAlign: 'center',
   },
   editInfo: {
     textAlign: 'center',
@@ -109,5 +167,21 @@ const styles = StyleSheet.create({
   warning: {
     color: Colors.primary,
     marginTop: 6,
+  },
+  navigationButton: {
+    width: scaleSizeUI(248),
+    height: scaleSizeUI(40),
+    alignSelf: 'center',
+  },
+  choosePicture: {
+    width: 27,
+    height: 27,
+    borderRadius: 9999,
+    backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 8,
+    right: 10,
   },
 });

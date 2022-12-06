@@ -4,13 +4,18 @@ import AnimatedLoader from 'react-native-animated-loader';
 
 import Sizes from '../constants/Size';
 
-const Loader = ({ loaderVisible = false, overlayColor = 'rgba(255,255,255,0.9)', speed = 6 }) => {
+const Loader = ({
+  loaderVisible = false,
+  overlayColor = 'rgba(255,255,255,0.9)',
+  speed = 6,
+  JsonSource = require('../../assets/pizza-loading.json'),
+}) => {
   return (
     <View>
       <AnimatedLoader
         visible={loaderVisible}
         overlayColor={overlayColor}
-        source={require('../../assets/pizza-loading.json')}
+        source={JsonSource}
         animationStyle={styles.loader}
         speed={speed}
       />
