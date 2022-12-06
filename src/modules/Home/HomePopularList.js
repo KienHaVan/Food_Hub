@@ -15,6 +15,7 @@ import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchFood } from '../../features/foodSlice';
 import { useNavigation } from '@react-navigation/native';
+import CustomButton from '../../components/CustomButton';
 
 const HomePopularList = ({ isScreenFocused }) => {
   const dispatch = useDispatch();
@@ -37,7 +38,7 @@ const HomePopularList = ({ isScreenFocused }) => {
         <Text style={TextStyles.h3}>Recommended for you</Text>
         <TouchableOpacity
           style={LayoutStyles.layoutStretch}
-          onPress={() => navigation.navigate('Search', { defaultSortCriteria: 'rating' })}
+          onPress={() => navigation.navigate('Search', { defaultSortCriteria: 1 })}
         >
           <Text style={[TextStyles.textMain, styles.linkText]}>View All</Text>
           <Image source={Images.ICON.ARROW_RIGHT} style={styles.linkArrow} />
@@ -45,6 +46,13 @@ const HomePopularList = ({ isScreenFocused }) => {
       </View>
 
       <View style={styles.cards}>{food.map((res) => renderCard(res))}</View>
+
+      <View style={styles.buttonContainer}>
+        <CustomButton
+          text='View All'
+          onPress={() => navigation.navigate('Search', { defaultSortCriteria: 1 })}
+        />
+      </View>
     </View>
   );
 };
@@ -65,5 +73,12 @@ const styles = StyleSheet.create({
   },
   cards: {
     marginHorizontal: -Sizes.sizeBig,
+  },
+  buttonContainer: {
+    width: '70%',
+    height: scaleSizeUI(55),
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: Sizes.sizeBigH,
   },
 });

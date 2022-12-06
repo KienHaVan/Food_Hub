@@ -13,11 +13,13 @@ const CheckoutPaymentCard = ({
   checked,
   setChecked,
   showingRadio = true,
+  disabled = false,
 }) => {
   return (
     <TouchableOpacity
       style={[LayoutStyles.layoutShadowGrey, styles.childrenContainer]}
       onPress={() => setChecked(index)}
+      disabled={disabled}
     >
       <View style={styles.childrenContainerTop}>
         <Image source={iconURL} style={styles.childrenIcon} />

@@ -5,7 +5,14 @@ import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
-const CustomButton = ({ isPrimary = true, iconSource, text = 'Click here', onPress, ...props }) => {
+const CustomButton = ({
+  isPrimary = true,
+  iconSource,
+  text = 'Click here',
+  onPress,
+  haveMinWidth = true,
+  ...props
+}) => {
   return (
     <TouchableOpacity
       style={[
@@ -14,6 +21,7 @@ const CustomButton = ({ isPrimary = true, iconSource, text = 'Click here', onPre
           ? [LayoutStyles.layoutShadowRed, styles.primaryButton]
           : [LayoutStyles.layoutShadowGrey, styles.secondaryButton],
         iconSource ? styles.buttonWithTextIcon : styles.buttonWithText,
+        !haveMinWidth && styles.buttonNoMinWidth,
       ]}
       onPress={onPress}
       {...props}
@@ -41,6 +49,9 @@ const styles = StyleSheet.create({
     padding: 9,
     borderRadius: 28,
     minWidth: scaleSizeUI(135),
+  },
+  buttonNoMinWidth: {
+    minWidth: 0,
   },
   buttonWithText: {
     justifyContent: 'center',

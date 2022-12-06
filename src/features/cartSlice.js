@@ -36,7 +36,10 @@ const cartSlice = createSlice({
             : item
         );
       } else {
-        state.carts = [...state.carts, { ...action.payload, quantity: action.payload.quantity }];
+        state.carts = [
+          ...state.carts,
+          { ...action.payload, quantity: action.payload.quantity, status: '0' },
+        ];
       }
     },
     //Function to remove item from cart
@@ -73,6 +76,20 @@ const cartSlice = createSlice({
       state.totalQuantity = 0;
       state.totalPrice = 0;
     },
+    initCartStatus(state) {
+      state.carts.map((item) => {
+        if (!item.status) {
+          item.status = '0';
+        }
+      });
+    },
+    changeCartStatus(state, action) {
+      state.carts.map((item) => {
+        if (item.id === action.payload.id) {
+          item.status = action.payload.status.toString();
+        }
+      });
+    },
   },
   extraReducers: (builder) => {},
 });
@@ -85,5 +102,7 @@ export const {
   decreaseCurrentQuantity,
   resetCurrentQuantity,
   resetCart,
+  initCartStatus,
+  changeCartStatus,
 } = cartSlice.actions;
 export default cartSlice.reducer;

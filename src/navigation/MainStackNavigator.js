@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import {
   FoodDetailScreen,
+  RestaurantDetailScreen,
   LoginScreen,
   SignUpScreen,
   SplashScreen,
@@ -35,6 +36,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name='Login' component={LoginScreen} />
       <Stack.Screen name='HomeStack' component={HomeBottomTabNavigator} />
       <Stack.Screen name='FoodDetail' component={FoodDetailScreen} />
+      <Stack.Screen name='RestaurantDetail' component={RestaurantDetailScreen} />
       <Stack.Screen name='Profile' component={ProfileScreen} />
       <Stack.Screen name='EditProfile' component={EditProfileScreen} />
       <Stack.Screen name='Search' component={SearchScreen} />

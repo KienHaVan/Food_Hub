@@ -1,14 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import {
-  ActivityIndicator,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
@@ -82,10 +75,9 @@ const WelcomeScreen = () => {
         </View>
         {visible && (
           <View style={styles.LoadingGoogleFacebook}>
-            {/* <ActivityIndicator size={'large'} color={Color.primary} /> */}
             <AnimatedLoader
               visible={visible}
-              overlayColor='rgba(255, 255, 255, 0.2)'
+              overlayColor='rgba(255, 255, 255, 0.9)'
               source={require('../../assets/pizza-loading.json')}
               animationStyle={styles.lottie}
               speed={6}
