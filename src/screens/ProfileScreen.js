@@ -38,7 +38,7 @@ const ProfileScreen = () => {
 
   const handleChoosePhoto = () => {
     launchImageLibrary({}, (res) => {
-      if (res?.assets[0]?.uri) {
+      if (res?.assets) {
         firestore().collection('users').doc(currentUser.id).update({
           photoURL: res?.assets[0]?.uri,
         });
@@ -59,7 +59,7 @@ const ProfileScreen = () => {
         <View style={[styles.avatarContainer, LayoutStyles.layoutShadowRed]}>
           <Image
             resizeMode='cover'
-            source={{ uri: currentUser.photoURL || photoURL }}
+            source={{ uri: photoURL || currentUser.photoURL }}
             style={styles.avatar}
           />
           <TouchableOpacity onPress={handleChoosePhoto} style={styles.choosePicture}>

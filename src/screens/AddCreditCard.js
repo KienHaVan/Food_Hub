@@ -19,13 +19,16 @@ import {
   updateCurrentUser,
   updateUserPayment,
 } from '../features/userSlice';
+import { err } from 'react-native-svg/lib/typescript/xml';
 
 const AddCreditCard = () => {
   const navigation = useNavigation();
-  const [number, setNumber] = useState('0000 0000 0000 0000');
+  const [error, setError] = useState({});
+  console.log('🚀 ~ file: AddCreditCard.js:27 ~ AddCreditCard ~ error', error);
+  const [number, setNumber] = useState('');
   const [date, setDate] = useState('');
-  const [VCC, setVCC] = useState('');
-  const [name, setName] = useState('HA VAN KIEN');
+  const [CVV, setCVV] = useState('');
+  const [name, setName] = useState('');
   const id = auth()?.currentUser?.uid;
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -49,7 +52,37 @@ const AddCreditCard = () => {
     checkPayment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  const checkNumber = () => {
+    if (number.toString().length === 0) {
+      setError({ ...error, cardNumber: 'Please enter your card number!' });
+    } else if (number.toString().length < 12) {
+      setError({ ...error, cardNumber: 'Invalid card number!' });
+    } else {
+      setError({ ...error, cardNumber: undefined });
+      return 1;
+    }
+  };
+  const checkDate = () => {
+    if (!date) {
+      setError({ ...error, expireDate: 'Enter expire date!' });
+    } else if (date) {
+      setError({ ...error, expireDate: undefined });
+    }
+  };
+  const checkCVV = () => {
+    if (!CVV) {
+      setError({ ...error, CVV: 'Enter CVV!' });
+    } else if (CVV) {
+      setError({ ...error, CVV: undefined });
+    }
+  };
+  const checkName = () => {
+    if (!name) {
+      setError({ ...error, cardHolder: 'Please enter your name!' });
+    } else if (name) {
+      setError({ ...error, cardHolder: undefined });
+    }
+  };
   const handleSave = async () => {
     const data = await firestore().collection('users').doc(id).get();
     const payment = data.data().payment;
@@ -63,7 +96,7 @@ const AddCreditCard = () => {
             {
               number,
               date,
-              VCC,
+              CVV,
               name,
             },
           ],
@@ -89,7 +122,11 @@ const AddCreditCard = () => {
             <CornerButton />
           </View>
         </View>
-        <CreditCard number={number} date={date} name={name} />
+        <CreditCard
+          number={number || '0000000000000000'}
+          date={date}
+          name={name || 'HA VAN KIEN'}
+        />
         <View style={styles.cardDetail}>
           <Text style={TextStyles.h2}>Card Detail</Text>
           <View style={styles.cardDetailContainer}>
@@ -99,6 +136,7 @@ const AddCreditCard = () => {
               keyboardType='numeric'
               maxLength={16}
             />
+            {error?.cardNumber && <Text style={styles.error}>{error?.cardNumber}</Text>}
             <View style={styles.cardDetailCenter}>
               <View style={{ flex: 0.5 }}>
                 <InputField
@@ -107,14 +145,16 @@ const AddCreditCard = () => {
                   keyboardType='numeric'
                   maxLength={4}
                 />
+                {error?.expireDate && <Text style={styles.error}>{error?.expireDate}</Text>}
               </View>
               <View style={{ flex: 0.5, marginLeft: 10 }}>
                 <InputField
                   placeholder={'CVV'}
-                  onChangeText={(newText) => setVCC(newText)}
+                  onChangeText={(newText) => setCVV(newText)}
                   keyboardType='numeric'
                   maxLength={3}
                 />
+                {error?.CVV && <Text style={styles.error}>{error?.CVV}</Text>}
               </View>
             </View>
             <InputField
@@ -122,6 +162,7 @@ const AddCreditCard = () => {
               onChangeText={(newText) => setName(newText)}
               autoCapitalize={'characters'}
             />
+            {error?.cardHolder && <Text style={styles.error}>{error?.cardHolder}</Text>}
           </View>
         </View>
         <View style={styles.bottomButton}>
@@ -152,10 +193,12 @@ const styles = StyleSheet.create({
   },
   bottomButton: {
     height: 60,
-    marginTop: 150,
+    marginTop: 30,
+    marginBottom: 20,
   },
   cardDetail: {
     flex: 1,
+    flexShrink: 0,
   },
   cardDetailContainer: {
     marginTop: 20,
@@ -166,5 +209,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 20,
+  },
+  error: {
+    color: 'red',
+    marginTop: 2,
   },
 });
