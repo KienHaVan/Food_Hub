@@ -40,8 +40,12 @@ export const SignInWithEmailAndPassword = async (email, password) => {
       console.log('User account signed in!');
     })
     .catch((error) => {
-      if (error.code === 'auth/email-already-in-use') {
-        console.log('That email address is already in use!');
+      if (error.code === 'auth/wrong-password') {
+        console.log('Wrong password!');
+        return;
+      }
+      if (error.message.includes('wrong-password')) {
+        console.log('Wrong password!');
       }
 
       if (error.code === 'auth/invalid-email') {

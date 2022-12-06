@@ -65,7 +65,7 @@ const LoginScreen = () => {
     if (!isValid) return;
     try {
       await SignInWithEmailAndPassword(data.email, data.password);
-      await dispatch(
+      dispatch(
         addCurrentUser({
           fullname: auth()?.currentUser?.displayName,
           email: auth()?.currentUser?.email,
@@ -79,7 +79,7 @@ const LoginScreen = () => {
       });
       navigation.navigate('HomeStack');
     } catch (error) {
-      console.log(error);
+      console.log('Error', error);
     }
   };
   return (

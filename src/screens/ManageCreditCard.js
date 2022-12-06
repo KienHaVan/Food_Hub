@@ -44,9 +44,9 @@ const ManageCreditCard = () => {
         {creditCardList.map((item, index) => (
           <CreditCard
             key={'#' + index.toString()}
-            name={item.name}
+            name={item.name || 'HA VAN KIEN'}
             date={item.date}
-            number={item.number}
+            number={item.number || '0000000000000000'}
           />
         ))}
       </ScrollView>

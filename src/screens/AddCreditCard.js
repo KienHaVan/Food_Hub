@@ -24,7 +24,6 @@ import { err } from 'react-native-svg/lib/typescript/xml';
 const AddCreditCard = () => {
   const navigation = useNavigation();
   const [error, setError] = useState({});
-  console.log('🚀 ~ file: AddCreditCard.js:27 ~ AddCreditCard ~ error', error);
   const [number, setNumber] = useState('');
   const [date, setDate] = useState('');
   const [CVV, setCVV] = useState('');
@@ -105,8 +104,9 @@ const AddCreditCard = () => {
           console.log('User updated!');
           navigation.goBack();
         });
-    } catch (error) {
-      console.log(error);
+      // eslint-disable-next-line no-catch-shadow
+    } catch (err) {
+      console.log(err);
     }
   };
   return (
