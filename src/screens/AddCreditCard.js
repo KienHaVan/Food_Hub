@@ -19,13 +19,16 @@ import {
   updateCurrentUser,
   updateUserPayment,
 } from '../features/userSlice';
+import { err } from 'react-native-svg/lib/typescript/xml';
 
 const AddCreditCard = () => {
   const navigation = useNavigation();
-  const [number, setNumber] = useState('0000 0000 0000 0000');
+  const [error, setError] = useState({});
+  console.log('🚀 ~ file: AddCreditCard.js:27 ~ AddCreditCard ~ error', error);
+  const [number, setNumber] = useState('');
   const [date, setDate] = useState('');
-  const [VCC, setVCC] = useState('');
-  const [name, setName] = useState('HA VAN KIEN');
+  const [CVV, setCVV] = useState('');
+  const [name, setName] = useState('');
   const id = auth()?.currentUser?.uid;
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -49,31 +52,65 @@ const AddCreditCard = () => {
     checkPayment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  const checkValid = () => {
+    if (!number) {
+      setError({ ...error, cardNumber: 'Please enter your card number!' });
+      return false;
+    } else if (number.toString().length < 12) {
+      setError({ ...error, cardNumber: 'Invalid card number!' });
+      return false;
+    } else if (number.toString().length >= 12) {
+      setError({ ...error, cardNumber: undefined });
+      return true;
+    }
+    if (!date) {
+      setError({ ...error, expireDate: 'Enter expire date!' });
+      return false;
+    } else if (date) {
+      setError({ ...error, expireDate: undefined });
+      return true;
+    }
+    if (!CVV) {
+      setError({ ...error, CVV: 'Enter CVV!' });
+      return false;
+    } else if (CVV) {
+      setError({ ...error, CVV: undefined });
+      return true;
+    }
+    if (!name) {
+      setError({ ...error, cardHolder: 'Please enter your name!' });
+      return false;
+    } else if (name) {
+      setError({ ...error, cardHolder: undefined });
+      return true;
+    }
+  };
   const handleSave = async () => {
-    const data = await firestore().collection('users').doc(id).get();
-    const payment = data.data().payment;
-    try {
-      await firestore()
-        .collection('users')
-        .doc(id)
-        .update({
-          payment: [
-            ...payment,
-            {
-              number,
-              date,
-              VCC,
-              name,
-            },
-          ],
-        })
-        .then(() => {
-          console.log('User updated!');
-          navigation.goBack();
-        });
-    } catch (error) {
-      console.log(error);
+    if (checkValid()) {
+      const data = await firestore().collection('users').doc(id).get();
+      const payment = data.data().payment;
+      try {
+        await firestore()
+          .collection('users')
+          .doc(id)
+          .update({
+            payment: [
+              ...payment,
+              {
+                number,
+                date,
+                CVV,
+                name,
+              },
+            ],
+          })
+          .then(() => {
+            console.log('User updated!');
+            navigation.goBack();
+          });
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
   return (
@@ -89,7 +126,11 @@ const AddCreditCard = () => {
             <CornerButton />
           </View>
         </View>
-        <CreditCard number={number} date={date} name={name} />
+        <CreditCard
+          number={number || '0000000000000000'}
+          date={date}
+          name={name || 'HA VAN KIEN'}
+        />
         <View style={styles.cardDetail}>
           <Text style={TextStyles.h2}>Card Detail</Text>
           <View style={styles.cardDetailContainer}>
@@ -99,6 +140,7 @@ const AddCreditCard = () => {
               keyboardType='numeric'
               maxLength={16}
             />
+            {error?.cardNumber && <Text style={styles.error}>{error?.cardNumber}</Text>}
             <View style={styles.cardDetailCenter}>
               <View style={{ flex: 0.5 }}>
                 <InputField
@@ -107,14 +149,16 @@ const AddCreditCard = () => {
                   keyboardType='numeric'
                   maxLength={4}
                 />
+                {error?.expireDate && <Text style={styles.error}>{error?.expireDate}</Text>}
               </View>
               <View style={{ flex: 0.5, marginLeft: 10 }}>
                 <InputField
                   placeholder={'CVV'}
-                  onChangeText={(newText) => setVCC(newText)}
+                  onChangeText={(newText) => setCVV(newText)}
                   keyboardType='numeric'
                   maxLength={3}
                 />
+                {error?.CVV && <Text style={styles.error}>{error?.CVV}</Text>}
               </View>
             </View>
             <InputField
@@ -122,6 +166,7 @@ const AddCreditCard = () => {
               onChangeText={(newText) => setName(newText)}
               autoCapitalize={'characters'}
             />
+            {error?.cardHolder && <Text style={styles.error}>{error?.cardHolder}</Text>}
           </View>
         </View>
         <View style={styles.bottomButton}>
@@ -152,10 +197,12 @@ const styles = StyleSheet.create({
   },
   bottomButton: {
     height: 60,
-    marginTop: 150,
+    marginTop: 30,
+    marginBottom: 20,
   },
   cardDetail: {
     flex: 1,
+    flexShrink: 0,
   },
   cardDetailContainer: {
     marginTop: 20,
@@ -166,5 +213,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 20,
+  },
+  error: {
+    color: 'red',
+    marginTop: 2,
   },
 });

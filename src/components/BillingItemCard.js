@@ -56,16 +56,18 @@ const BillingItemCard = ({ item }) => {
       });
   };
   const handleOrderCompleted = () => {
-    navigation.navigate('');
+    navigation.navigate('Rating', { foodDetail: item });
   };
   return (
     <View style={[LayoutStyles.layoutShadowGrey, styles.card]}>
-      <TouchableOpacity
-        style={[LayoutStyles.layoutShadowGrey, styles.cardRemover]}
-        onPress={handleCancell}
-      >
-        <Image source={Images.ICON.CLOSE} />
-      </TouchableOpacity>
+      {item.status !== '1' && (
+        <TouchableOpacity
+          style={[LayoutStyles.layoutShadowGrey, styles.cardRemover]}
+          onPress={handleCancell}
+        >
+          <Image source={Images.ICON.CLOSE} />
+        </TouchableOpacity>
+      )}
       <Image source={{ uri: item.image }} style={styles.cardThumbnail} />
       <View style={styles.cardContent}>
         <Text numberOfLines={2} style={TextStyles.h3}>

@@ -43,6 +43,7 @@ const CheckoutOrderScreen = () => {
       }
     };
     checkAddress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePlaceOrder = async () => {
@@ -101,7 +102,7 @@ const CheckoutOrderScreen = () => {
             <Image source={Images.ICON.CHECKOUT_LOCATION} style={styles.locationIcon} />
             <View style={styles.locationInfoRight}>
               <Text style={TextStyles.h3}>Home</Text>
-              <Text style={TextStyles.textMain}>Times Square NYC, Manhattan</Text>
+              <Text style={TextStyles.textMain}>{address}</Text>
             </View>
           </View>
         </View>
