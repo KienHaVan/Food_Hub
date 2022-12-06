@@ -43,17 +43,24 @@ const RatingScreen = ({ route }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const formatDate = (date) => {
+    const day = ('0' + date.getDate()).slice(-2);
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   const handlePressRating = (item) => {
     setDefaultRating(item);
   };
 
   const handleSubmitComment = async () => {
     const formValues = {
-      name: currentUserFirestoreData.fullname,
-      image: currentUserFirestoreData.photoURL,
-      comment: comment,
-      rate: defaultRating,
-      dayPost: currentDate.toLocaleDateString(),
+      userName: currentUserFirestoreData.fullname,
+      userAvatar: currentUserFirestoreData.photoURL,
+      userReview: comment,
+      rating: defaultRating,
+      date: formatDate(currentDate),
     };
     const foodData = await firestore().collection('food').doc(foodDetail.id).get();
     const reviews = foodData.data().reviews;
@@ -67,6 +74,8 @@ const RatingScreen = ({ route }) => {
     } catch (error) {
       console.log('Error: ', error);
     }
+    setComment('');
+    setDefaultRating(1);
     navigation.navigate('Review', { foodDetail: foodDetail });
   };
 
