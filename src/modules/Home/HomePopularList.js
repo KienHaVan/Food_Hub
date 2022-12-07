@@ -14,6 +14,7 @@ import { Images } from '../../../assets';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchFood } from '../../features/foodSlice';
+import { setSearchTheme } from '../../features/categorySlice';
 import { useNavigation } from '@react-navigation/native';
 import CustomButton from '../../components/CustomButton';
 
@@ -50,7 +51,10 @@ const HomePopularList = ({ isScreenFocused }) => {
       <View style={styles.buttonContainer}>
         <CustomButton
           text='View All'
-          onPress={() => navigation.navigate('Search', { defaultSortCriteria: 1 })}
+          onPress={() => {
+            dispatch(setSearchTheme(0));
+            navigation.navigate('Search', { defaultSortCriteria: 1 });
+          }}
         />
       </View>
     </View>

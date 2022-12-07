@@ -37,6 +37,7 @@ import { scaleSizeUI } from '../utils/scaleSizeUI';
 import FoodAddonList from '../modules/FoodDetail/FoodAddonList';
 import Loader from '../components/Loader';
 import FoodReviewModal from '../modules/FoodDetail/FoodReviewModal';
+import { identity } from 'react-native-svg/lib/typescript/lib/Matrix2D';
 
 const FoodDetailScreen = ({ navigation, route }) => {
   const { data, isFavorite } = route.params;
@@ -46,6 +47,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
   const currentUser = useSelector((state) => state.user.currentUser);
   const updateUserLoading = useSelector((state) => state.user.isLoading);
   const [showReview, setShowReview] = useState(false);
+  const [addon, setAddon] = useState({ name: '_', price: 0 });
 
   //When new data is passed into the screen, the quantity of the item is reset
   useEffect(() => {
@@ -62,7 +64,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
 
   //Handle adding to cart action after pressing Add to cart
   const handleAddToCart = () => {
-    dispatch(addToCart({ ...data, quantity: currentQuantity }));
+    dispatch(addToCart({ ...data, quantity: currentQuantity, chosenAddon: addon }));
     setTimeout(() => {
       navigation.goBack();
     }, 0);
@@ -123,14 +125,14 @@ const FoodDetailScreen = ({ navigation, route }) => {
 
           <Text style={TextStyles.textMain}>{data.description}</Text>
 
-          <FoodAddonList data={data?.addons} />
+          <FoodAddonList data={data?.addons} currentAddon={addon} onSelect={setAddon} />
         </View>
       </ScrollView>
 
       <View style={LayoutStyles.layoutCenter}>
         <View style={styles.buttonContainer}>
           <CustomButton
-            text='ADD TO CART'
+            text={`ADD TO CART ($${formatPrice(data.price * currentQuantity + addon.price)})`}
             iconSource={Images.ICON.CART}
             onPress={handleAddToCart}
           />
@@ -190,7 +192,7 @@ const styles = StyleSheet.create({
     color: Colors.primary,
   },
   buttonContainer: {
-    width: scaleSizeUI(167),
+    width: scaleSizeUI(235),
     height: scaleSizeUI(60, true),
   },
 });
