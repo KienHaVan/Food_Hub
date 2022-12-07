@@ -53,13 +53,13 @@ const WelcomeScreen = () => {
   return (
     <ImageBackground source={Images.IMAGES.WELCOME_BACKGROUND} style={styles.container}>
       <LinearGradient colors={['transparent', '#000']} style={styles.gradient}>
-        <View style={styles.headingButton}>
+        {/* <View style={styles.headingButton}>
           <CornerButton
             sourceImage={Images.ICON.ARROW_LEFT}
             style={styles.iconFlip}
             handlePress={handleSignInAnonymously}
           />
-        </View>
+        </View> */}
         <View style={styles.slogan}>
           <Text style={TextStyles.h1}>
             Welcome to <Text style={styles.sloganAppName}>FoodHub</Text>

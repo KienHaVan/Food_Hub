@@ -31,7 +31,7 @@ const ProfileScreen = () => {
     }
     const subscriber = firestore()
       .collection('users')
-      .doc(currentUser.id)
+      .doc(auth()?.currentUser?.uid)
       .onSnapshot((documentSnapshot) => {
         setFullname(documentSnapshot?.data()?.fullname || '');
         setEmail(documentSnapshot?.data()?.email || '');
@@ -40,12 +40,12 @@ const ProfileScreen = () => {
       });
     return () => subscriber();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  }, []);
 
-  const handleChoosePhoto = () => {
-    launchImageLibrary({}, (res) => {
+  const handleChoosePhoto = async () => {
+    await launchImageLibrary({}, async (res) => {
       if (res?.assets) {
-        firestore().collection('users').doc(currentUser.id).update({
+        await firestore().collection('users').doc(auth()?.currentUser?.uid).update({
           photoURL: res?.assets[0]?.uri,
         });
       }
@@ -65,7 +65,7 @@ const ProfileScreen = () => {
         <View style={[styles.avatarContainer, LayoutStyles.layoutShadowRed]}>
           <Image
             resizeMode='cover'
-            source={{ uri: photoURL || currentUser.photoURL }}
+            source={{ uri: photoURL || currentUser?.photoURL }}
             style={styles.avatar}
           />
           <TouchableOpacity onPress={handleChoosePhoto} style={styles.choosePicture}>

@@ -23,23 +23,33 @@ import firestore from '@react-native-firebase/firestore';
 import { addCurrentUser } from '../../features/userSlice';
 
 const Menu = ({ isMenuShown, handleShowMenu }) => {
-  const currentUser = useSelector((state) => state.user.currentUserFirestoreData);
+  const currentUser = useSelector((state) => state.user.currentUser);
   const navigation = useNavigation();
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const dispatch = useDispatch();
+  const [fullName, setFullname] = useState('');
+  const [email, setEmail] = useState('');
+  const [photoURL, setPhotoURL] = useState('');
+  const id = auth()?.currentUser?.uid;
   useEffect(() => {
-    if (!auth().currentUser.email) {
-      dispatch(
-        addCurrentUser({
-          fullname: 'admin',
-          email: 'admin@gmail.com',
-          photoURL:
-            'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-        })
+    if (!auth()?.currentUser?.email) {
+      setFullname('admin');
+      setEmail('admin@gmail.com');
+      setPhotoURL(
+        'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
       );
+    } else {
+      const subscriber = firestore()
+        .collection('users')
+        .doc(id)
+        .onSnapshot((documentSnapshot) => {
+          setFullname(documentSnapshot?.data()?.fullname || '');
+          setEmail(documentSnapshot?.data()?.email || '');
+          setPhotoURL(documentSnapshot?.data()?.photoURL || '');
+        });
+      return () => subscriber();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
 
   const renderItem = (item) => {
     return (
@@ -68,12 +78,12 @@ const Menu = ({ isMenuShown, handleShowMenu }) => {
         <LogoutConfirm onCancel={() => setIsPopupVisible(false)} onLogout={onLogout} />
       </Popup>
       <View style={LayoutStyles.layoutShadowRed}>
-        <Image source={{ uri: currentUser.photoURL }} style={styles.avatar} />
+        <Image source={{ uri: photoURL || currentUser?.photoURL }} style={styles.avatar} />
       </View>
       <Text style={TextStyles.h2} numberOfLines={2}>
-        {currentUser.fullname}
+        {fullName || currentUser?.fullname}
       </Text>
-      <Text style={TextStyles.textMain}>{currentUser.email}</Text>
+      <Text style={TextStyles.textMain}>{email || currentUser?.email}</Text>
 
       <View style={styles.menuItemGroup}>{MenuItems.map((item) => renderItem(item))}</View>
 
@@ -88,7 +98,7 @@ export default Menu;
 
 const styles = StyleSheet.create({
   menu: {
-    width: '75%',
+    width: '65%',
     position: 'absolute',
     height: Dimensions.get('screen').height,
     paddingVertical: Sizes.sizeLargeH,

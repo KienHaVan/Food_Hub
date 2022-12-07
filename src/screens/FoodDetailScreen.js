@@ -38,6 +38,7 @@ import FoodAddonList from '../modules/FoodDetail/FoodAddonList';
 import Loader from '../components/Loader';
 import FoodReviewModal from '../modules/FoodDetail/FoodReviewModal';
 import { identity } from 'react-native-svg/lib/typescript/lib/Matrix2D';
+import auth from '@react-native-firebase/auth';
 
 const FoodDetailScreen = ({ navigation, route }) => {
   const { data, isFavorite } = route.params;
@@ -48,7 +49,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
   const updateUserLoading = useSelector((state) => state.user.isLoading);
   const [showReview, setShowReview] = useState(false);
   const [addon, setAddon] = useState({ name: '_', price: 0 });
-
+  const id = auth()?.currentUser?.uid;
   //When new data is passed into the screen, the quantity of the item is reset
   useEffect(() => {
     dispatch(resetCurrentQuantity());
@@ -58,7 +59,7 @@ const FoodDetailScreen = ({ navigation, route }) => {
   //When the cart is changed => update user in firestore
   //TODO: Bug here!!! navigating to this screen also calls API
   useEffect(() => {
-    dispatch(updateUser({ userId: currentUser.id, newData: { carts } }));
+    dispatch(updateUser({ userId: id || currentUser.id, newData: { carts } }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [carts]);
 
