@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 //region Import styling
 import TextStyles from '../../styles/TextStyles';
@@ -14,6 +14,8 @@ import CustomButton from '../../components/CustomButton';
 import MealCard from '../../components/MealCard';
 import { fetchFood } from '../../features/foodSlice';
 import { setSearchTheme } from '../../features/categorySlice';
+import { scaleSizeUI } from '../../utils/scaleSizeUI';
+import { Images } from '../../../assets';
 
 const HomePopularList = ({ isScreenFocused }) => {
   const dispatch = useDispatch();
@@ -46,7 +48,7 @@ const HomePopularList = ({ isScreenFocused }) => {
     // console.log(existingItem);
     // console.log(check);
     // console.log(existingItem.includes(data.id));
-    return <MealCard key={data.id} data={data} isFavorite={check ? true : false} />;
+    return <MealCard key={data.id} data={data} isFavorite={!!check} />;
   };
 
   return (
