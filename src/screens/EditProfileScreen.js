@@ -47,10 +47,10 @@ const EditProfileScreen = () => {
         const data = documentSnapshot.data();
         setFullname(data.fullname || '');
         setPhoneNumber(data.phoneNumber || '');
-        if (data.address.length) {
+        if (data?.address.length) {
           const userAddress = data.address.split(', ');
-          setRegion(userAddress[2]);
-          setCity(userAddress[1]);
+          setCity(userAddress[2]);
+          setRegion(userAddress[1]);
           setStreet(userAddress[0]);
         }
       });
@@ -66,7 +66,7 @@ const EditProfileScreen = () => {
         .update({
           fullname: fullname,
           phoneNumber: phoneNumber,
-          address: `${street}, ${city}, ${region}`,
+          address: `${street}, ${region}, ${city}`,
         });
     } catch (error) {
       console.log('Error: ', error);
@@ -101,10 +101,10 @@ const EditProfileScreen = () => {
             />
           </View>
           <View style={styles.textInput}>
-            <InputField label='District' value={region} onChangeText={(text) => setRegion(text)} />
+            <InputField label='City' value={city} onChangeText={(text) => setCity(text)} />
           </View>
           <View style={styles.textInput}>
-            <InputField label='City' value={city} onChangeText={(text) => setCity(text)} />
+            <InputField label='District' value={region} onChangeText={(text) => setRegion(text)} />
           </View>
           <View style={styles.textInput}>
             <InputField

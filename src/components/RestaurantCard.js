@@ -20,7 +20,7 @@ const RestaurantCard = ({ data, isFavorite = false, isFullWidth = false }) => {
   useEffect(() => {
     const checkFavoriteRestaurant = async () => {
       const userData = await firestore().collection('users').doc(id).get();
-      const favoriteRestaurant = userData.data().favoriteRestaurant;
+      const favoriteRestaurant = userData.data()?.favoriteRestaurant;
       if (!favoriteRestaurant) {
         await addUserToFirebaseWithID(
           {
@@ -63,7 +63,7 @@ const RestaurantCard = ({ data, isFavorite = false, isFullWidth = false }) => {
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('RestaurantDetail', { data })}
+      onPress={() => navigation.navigate('RestaurantDetail', { data: data, isFavorite: fav })}
       style={[LayoutStyles.layoutShadowGrey, styles.card, isFullWidth && styles.cardFull]}
     >
       {/*Rating Label*/}

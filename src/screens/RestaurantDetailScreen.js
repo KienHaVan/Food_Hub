@@ -22,14 +22,14 @@ import { scaleSizeUI } from '../utils/scaleSizeUI';
 import { fetchFoodInRestaurant } from '../features/foodSlice';
 
 const RestaurantDetailScreen = ({ navigation, route }) => {
-  const { data } = route.params;
+  const { data, isFavorite } = route.params;
   const dispatch = useDispatch();
   const foodLoading = useSelector((state) => state.food.isLoading);
   const food = useSelector((state) => state.food.food);
 
   useEffect(() => {
     dispatch(fetchFoodInRestaurant(data.food));
-  }, [data]);
+  }, [data, dispatch]);
 
   const renderFoodCard = (food) => {
     return (
@@ -57,7 +57,7 @@ const RestaurantDetailScreen = ({ navigation, route }) => {
         />
       </View>
 
-      <FavoriteButton />
+      <FavoriteButton isFavorite={isFavorite} />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <ImageBackground source={{ uri: data.image }} style={styles.screenThumbnail} />
