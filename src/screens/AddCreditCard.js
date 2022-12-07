@@ -1,25 +1,18 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import CreditCard from '../components/CreditCard';
-import CornerButton from '../components/CornerButton';
-import { Images } from '../../assets';
-import TextStyles from '../styles/TextStyles';
-import Color from '../constants/Color';
-import CustomButton from '../components/CustomButton';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { Images } from '../../assets';
+import CornerButton from '../components/CornerButton';
+import CreditCard from '../components/CreditCard';
+import CustomButton from '../components/CustomButton';
 import InputField from '../components/InputField';
 import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
+import Color from '../constants/Color';
+import TextStyles from '../styles/TextStyles';
 import { addUserToFirebaseWithID } from '../utils/authentication';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  initUserPayment,
-  InitUserPayment,
-  updateCurrentUser,
-  updateUserPayment,
-} from '../features/userSlice';
-import { err } from 'react-native-svg/lib/typescript/xml';
 
 const AddCreditCard = () => {
   const navigation = useNavigation();
@@ -29,8 +22,6 @@ const AddCreditCard = () => {
   const [CVV, setCVV] = useState('');
   const [name, setName] = useState('');
   const id = auth()?.currentUser?.uid;
-  const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.user.currentUser);
   useEffect(() => {
     // if (!currentUser?.paymentMethod) {
     //   dispatch(initUserPayment());
@@ -51,37 +42,6 @@ const AddCreditCard = () => {
     checkPayment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const checkNumber = () => {
-    if (number.toString().length === 0) {
-      setError({ ...error, cardNumber: 'Please enter your card number!' });
-    } else if (number.toString().length < 12) {
-      setError({ ...error, cardNumber: 'Invalid card number!' });
-    } else {
-      setError({ ...error, cardNumber: undefined });
-      return 1;
-    }
-  };
-  const checkDate = () => {
-    if (!date) {
-      setError({ ...error, expireDate: 'Enter expire date!' });
-    } else if (date) {
-      setError({ ...error, expireDate: undefined });
-    }
-  };
-  const checkCVV = () => {
-    if (!CVV) {
-      setError({ ...error, CVV: 'Enter CVV!' });
-    } else if (CVV) {
-      setError({ ...error, CVV: undefined });
-    }
-  };
-  const checkName = () => {
-    if (!name) {
-      setError({ ...error, cardHolder: 'Please enter your name!' });
-    } else if (name) {
-      setError({ ...error, cardHolder: undefined });
-    }
-  };
   const handleSave = async () => {
     const data = await firestore().collection('users').doc(id).get();
     const payment = data.data().payment;
@@ -197,7 +157,7 @@ const styles = StyleSheet.create({
   },
   cardDetail: {
     flex: 1,
-    flexShrink: 0,
+    // flexShrink: 0,
   },
   cardDetailContainer: {
     marginTop: 20,

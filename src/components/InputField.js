@@ -8,6 +8,7 @@ import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const InputField = ({
+  ref = null,
   placeholder,
   label,
   preIcon,
@@ -66,6 +67,7 @@ const InputField = ({
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onSubmitEditing={onSubmitted}
+            ref={ref}
             {...props}
           />
         </View>
