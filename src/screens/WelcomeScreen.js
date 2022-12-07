@@ -90,7 +90,7 @@ const WelcomeScreen = () => {
           <View style={styles.LoadingGoogleFacebook}>
             <AnimatedLoader
               visible={visible}
-              overlayColor='rgba(255, 255, 255, 0.9)'
+              overlayColor='rgba(255, 255, 255, 0.2)'
               source={require('../../assets/pizza-loading.json')}
               animationStyle={styles.lottie}
               speed={6}

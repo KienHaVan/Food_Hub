@@ -126,39 +126,6 @@ const SignUpScreen = () => {
             break;
         }
       });
-    // try {
-    //   await SignUpWithEmailAndPassword(data.email, data.password);
-    //   await auth().currentUser.updateProfile({
-    //     displayName: data.fullname,
-    //     photoURL:
-    //       'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-    //   });
-    //   await addUserToFirebaseWithID(
-    //     {
-    //       fullname: data.fullname,
-    //       email: data.email,
-    //       password: data.password,
-    //       photoURL:
-    //         'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-    //     },
-    //     auth()?.currentUser?.uid
-    //   );
-    //   dispatch(
-    //     addCurrentUser({
-    //       fullname: auth()?.currentUser?.displayName,
-    //       email: auth()?.currentUser?.email,
-    //       photoURL: auth()?.currentUser?.photoURL,
-    //       id: auth()?.currentUser?.uid,
-    //     })
-    //   );
-    //   Toast.show({
-    //     type: 'success',
-    //     text1: 'Create user successfully',
-    //   });
-    //   navigation.navigate('HomeStack');
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
   return (
     <ImageBackground
