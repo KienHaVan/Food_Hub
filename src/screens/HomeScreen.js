@@ -25,13 +25,10 @@ const HomeScreen = () => {
   const offsetValueY = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
 
-  useEffect(() => {
-    dispatch(getFireStoreUserData(currentUser.id));
-  }, []);
-
   useFocusEffect(
     React.useCallback(() => {
       setIsScreenFocused(true);
+      dispatch(getFireStoreUserData(currentUser.id));
       return () => {
         setIsScreenFocused(false);
       };

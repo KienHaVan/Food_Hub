@@ -69,7 +69,7 @@ export default Menu;
 
 const styles = StyleSheet.create({
   menu: {
-    width: '75%',
+    width: '65%',
     position: 'absolute',
     height: Dimensions.get('screen').height,
     paddingVertical: Sizes.sizeLargeH,

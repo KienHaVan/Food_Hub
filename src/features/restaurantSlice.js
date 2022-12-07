@@ -8,10 +8,6 @@ import {
 export const fetchRestaurants = createAsyncThunk(
   'Restaurant/fetchAllRestaurants',
   async ({ areFeatured = false, category, searchTerm = '', sortCriteria = 'rating' }) => {
-    // console.log('are featured?', areFeatured);
-    // console.log('category?', category);
-    // console.log('search term?', searchTerm);
-    // console.log('sort criteria?', sortCriteria);
     return areFeatured
       ? await fetchPopularRestaurantsApi()
       : await fetchRestaurantApi(category, searchTerm, sortCriteria);
