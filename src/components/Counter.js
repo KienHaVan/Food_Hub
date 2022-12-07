@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 import Colors from '../constants/Color';
 import Sizes from '../constants/Size';
+import { resetCurrentQuantity } from '../features/cartSlice';
 import TextStyles from '../styles/TextStyles';
 import AmountButton from './AmountButton';
-import { useDispatch } from 'react-redux';
-import { resetCurrentQuantity } from '../features/cartSlice';
 
 const Counter = ({ defaultValue, onIncrease, onDecrease, allowZero = false }) => {
   const dispatch = useDispatch();

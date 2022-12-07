@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import AnimatedLoader from 'react-native-animated-loader';
 
 import Sizes from '../constants/Size';

@@ -22,7 +22,7 @@ const MyInput = ({ control, isPassword = false, ...props }) => {
   return (
     <View style={styles.inputContainer}>
       <TextInput
-        style={[styles.input, focus ? styles.buttonActive : null, { borderColor: 'red' }]}
+        style={[styles.input, focus ? styles.buttonActive : null]}
         autoCapitalize={'false'}
         onBlur={handleFocusOut}
         onFocus={() => setFocus(true)}

@@ -1,17 +1,14 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
-import TextStyles from '../styles/TextStyles';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
-import Color from '../constants/Color';
-import { useState } from 'react';
-import BillingItemCard from '../components/BillingItemCard';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { changeCartStatus, initCartStatus } from '../features/cartSlice';
-import { updateUser } from '../features/userSlice';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import BillingItemCard from '../components/BillingItemCard';
+import Color from '../constants/Color';
+import { initCartStatus } from '../features/cartSlice';
+import TextStyles from '../styles/TextStyles';
+import { scaleSizeUI } from '../utils/scaleSizeUI';
 const statusList = [
   {
     id: 0,
@@ -30,8 +27,6 @@ const statusList = [
 const OrderScreen = () => {
   const [checked, setChecked] = useState(0);
   const [orderList, setOrderList] = useState([]);
-  const carts = useSelector((state) => state.cart.carts);
-  const currentUser = useSelector((state) => state.user.currentUser);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   useEffect(() => {

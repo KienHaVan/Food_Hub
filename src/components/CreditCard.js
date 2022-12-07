@@ -20,7 +20,7 @@ const CreditCard = ({ name = 'HA VAN KIEN', date = '1224', number = '00000000000
     <ImageBackground
       style={styles.container}
       source={Images.IMAGES.CREDIT_CARD_BACKGROUND}
-      imageStyle={{ borderRadius: 30 }}
+      imageStyle={styles.imageStyle}
       resizeMode='cover'
     >
       <View style={styles.heading}>
@@ -87,5 +87,8 @@ const styles = StyleSheet.create({
   },
   bottomSubInfo: {
     color: Color.grey,
+  },
+  imageStyle: {
+    borderRadius: 30,
   },
 });

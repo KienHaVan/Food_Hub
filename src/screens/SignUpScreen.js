@@ -1,17 +1,19 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
   ImageBackground,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import AnimatedLoader from 'react-native-animated-loader';
 import Toast from 'react-native-toast-message';
+import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 import { Images } from '../../assets';
 import MyInput from '../components/form/MyInput';
@@ -19,15 +21,8 @@ import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
 import Color from '../constants/Color';
 import { addCurrentUser } from '../features/userSlice';
 import TextStyles from '../styles/TextStyles';
-import {
-  addUserToFirebase,
-  addUserToFirebaseWithID,
-  SignUpWithEmailAndPassword,
-} from '../utils/authentication';
+import { addUserToFirebaseWithID } from '../utils/authentication';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
-import auth from '@react-native-firebase/auth';
-import { useDispatch, useSelector } from 'react-redux';
-import AnimatedLoader from 'react-native-animated-loader';
 
 const schema = yup
   .object({

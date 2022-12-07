@@ -1,17 +1,15 @@
-import { ImageBackground, StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
-import Color from '../constants/Color';
-import { scaleSizeUI } from '../utils/scaleSizeUI';
-import { Images } from '../../assets';
-import TextStyles from '../styles/TextStyles';
-import InputField from '../components/InputField';
-import CustomButton from '../components/CustomButton';
-import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
-import CornerButton from '../components/CornerButton';
-import { useNavigation } from '@react-navigation/native';
-import { passwordReset } from '../utils/authentication';
-import Toast from 'react-native-toast-message';
 import auth from '@react-native-firebase/auth';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { ImageBackground, StyleSheet, Text, View } from 'react-native';
+import Toast from 'react-native-toast-message';
+import { Images } from '../../assets';
+import CornerButton from '../components/CornerButton';
+import CustomButton from '../components/CustomButton';
+import InputField from '../components/InputField';
+import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
+import TextStyles from '../styles/TextStyles';
+import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState('');
@@ -84,7 +82,7 @@ const ForgotPasswordScreen = () => {
           <View style={styles.button}>
             <CustomButton text='Send Request' onPress={handleResetPassword} />
           </View>
-          <View style={[styles.button, { width: 160, alignSelf: 'center' }]}>
+          <View style={[styles.button, styles.cancelButton]}>
             <CustomButton
               text='Cancel'
               isPrimary={false}
@@ -138,4 +136,5 @@ const styles = StyleSheet.create({
     color: 'red',
     marginTop: 2,
   },
+  cancelButton: { width: 160, alignSelf: 'center' },
 });

@@ -107,10 +107,6 @@ const LogWithFacebookAndGoogle = ({ text, dark = false, setVisible = () => {} })
       </View>
 
       <View style={styles.bottomMeta}>
-        {/* <TouchableOpacity style={styles.bottomMetaButton}>
-          <Image source={Images.ICON.FACEBOOK} style={styles.bottomMetaImage} />
-          <Text style={[TextStyles.textMain, styles.metaButtonText]}>FACEBOOK</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity style={[styles.bottomMetaButton]} onPress={onGoogleButtonPress}>
           <Image source={Images.ICON.GOOGLE} style={styles.bottomMetaImage} />
           <Text style={[TextStyles.textMain, styles.metaButtonText]}>Continue with Google</Text>

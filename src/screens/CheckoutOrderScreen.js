@@ -60,15 +60,6 @@ const CheckoutOrderScreen = () => {
     setShowLoader(true);
     const data = await firestore().collection('users').doc(id).get();
     const orders = data.data().orders;
-    // if (!orders) {
-    //   await addUserToFirebaseWithID(
-    //     {
-    //       ...data.data(),
-    //       orders: [],
-    //     },
-    //     auth()?.currentUser?.uid
-    //   );
-    // }
     await firestore()
       .collection('users')
       .doc(id)
@@ -79,15 +70,6 @@ const CheckoutOrderScreen = () => {
         console.log('User updated!');
       });
     dispatch(resetCart());
-    // await firestore()
-    //   .collection('users')
-    //   .doc(id)
-    //   .update({
-    //     carts: [],
-    //   })
-    //   .then(() => {
-    //     console.log('User updated!');
-    //   });
     setTimeout(() => {
       navigation.navigate('Billing');
       setShowLoader(false);

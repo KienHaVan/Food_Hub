@@ -3,7 +3,6 @@ import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
 import CreditCard from '../components/CreditCard';
@@ -23,9 +22,6 @@ const AddCreditCard = () => {
   const [name, setName] = useState('');
   const id = auth()?.currentUser?.uid;
   useEffect(() => {
-    // if (!currentUser?.paymentMethod) {
-    //   dispatch(initUserPayment());
-    // }
     const checkPayment = async () => {
       const data = await firestore().collection('users').doc(id).get();
       const payment = data.data().payment;
@@ -98,7 +94,7 @@ const AddCreditCard = () => {
             />
             {error?.cardNumber && <Text style={styles.error}>{error?.cardNumber}</Text>}
             <View style={styles.cardDetailCenter}>
-              <View style={{ flex: 0.5 }}>
+              <View style={styles.dateInput}>
                 <InputField
                   placeholder={'Expire date'}
                   onChangeText={(newText) => setDate(newText)}
@@ -107,7 +103,7 @@ const AddCreditCard = () => {
                 />
                 {error?.expireDate && <Text style={styles.error}>{error?.expireDate}</Text>}
               </View>
-              <View style={{ flex: 0.5, marginLeft: 10 }}>
+              <View style={styles.CVVInput}>
                 <InputField
                   placeholder={'CVV'}
                   onChangeText={(newText) => setCVV(newText)}
@@ -172,5 +168,12 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     marginTop: 2,
+  },
+  dateInput: {
+    flex: 0.5,
+  },
+  CVVInput: {
+    flex: 0.5,
+    marginLeft: 10,
   },
 });
