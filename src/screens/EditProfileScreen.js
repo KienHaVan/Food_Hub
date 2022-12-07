@@ -1,20 +1,18 @@
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
 import CustomButton from '../components/CustomButton';
 import InputField from '../components/InputField';
 import KeyBoardAvoidingWaraper from '../components/KeyBoardAvoidingWaraper';
 import Colors from '../constants/Color';
-import { getFireStoreUserData, updateCurrentUser } from '../features/userSlice';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { addUserToFirebaseWithID } from '../utils/authentication';
 import { height, scaleSizeUI } from '../utils/scaleSizeUI';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 
 const EditProfileScreen = () => {
   const [fullname, setFullname] = useState('');
@@ -71,7 +69,7 @@ const EditProfileScreen = () => {
     } catch (error) {
       console.log('Error: ', error);
     }
-    navigation.navigate('Profile');
+    navigation.goBack();
   };
   return (
     <KeyBoardAvoidingWaraper>
@@ -79,7 +77,7 @@ const EditProfileScreen = () => {
         <View style={LayoutStyles.layoutStretch}>
           <CornerButton
             sourceImage={Images.ICON.ARROW_LEFT}
-            handlePress={() => navigation.goBack('Profile')}
+            handlePress={() => navigation.goBack()}
           />
           <Text style={TextStyles.h3}>Add new address</Text>
           <View style={styles.space} />

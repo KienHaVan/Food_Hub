@@ -32,10 +32,10 @@ const FavoriteScreen = () => {
       .onSnapshot((documentSnapshot) => {
         setUserData(
           isFoodItem
-            ? documentSnapshot.data().favoriteFood || []
-            : documentSnapshot.data().favoriteRestaurant || []
+            ? documentSnapshot?.data()?.favoriteFood || []
+            : documentSnapshot?.data()?.favoriteRestaurant || []
         );
-        setPhotoURL(documentSnapshot.data().photoURL || '');
+        setPhotoURL(documentSnapshot?.data()?.photoURL || '');
       });
     return () => subscriber();
   }, [id, isFoodItem]);

@@ -19,16 +19,18 @@ const RestaurantCard = ({ data, isFavorite = false, isFullWidth = false }) => {
 
   useEffect(() => {
     const checkFavoriteRestaurant = async () => {
-      const userData = await firestore().collection('users').doc(id).get();
-      const favoriteRestaurant = userData.data()?.favoriteRestaurant;
-      if (!favoriteRestaurant) {
-        await addUserToFirebaseWithID(
-          {
-            ...userData.data(),
-            favoriteRestaurant: [],
-          },
-          auth()?.currentUser?.uid
-        );
+      if (auth().currentUser.email) {
+        const userData = await firestore().collection('users').doc(id).get();
+        const favoriteRestaurant = userData?.data()?.favoriteRestaurant;
+        if (!favoriteRestaurant) {
+          await addUserToFirebaseWithID(
+            {
+              ...userData.data(),
+              favoriteRestaurant: [],
+            },
+            auth()?.currentUser?.uid
+          );
+        }
       }
     };
     checkFavoriteRestaurant();
@@ -38,7 +40,7 @@ const RestaurantCard = ({ data, isFavorite = false, isFullWidth = false }) => {
   const handlePress = async (item) => {
     setFav(!fav);
     const userData = await firestore().collection('users').doc(id).get();
-    const favoriteRestaurant = userData.data().favoriteRestaurant;
+    const favoriteRestaurant = userData?.data()?.favoriteRestaurant;
     try {
       if (!fav) {
         await firestore()
