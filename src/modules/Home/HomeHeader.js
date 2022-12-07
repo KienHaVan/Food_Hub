@@ -10,6 +10,7 @@ import LayoutStyles from '../../styles/Layout';
 import TextStyles from '../../styles/TextStyles';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import GetLocation from 'react-native-get-location';
 
 const HomeHeader = ({ handleShowMenu }) => {
   const navigation = useNavigation();
@@ -18,13 +19,25 @@ const HomeHeader = ({ handleShowMenu }) => {
   const [photoURL, setPhotoURL] = useState('');
   const id = auth()?.currentUser?.uid;
 
+  // GetLocation.getCurrentPosition({
+  //   enableHighAccuracy: true,
+  //   timeout: 15000,
+  // })
+  //   .then((location) => {
+  //     console.log(location);
+  //   })
+  //   .catch((error) => {
+  //     const { code, message } = error;
+  //     console.warn(code, message);
+  //   });
+
   useEffect(() => {
     const subscriber = firestore()
       .collection('users')
       .doc(id)
       .onSnapshot((documentSnapshot) => {
-        setUserAddress(documentSnapshot.data().address || '');
-        setPhotoURL(documentSnapshot.data().photoURL || '');
+        setUserAddress(documentSnapshot.data()?.address || '');
+        setPhotoURL(documentSnapshot.data()?.photoURL || '');
       });
     return () => subscriber();
   }, [id]);

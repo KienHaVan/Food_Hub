@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 //region Import styling
 import Colors from '../../constants/Color';
@@ -6,7 +6,6 @@ import Sizes from '../../constants/Size';
 import LayoutStyles from '../../styles/Layout';
 import TextStyles from '../../styles/TextStyles';
 //endregion
-import auth from '@react-native-firebase/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { Images } from '../../../assets';
 import RestaurantCard from '../../components/RestaurantCard';
@@ -14,9 +13,12 @@ import { fetchRestaurants } from '../../features/restaurantSlice';
 import { setSearchTheme } from '../../features/categorySlice';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
 import HomeFeaturedSkeleton from './HomeFeaturedSkeleton';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 
 const HomeFeatured = ({ isScreenFocused }) => {
+  const [favoriteRestaurantData, setFavoriteRestaurantData] = useState([]);
   const restaurants = useSelector((state) => state.restaurant.restaurants);
   const isLoading = useSelector((state) => state.restaurant.isLoading);
   const navigation = useNavigation();
@@ -27,10 +29,24 @@ const HomeFeatured = ({ isScreenFocused }) => {
     if (isScreenFocused) {
       dispatch(fetchRestaurants({ areFeatured: true }));
     }
-  }, [dispatch, isScreenFocused, id]);
+  }, [dispatch, isScreenFocused]);
+
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('users')
+      .doc(id)
+      .onSnapshot((documentSnapshot) => {
+        setFavoriteRestaurantData(documentSnapshot.data()?.favoriteRestaurant || []);
+      });
+
+    return () => subscriber();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const renderCard = ({ item }) => {
-    return <RestaurantCard data={item} is />;
+    const existingItem = favoriteRestaurantData.map((card) => card.id);
+    const check = existingItem.includes(item.id);
+    return <RestaurantCard data={item} key={item.id} isFavorite={check ? true : false} />;
   };
 
   return (

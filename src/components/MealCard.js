@@ -20,16 +20,18 @@ const MealCard = ({ data, isFavorite = false }) => {
 
   useEffect(() => {
     const checkFavoriteFood = async () => {
-      const userData = await firestore().collection('users').doc(id).get();
-      const favoriteFood = userData.data().favoriteFood;
-      if (!favoriteFood) {
-        await addUserToFirebaseWithID(
-          {
-            ...userData.data(),
-            favoriteFood: [],
-          },
-          auth()?.currentUser?.uid
-        );
+      if (auth().currentUser.email) {
+        const userData = await firestore().collection('users').doc(id).get();
+        const favoriteFood = userData?.data()?.favoriteFood;
+        if (!favoriteFood) {
+          await addUserToFirebaseWithID(
+            {
+              ...userData.data(),
+              favoriteFood: [],
+            },
+            auth()?.currentUser?.uid
+          );
+        }
       }
     };
     checkFavoriteFood();
@@ -39,7 +41,7 @@ const MealCard = ({ data, isFavorite = false }) => {
   const handlePress = async (item) => {
     setFav(!fav);
     const userData = await firestore().collection('users').doc(id).get();
-    const favoriteFood = userData.data().favoriteFood;
+    const favoriteFood = userData?.data()?.favoriteFood;
     try {
       if (!fav) {
         await firestore()
