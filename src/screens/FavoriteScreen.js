@@ -26,6 +26,10 @@ const FavoriteScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
+    if (!auth().currentUser.email) {
+      navigation.navigate('Welcome');
+      return;
+    }
     const subscriber = firestore()
       .collection('users')
       .doc(id)
@@ -38,6 +42,7 @@ const FavoriteScreen = () => {
         setPhotoURL(documentSnapshot?.data()?.photoURL || '');
       });
     return () => subscriber();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, isFoodItem]);
 
   const handlePress = (item) => {

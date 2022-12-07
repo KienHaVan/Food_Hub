@@ -14,6 +14,7 @@ import Sizes from '../constants/Size';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { height, scaleSizeUI } from '../utils/scaleSizeUI';
+import auth from '@react-native-firebase/auth';
 
 const ProfileScreen = () => {
   const [fullName, setFullname] = useState('');
@@ -24,16 +25,21 @@ const ProfileScreen = () => {
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
+    if (!auth().currentUser.email) {
+      navigation.navigate('Welcome');
+      return;
+    }
     const subscriber = firestore()
       .collection('users')
       .doc(currentUser.id)
       .onSnapshot((documentSnapshot) => {
-        setFullname(documentSnapshot.data().fullname || '');
-        setEmail(documentSnapshot.data().email || '');
-        setPhoneNumber(documentSnapshot.data().phoneNumber || '');
-        setPhotoURL(documentSnapshot.data().photoURL || '');
+        setFullname(documentSnapshot?.data()?.fullname || '');
+        setEmail(documentSnapshot?.data()?.email || '');
+        setPhoneNumber(documentSnapshot?.data()?.phoneNumber || '');
+        setPhotoURL(documentSnapshot?.data()?.photoURL || '');
       });
     return () => subscriber();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   const handleChoosePhoto = () => {

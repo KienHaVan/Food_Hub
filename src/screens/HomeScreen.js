@@ -27,6 +27,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     dispatch(getFireStoreUserData(currentUser.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useFocusEffect(

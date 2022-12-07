@@ -14,12 +14,13 @@ const CreditCard = ({ name = 'HA VAN KIEN', date = '1224', number = '00000000000
     number.slice(8, 12) +
     ' ' +
     number.slice(12, 16);
-  const renderDate = dayjs(`2018-${date.slice(2, 4)}-${date.slice(0, 2)}`).format('DD/MM');
+  const renderDate = dayjs(`20${date.slice(2, 4)}-${date.slice(0, 2)}-01`).format('MM/YY');
+  const renderDateInit = dayjs(`2024-01-01`).format('MM/YY');
   return (
     <ImageBackground
       style={styles.container}
       source={Images.IMAGES.CREDIT_CARD_BACKGROUND}
-      imageStyle={{ borderRadius: 30 }}
+      imageStyle={styles.imageStyle}
       resizeMode='cover'
     >
       <View style={styles.heading}>
@@ -42,7 +43,9 @@ const CreditCard = ({ name = 'HA VAN KIEN', date = '1224', number = '00000000000
         </View>
         <View>
           <Text style={styles.bottomSubInfo}>Expires</Text>
-          <Text style={[TextStyles.h3, styles.bottomInfo]}>{renderDate}</Text>
+          <Text style={[TextStyles.h3, styles.bottomInfo]}>
+            {renderDate !== 'Invalid Date' ? renderDate : renderDateInit}
+          </Text>
         </View>
       </View>
     </ImageBackground>
@@ -84,5 +87,8 @@ const styles = StyleSheet.create({
   },
   bottomSubInfo: {
     color: Color.grey,
+  },
+  imageStyle: {
+    borderRadius: 30,
   },
 });

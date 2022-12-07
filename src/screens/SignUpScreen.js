@@ -1,17 +1,19 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
   ImageBackground,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import AnimatedLoader from 'react-native-animated-loader';
 import Toast from 'react-native-toast-message';
+import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 import { Images } from '../../assets';
 import MyInput from '../components/form/MyInput';
@@ -19,15 +21,8 @@ import LogWithFacebookAndGoogle from '../components/LogWithFacebookAndGoogle';
 import Color from '../constants/Color';
 import { addCurrentUser } from '../features/userSlice';
 import TextStyles from '../styles/TextStyles';
-import {
-  addUserToFirebase,
-  addUserToFirebaseWithID,
-  SignUpWithEmailAndPassword,
-} from '../utils/authentication';
+import { addUserToFirebaseWithID } from '../utils/authentication';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
-import auth from '@react-native-firebase/auth';
-import { useDispatch, useSelector } from 'react-redux';
-import AnimatedLoader from 'react-native-animated-loader';
 
 const schema = yup
   .object({
@@ -67,39 +62,68 @@ const SignUpScreen = () => {
     if (!isValid) {
       return;
     }
-    try {
-      await SignUpWithEmailAndPassword(data.email, data.password);
-      await auth().currentUser.updateProfile({
-        displayName: data.fullname,
-        photoURL:
-          'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-      });
-      await addUserToFirebaseWithID(
-        {
-          fullname: data.fullname,
-          email: data.email,
-          password: data.password,
+    await auth()
+      .createUserWithEmailAndPassword(data.email, data.password)
+      .then(async () => {
+        console.log('User account created & signed in!');
+        await auth().currentUser.updateProfile({
+          displayName: data.fullname,
           photoURL:
             'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-        },
-        auth()?.currentUser?.uid
-      );
-      dispatch(
-        addCurrentUser({
-          fullname: auth()?.currentUser?.displayName,
-          email: auth()?.currentUser?.email,
-          photoURL: auth()?.currentUser?.photoURL,
-          id: auth()?.currentUser?.uid,
-        })
-      );
-      Toast.show({
-        type: 'success',
-        text1: 'Create user successfully',
+        });
+        await addUserToFirebaseWithID(
+          {
+            fullname: data.fullname,
+            email: data.email,
+            password: data.password,
+            photoURL:
+              'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+          },
+          auth()?.currentUser?.uid
+        );
+        dispatch(
+          addCurrentUser({
+            fullname: auth()?.currentUser?.displayName,
+            email: auth()?.currentUser?.email,
+            photoURL: auth()?.currentUser?.photoURL,
+            id: auth()?.currentUser?.uid,
+          })
+        );
+        Toast.show({
+          type: 'success',
+          text1: 'Create user successfully',
+        });
+        navigation.navigate('HomeStack');
+      })
+      .catch((error) => {
+        switch (error.code) {
+          case 'auth/network-request-failed':
+            Toast.show({
+              type: 'error',
+              text1: 'Check your internet connection',
+            });
+            break;
+          case 'auth/email-already-in-use':
+            Toast.show({
+              type: 'error',
+              text1: 'Please try onther email',
+            });
+            break;
+          case 'auth/too-many-requests':
+            Toast.show({
+              type: 'error',
+              text1: 'Try Again',
+            });
+            break;
+          default:
+            console.log(error);
+            Toast.show({
+              type: 'error',
+              text1: 'Try Again',
+            });
+            break;
+        }
       });
-      navigation.navigate('HomeStack');
-    } catch (error) {
-      console.log(error);
-    }
   };
   return (
     <ImageBackground

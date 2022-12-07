@@ -55,7 +55,7 @@ const HomeBottomTabNavigator = () => {
         }}
       />
       <Tab.Screen name='Favorite' component={FavoriteScreen} />
-      <Tab.Screen name='Notification' component={NotificationScreen} />
+      {/* <Tab.Screen name='Notification' component={NotificationScreen} /> */}
     </Tab.Navigator>
   );
 };

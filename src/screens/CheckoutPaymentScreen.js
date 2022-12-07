@@ -1,18 +1,16 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import CornerButton from '../components/CornerButton';
-import { Images } from '../../assets';
-import TextStyles from '../styles/TextStyles';
-import LayoutStyles from '../styles/Layout';
-import { useNavigation } from '@react-navigation/native';
-import CustomButton from '../components/CustomButton';
-import Color from '../constants/Color';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { initUserPayment } from '../features/userSlice';
-import { RadioButton } from 'react-native-paper';
+import { Images } from '../../assets';
 import CheckoutPaymentCard from '../components/CheckoutPaymentCard';
+import CornerButton from '../components/CornerButton';
+import CustomButton from '../components/CustomButton';
+import Color from '../constants/Color';
+import LayoutStyles from '../styles/Layout';
+import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 
 const paymentList = [
@@ -31,8 +29,6 @@ const CheckoutPaymentScreen = () => {
   const [checked, setChecked] = useState(0);
   const [creditCardList, setCreditCardList] = useState([]);
   const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.user.currentUser);
   const theList = [...paymentList];
   creditCardList.map((item, index) => {
     theList.push({
