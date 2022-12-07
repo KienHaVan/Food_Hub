@@ -15,6 +15,7 @@ const InputField = ({
   isPassword,
   keyboardType,
   isShowKeyboard,
+  returnKeyType = 'done',
   isDisabled,
   isEditable,
   isSelected,
@@ -61,6 +62,7 @@ const InputField = ({
             value={value}
             onChangeText={onChangeText}
             keyboardType={keyboardType}
+            returnKeyType={returnKeyType}
             showSoftInputOnFocus={isShowKeyboard}
             editable={isEditable}
             selectTextOnFocus={isSelected}

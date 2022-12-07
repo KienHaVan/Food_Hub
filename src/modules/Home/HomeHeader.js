@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Images } from '../../../assets';
@@ -11,11 +10,11 @@ import LayoutStyles from '../../styles/Layout';
 import TextStyles from '../../styles/TextStyles';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import { useState } from 'react';
 import GetLocation from 'react-native-get-location';
 
 const HomeHeader = ({ handleShowMenu }) => {
   const navigation = useNavigation();
+  const currentUser = useSelector((state) => state.user.currentUserFirestoreData);
   const [userAddress, setUserAddress] = useState('');
   const [photoURL, setPhotoURL] = useState('');
   const id = auth()?.currentUser?.uid;
@@ -46,7 +45,6 @@ const HomeHeader = ({ handleShowMenu }) => {
     return () => subscriber();
   }, [id]);
 
-  const { currentUser } = useSelector((state) => state.user);
   return (
     <View style={[LayoutStyles.layoutStretch, styles.header]}>
       <CornerButton sourceImage={Images.ICON.BURGER} handlePress={handleShowMenu} />

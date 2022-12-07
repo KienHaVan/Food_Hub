@@ -37,7 +37,7 @@ const CartCard = ({ item, onConfirmRemove }) => {
           {item.name}
         </Text>
         <Text style={[TextStyles.h3, styles.cardPrice]}>
-          ${formatPrice(item.price * item.quantity)}
+          ${formatPrice(item.price * item.quantity + item.chosenAddon.price)}
         </Text>
       </View>
       <View style={styles.cardCounter}>

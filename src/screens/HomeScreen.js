@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Animated, Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, ScrollView, StyleSheet, Text } from 'react-native';
 import Sizes from '../constants/Size';
 import HomeCategories from '../modules/Home/HomeCategories';
 import HomeFeatured from '../modules/Home/HomeFeatured';
@@ -12,15 +12,22 @@ import TextStyles from '../styles/TextStyles';
 import { scaleSizeUI } from '../utils/scaleSizeUI';
 import { useFocusEffect } from '@react-navigation/native';
 import HomeCategoriesModal from '../modules/Home/HomeCategoriesModal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFireStoreUserData } from '../features/userSlice';
 
 const HomeScreen = () => {
+  const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const [isScreenFocused, setIsScreenFocused] = useState(false);
+  const currentUser = useSelector((state) => state.user.currentUser);
   const isModalShown = useSelector((state) => state.category.isModalShown);
   const offsetValueX = useRef(new Animated.Value(0)).current;
   const offsetValueY = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    dispatch(getFireStoreUserData(currentUser.id));
+  }, []);
 
   useFocusEffect(
     React.useCallback(() => {

@@ -23,7 +23,7 @@ import firestore from '@react-native-firebase/firestore';
 import { addCurrentUser } from '../../features/userSlice';
 
 const Menu = ({ isMenuShown, handleShowMenu }) => {
-  const currentUser = useSelector((state) => state.user.currentUser);
+  const currentUser = useSelector((state) => state.user.currentUserFirestoreData);
   const navigation = useNavigation();
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const dispatch = useDispatch();

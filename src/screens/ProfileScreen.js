@@ -170,8 +170,9 @@ const styles = StyleSheet.create({
   },
   navigationButton: {
     width: scaleSizeUI(248),
-    height: scaleSizeUI(40),
+    height: scaleSizeUI(60),
     alignSelf: 'center',
+    marginTop: 16,
   },
   choosePicture: {
     width: 27,

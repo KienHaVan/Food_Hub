@@ -1,9 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchUserById, updateUserApi } from '../api/userApi';
 
-export const getFireStoreUserData = createAsyncThunk('User/getFireStoreUserData', async (id) => {
-  return await fetchUserById(id);
-});
+export const getFireStoreUserData = createAsyncThunk(
+  'User/getFireStoreUserData',
+  async (id, thunkApi) => {
+    return await fetchUserById(id);
+  }
+);
 
 export const updateUser = createAsyncThunk('User/updateUser', async (data, thunkApi) => {
   return await updateUserApi(data.userId, data.newData);

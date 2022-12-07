@@ -43,6 +43,7 @@ const HomeSearch = () => {
           placeholder='Find for food or restaurant...'
           isPassword={false}
           preIcon={Images.ICON.SEARCH}
+          returnKeyType='search'
           onSubmitted={(event) => handleSearch(event.nativeEvent.text)}
         />
       </View>

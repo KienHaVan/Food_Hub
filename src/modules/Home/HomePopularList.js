@@ -1,21 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 //region Import styling
+import TextStyles from '../../styles/TextStyles';
+import LayoutStyles from '../../styles/Layout';
 import Colors from '../../constants/Color';
 import Sizes from '../../constants/Size';
-import LayoutStyles from '../../styles/Layout';
-import TextStyles from '../../styles/TextStyles';
 //endregion
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Images } from '../../../assets';
 import CustomButton from '../../components/CustomButton';
 import MealCard from '../../components/MealCard';
 import { fetchFood } from '../../features/foodSlice';
+import { setSearchTheme } from '../../features/categorySlice';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
+import { Images } from '../../../assets';
 
 const HomePopularList = ({ isScreenFocused }) => {
   const dispatch = useDispatch();
@@ -45,10 +45,7 @@ const HomePopularList = ({ isScreenFocused }) => {
   const renderCard = (data) => {
     const existingItem = favoriteFoodData.map((item) => item.id);
     const check = existingItem.includes(data.id);
-    // console.log(existingItem);
-    // console.log(check);
-    // console.log(existingItem.includes(data.id));
-    return <MealCard key={data.id} data={data} isFavorite={check ? true : false} />;
+    return <MealCard key={data.id} data={data} isFavorite={!!check} />;
   };
 
   return (
@@ -64,12 +61,15 @@ const HomePopularList = ({ isScreenFocused }) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.cards}>{food.map((res) => renderCard(res))}</View>
+      {isScreenFocused && <View style={styles.cards}>{food.map((res) => renderCard(res))}</View>}
 
       <View style={styles.buttonContainer}>
         <CustomButton
           text='View All'
-          onPress={() => navigation.navigate('Search', { defaultSortCriteria: 1 })}
+          onPress={() => {
+            dispatch(setSearchTheme(0));
+            navigation.navigate('Search', { defaultSortCriteria: 1 });
+          }}
         />
       </View>
     </View>
