@@ -42,6 +42,7 @@ const HomeScreen = () => {
       duration: 400,
       useNativeDriver: true,
     }).start();
+    console.log('scale', scaleValue);
   };
 
   const moveScreen = () => {
@@ -55,12 +56,13 @@ const HomeScreen = () => {
       duration: 300,
       useNativeDriver: true,
     }).start();
+    console.log('x', offsetValueX);
   };
 
   const animateShowMenu = () => {
+    setShowMenu(!showMenu);
     scaleScreen();
     moveScreen();
-    setShowMenu(!showMenu);
   };
 
   return (
@@ -84,7 +86,7 @@ const HomeScreen = () => {
         ]}
       >
         <HomeHeader handleShowMenu={animateShowMenu} />
-        <Text style={[TextStyles.h2, styles.screenHeading]}>What would you like to order</Text>
+        <Text style={[TextStyles.h2, styles.screenHeading]}>What would you like to order?</Text>
         <HomeSearch />
         <HomeCategories isScreenFocused={isScreenFocused} />
         <HomeFeatured isScreenFocused={isScreenFocused} />

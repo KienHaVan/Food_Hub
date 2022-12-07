@@ -42,6 +42,7 @@ const SplashScreen = ({ navigation }) => {
       };
       getCurrentFullInfo().then((data) => dispatch(fetchCartFromDB(data.data())));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   return (

@@ -19,48 +19,75 @@ const LogWithFacebookAndGoogle = ({ text, dark = false, setVisible = () => {} })
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const onGoogleButtonPress = async () => {
-    setVisible(true);
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    const { idToken } = await GoogleSignin.signIn();
-    const googleCredential = await auth.GoogleAuthProvider.credential(idToken);
-    await auth().signInWithCredential(googleCredential);
-    await auth().currentUser.updateProfile({
-      photoURL:
-        'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-    });
-    const id = auth()?.currentUser?.uid;
-    const data = await firestore().collection('users').doc(id).get();
-    if (!data?.data()?.email) {
-      await addUserToFirebaseWithID(
-        {
+    try {
+      setVisible(true);
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      const { idToken } = await GoogleSignin.signIn();
+      const googleCredential = await auth.GoogleAuthProvider.credential(idToken);
+      await auth().signInWithCredential(googleCredential);
+      await auth().currentUser.updateProfile({
+        photoURL:
+          'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+      });
+      const id = auth()?.currentUser?.uid;
+      const data = await firestore().collection('users').doc(id).get();
+      if (!data?.data()?.email) {
+        await addUserToFirebaseWithID(
+          {
+            fullname: auth()?.currentUser?.displayName,
+            email: auth()?.currentUser?.email,
+            photoURL: auth()?.currentUser?.photoURL,
+          },
+          auth()?.currentUser?.uid
+        );
+      } else {
+        await addUserToFirebaseWithID(
+          {
+            ...data.data(),
+          },
+          auth()?.currentUser?.uid
+        );
+      }
+      dispatch(
+        addCurrentUser({
           fullname: auth()?.currentUser?.displayName,
           email: auth()?.currentUser?.email,
           photoURL: auth()?.currentUser?.photoURL,
-        },
-        auth()?.currentUser?.uid
+          id: auth()?.currentUser?.uid,
+        })
       );
-    } else {
-      await addUserToFirebaseWithID(
-        {
-          ...data.data(),
-        },
-        auth()?.currentUser?.uid
-      );
+      setVisible(false);
+      Toast.show({
+        type: 'success',
+        text1: 'Login successfully',
+      });
+      navigation.navigate('HomeStack');
+    } catch (error) {
+      switch (error.code) {
+        case '7':
+          Toast.show({
+            type: 'error',
+            text1: 'Check your internet connection',
+          });
+          setVisible(false);
+          break;
+        case 'auth/too-many-requests':
+          Toast.show({
+            type: 'error',
+            text1: 'Try Again',
+          });
+          setVisible(false);
+          break;
+        default:
+          console.log(error.code);
+          Toast.show({
+            type: 'error',
+            text1: 'Try Again',
+          });
+          setVisible(false);
+          break;
+      }
     }
-    dispatch(
-      addCurrentUser({
-        fullname: auth()?.currentUser?.displayName,
-        email: auth()?.currentUser?.email,
-        photoURL: auth()?.currentUser?.photoURL,
-        id: auth()?.currentUser?.uid,
-      })
-    );
-    setVisible(false);
-    Toast.show({
-      type: 'success',
-      text1: 'Login successfully',
-    });
-    navigation.navigate('HomeStack');
   };
   return (
     <View>
@@ -80,10 +107,6 @@ const LogWithFacebookAndGoogle = ({ text, dark = false, setVisible = () => {} })
       </View>
 
       <View style={styles.bottomMeta}>
-        {/* <TouchableOpacity style={styles.bottomMetaButton}>
-          <Image source={Images.ICON.FACEBOOK} style={styles.bottomMetaImage} />
-          <Text style={[TextStyles.textMain, styles.metaButtonText]}>FACEBOOK</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity style={[styles.bottomMetaButton]} onPress={onGoogleButtonPress}>
           <Image source={Images.ICON.GOOGLE} style={styles.bottomMetaImage} />
           <Text style={[TextStyles.textMain, styles.metaButtonText]}>Continue with Google</Text>

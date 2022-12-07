@@ -14,8 +14,11 @@ import Sizes from '../constants/Size';
 import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { height, scaleSizeUI } from '../utils/scaleSizeUI';
+import auth from '@react-native-firebase/auth';
+import { getFireStoreUserData } from '../features/userSlice';
 
 const ProfileScreen = () => {
+  const dispatch = useDispatch();
   const [fullName, setFullname] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
@@ -24,26 +27,32 @@ const ProfileScreen = () => {
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
+    if (!auth().currentUser.email) {
+      navigation.navigate('Welcome');
+      return;
+    }
     const subscriber = firestore()
       .collection('users')
       .doc(currentUser.id)
       .onSnapshot((documentSnapshot) => {
-        setFullname(documentSnapshot.data().fullname || '');
-        setEmail(documentSnapshot.data().email || '');
-        setPhoneNumber(documentSnapshot.data().phoneNumber || '');
-        setPhotoURL(documentSnapshot.data().photoURL || '');
+        setFullname(documentSnapshot?.data()?.fullname || '');
+        setEmail(documentSnapshot?.data()?.email || '');
+        setPhoneNumber(documentSnapshot?.data()?.phoneNumber || '');
+        setPhotoURL(documentSnapshot?.data()?.photoURL || '');
       });
     return () => subscriber();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
-  const handleChoosePhoto = () => {
-    launchImageLibrary({}, (res) => {
+  const handleChoosePhoto = async () => {
+    await launchImageLibrary({}, async (res) => {
       if (res?.assets) {
-        firestore().collection('users').doc(currentUser.id).update({
+        await firestore().collection('users').doc(currentUser.id).update({
           photoURL: res?.assets[0]?.uri,
         });
       }
     });
+    dispatch(getFireStoreUserData(id));
   };
 
   return (
@@ -164,8 +173,9 @@ const styles = StyleSheet.create({
   },
   navigationButton: {
     width: scaleSizeUI(248),
-    height: scaleSizeUI(40),
+    height: scaleSizeUI(60),
     alignSelf: 'center',
+    marginTop: 16,
   },
   choosePicture: {
     width: 27,

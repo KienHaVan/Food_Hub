@@ -13,8 +13,11 @@ import LayoutStyles from '../styles/Layout';
 import TextStyles from '../styles/TextStyles';
 import { addUserToFirebaseWithID } from '../utils/authentication';
 import { height, scaleSizeUI } from '../utils/scaleSizeUI';
+import { getFireStoreUserData } from '../features/userSlice';
+import { useDispatch } from 'react-redux';
 
 const EditProfileScreen = () => {
+  const dispatch = useDispatch();
   const [fullname, setFullname] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [region, setRegion] = useState('');
@@ -45,7 +48,7 @@ const EditProfileScreen = () => {
         const data = documentSnapshot.data();
         setFullname(data.fullname || '');
         setPhoneNumber(data.phoneNumber || '');
-        if (data?.address.length) {
+        if (data?.address?.length) {
           const userAddress = data.address.split(', ');
           setCity(userAddress[2]);
           setRegion(userAddress[1]);
@@ -66,6 +69,7 @@ const EditProfileScreen = () => {
           phoneNumber: phoneNumber,
           address: `${street}, ${region}, ${city}`,
         });
+      dispatch(getFireStoreUserData(id));
     } catch (error) {
       console.log('Error: ', error);
     }

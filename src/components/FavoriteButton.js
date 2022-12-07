@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Image, TouchableOpacity, StyleSheet } from 'react-native';
-import LayoutStyles from '../styles/Layout';
-import Sizes from '../constants/Size';
+import React from 'react';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../constants/Color';
+import Sizes from '../constants/Size';
+import LayoutStyles from '../styles/Layout';
 
 import { Images } from '../../assets';
 

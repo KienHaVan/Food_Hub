@@ -37,7 +37,10 @@ const HomeHeader = ({ handleShowMenu }) => {
       .doc(id)
       .onSnapshot((documentSnapshot) => {
         setUserAddress(documentSnapshot.data()?.address || '');
-        setPhotoURL(documentSnapshot.data()?.photoURL || '');
+        setPhotoURL(
+          documentSnapshot.data()?.photoURL ||
+            'https://images.unsplash.com/photo-1585238342024-78d387f4a707?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGl6emF8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60'
+        );
       });
     return () => subscriber();
   }, [id]);
@@ -56,7 +59,7 @@ const HomeHeader = ({ handleShowMenu }) => {
         style={[LayoutStyles.layoutShadowRed, styles.avatar]}
         onPress={() => navigation.navigate('Profile')}
       >
-        <Image source={{ uri: photoURL || currentUser.photoURL }} style={styles.avatar} />
+        <Image source={{ uri: photoURL || auth()?.currentUser?.photoURL }} style={styles.avatar} />
       </TouchableOpacity>
     </View>
   );

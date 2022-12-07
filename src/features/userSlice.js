@@ -41,6 +41,7 @@ const userSlice = createSlice({
     builder
       .addCase(getFireStoreUserData.fulfilled, (state, action) => {
         state.currentUserFirestoreData = action.payload;
+        state.currentUser = action.payload;
       })
       .addCase(updateUser.pending, (state, action) => {
         state.isLoading = true;

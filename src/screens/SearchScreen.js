@@ -34,6 +34,7 @@ const SearchScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     handleFilter(SearchCriterias[currentCriteria - 1].criteria);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localSearchTerm]);
 
   const showFood = ({ item }) => {

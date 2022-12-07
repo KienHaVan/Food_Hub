@@ -14,9 +14,9 @@ import AnimatedLoader from 'react-native-animated-loader';
 const WelcomeScreen = () => {
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
-  const handleSignInAnonymously = () => {
+  const handleSignInAnonymously = async () => {
     setVisible(true);
-    auth()
+    await auth()
       .signInAnonymously()
       .then(() => {
         console.log('User signed in anonymously');
@@ -24,16 +24,29 @@ const WelcomeScreen = () => {
         setVisible(false);
       })
       .catch((error) => {
-        if (error.code === 'auth/operation-not-allowed') {
-          console.log('Enable anonymous in your firebase console.');
-        } else if (error.code === 'auth/network-request-failed') {
-          console.log('Check your internet connection');
-          Toast.show({
-            type: 'info',
-            text1: 'Check your internet connection',
-          });
-        } else {
-          console.log(error);
+        switch (error.code) {
+          case 'auth/network-request-failed':
+            Toast.show({
+              type: 'error',
+              text1: 'Check your internet connection',
+            });
+            setVisible(false);
+            break;
+          case 'auth/too-many-requests':
+            Toast.show({
+              type: 'error',
+              text1: 'Try Again',
+            });
+            setVisible(false);
+            break;
+          default:
+            console.log(error);
+            Toast.show({
+              type: 'error',
+              text1: 'Try Again',
+            });
+            setVisible(false);
+            break;
         }
       });
   };
@@ -77,7 +90,7 @@ const WelcomeScreen = () => {
           <View style={styles.LoadingGoogleFacebook}>
             <AnimatedLoader
               visible={visible}
-              overlayColor='rgba(255, 255, 255, 0.9)'
+              overlayColor='rgba(255, 255, 255, 0.2)'
               source={require('../../assets/pizza-loading.json')}
               animationStyle={styles.lottie}
               speed={6}
