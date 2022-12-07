@@ -26,7 +26,8 @@ const cartSlice = createSlice({
     //Function to add item to cart
     addToCart(state, action) {
       state.totalQuantity += action.payload.quantity;
-      state.totalPrice += action.payload.price * action.payload.quantity;
+      state.totalPrice +=
+        action.payload.price * action.payload.quantity + action.payload.chosenAddon.price;
       const existingItem = state.carts.find((item) => item.id === action.payload.id);
 
       if (existingItem) {

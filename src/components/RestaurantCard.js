@@ -195,5 +195,6 @@ const styles = StyleSheet.create({
   },
   cardFull: {
     width: '87%',
+    marginBottom: Sizes.sizeBigH,
   },
 });

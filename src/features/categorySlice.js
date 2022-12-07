@@ -12,6 +12,7 @@ const initialState = {
   categories: [],
   isLoading: false,
   isModalShown: false,
+  searchTheme: 0,
 };
 
 const categorySlice = createSlice({
@@ -20,6 +21,9 @@ const categorySlice = createSlice({
   reducers: {
     toggleModal(state) {
       state.isModalShown = !state.isModalShown;
+    },
+    setSearchTheme(state, action) {
+      state.searchTheme = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -34,5 +38,5 @@ const categorySlice = createSlice({
   },
 });
 
-export const { toggleModal } = categorySlice.actions;
+export const { toggleModal, setSearchTheme } = categorySlice.actions;
 export default categorySlice.reducer;
