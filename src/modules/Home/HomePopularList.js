@@ -1,26 +1,28 @@
 import React, { useEffect } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
-
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 //region Import styling
-import TextStyles from '../../styles/TextStyles';
-import LayoutStyles from '../../styles/Layout';
 import Colors from '../../constants/Color';
 import Sizes from '../../constants/Size';
+import LayoutStyles from '../../styles/Layout';
+import TextStyles from '../../styles/TextStyles';
 //endregion
-
-import MealCard from '../../components/MealCard';
-
-import { Images } from '../../../assets';
-import { scaleSizeUI } from '../../utils/scaleSizeUI';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchFood } from '../../features/foodSlice';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Images } from '../../../assets';
 import CustomButton from '../../components/CustomButton';
+import MealCard from '../../components/MealCard';
+import { fetchFood } from '../../features/foodSlice';
+import { scaleSizeUI } from '../../utils/scaleSizeUI';
 
 const HomePopularList = ({ isScreenFocused }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const food = useSelector((state) => state.food.food);
+  const id = auth()?.currentUser?.uid;
+  const [favoriteFoodData, setFavoriteFoodData] = useState([]);
 
   useEffect(() => {
     if (isScreenFocused) {
@@ -28,8 +30,25 @@ const HomePopularList = ({ isScreenFocused }) => {
     }
   }, [dispatch, isScreenFocused]);
 
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('users')
+      .doc(id)
+      .onSnapshot((documentSnapshot) => {
+        setFavoriteFoodData(documentSnapshot.data()?.favoriteFood || []);
+      });
+
+    return () => subscriber();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const renderCard = (data) => {
-    return <MealCard key={data.id} data={data} />;
+    const existingItem = favoriteFoodData.map((item) => item.id);
+    const check = existingItem.includes(data.id);
+    // console.log(existingItem);
+    // console.log(check);
+    // console.log(existingItem.includes(data.id));
+    return <MealCard key={data.id} data={data} isFavorite={check ? true : false} />;
   };
 
   return (

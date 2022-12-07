@@ -24,8 +24,8 @@ const HomeHeader = ({ handleShowMenu }) => {
       .collection('users')
       .doc(id)
       .onSnapshot((documentSnapshot) => {
-        setUserAddress(documentSnapshot.data().address || '');
-        setPhotoURL(documentSnapshot.data().photoURL || '');
+        setUserAddress(documentSnapshot.data()?.address || '');
+        setPhotoURL(documentSnapshot.data()?.photoURL || '');
       });
     return () => subscriber();
   }, [id]);
