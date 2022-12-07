@@ -40,7 +40,9 @@ const HomeHeader = ({ handleShowMenu }) => {
           <Text style={TextStyles.textSmall}>
             Deliver to <Image source={Images.ICON.ARROW_DOWN} />
           </Text>
-          <Text style={[TextStyles.textMain, styles.addressText]}>{userAddress}</Text>
+          <Text style={[TextStyles.textMain, styles.addressText]} numberOfLines={2}>
+            {userAddress}
+          </Text>
         </View>
       )}
 
@@ -60,6 +62,7 @@ const styles = StyleSheet.create({
   },
   headerAddress: {
     alignItems: 'center',
+    width: '70%',
   },
   addressText: {
     color: Colors.primary,
