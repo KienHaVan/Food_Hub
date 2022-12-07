@@ -35,6 +35,16 @@ const CheckoutOrderScreen = () => {
   useEffect(() => {
     const checkAddress = async () => {
       const data = await firestore().collection('users').doc(id).get();
+      const orders = data.data().orders;
+      if (!orders) {
+        await addUserToFirebaseWithID(
+          {
+            ...data.data(),
+            orders: [],
+          },
+          auth()?.currentUser?.uid
+        );
+      }
       const address = data.data().address;
       if (!address) {
         navigation.navigate('EditProfile');
@@ -50,15 +60,15 @@ const CheckoutOrderScreen = () => {
     setShowLoader(true);
     const data = await firestore().collection('users').doc(id).get();
     const orders = data.data().orders;
-    if (!orders) {
-      await addUserToFirebaseWithID(
-        {
-          ...data.data(),
-          orders: [],
-        },
-        auth()?.currentUser?.uid
-      );
-    }
+    // if (!orders) {
+    //   await addUserToFirebaseWithID(
+    //     {
+    //       ...data.data(),
+    //       orders: [],
+    //     },
+    //     auth()?.currentUser?.uid
+    //   );
+    // }
     await firestore()
       .collection('users')
       .doc(id)

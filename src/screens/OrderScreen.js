@@ -47,27 +47,6 @@ const OrderScreen = () => {
       .onSnapshot((documentSnapshot) => {
         setOrderList(documentSnapshot.data().orders || []);
       });
-    // const moveOrderToCompleted = async () => {
-    //   const data = await firestore().collection('users').doc(id).get();
-    //   const orders = data.data().orders;
-    //   await orders.map((item) => {
-    //     if (item.status === '0') {
-    //       setTimeout(() => {
-    //         item.status = '1';
-    //       }, 10000);
-    //     }
-    //   });
-    //   await firestore()
-    //     .collection('users')
-    //     .doc(id)
-    //     .update({
-    //       orders: [...orders],
-    //     })
-    //     .then(() => {
-    //       console.log('User updated!');
-    //     });
-    // };
-    // moveOrderToCompleted();
     return () => subscriber();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

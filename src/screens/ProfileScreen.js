@@ -28,10 +28,10 @@ const ProfileScreen = () => {
       .collection('users')
       .doc(currentUser.id)
       .onSnapshot((documentSnapshot) => {
-        setFullname(documentSnapshot.data().fullname || '');
-        setEmail(documentSnapshot.data().email || '');
-        setPhoneNumber(documentSnapshot.data().phoneNumber || '');
-        setPhotoURL(documentSnapshot.data().photoURL || '');
+        setFullname(documentSnapshot?.data()?.fullname || '');
+        setEmail(documentSnapshot?.data()?.email || '');
+        setPhoneNumber(documentSnapshot?.data()?.phoneNumber || '');
+        setPhotoURL(documentSnapshot?.data()?.photoURL || '');
       });
     return () => subscriber();
   }, [currentUser]);

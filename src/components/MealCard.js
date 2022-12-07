@@ -61,12 +61,17 @@ const MealCard = ({ data, isFavorite = false }) => {
       console.log(error);
     }
   };
-
-  console.log(fav);
-
+  const handlePressMeal = () => {
+    if (!auth().currentUser.email) {
+      navigation.navigate('Welcome');
+      return;
+    } else {
+      navigation.navigate('FoodDetail', { data: data, isFavorite: fav });
+    }
+  };
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('FoodDetail', { data: data, isFavorite: fav })}
+      onPress={handlePressMeal}
       style={[LayoutStyles.layoutShadowGrey, styles.card]}
     >
       <FavoriteButton handlePress={() => handlePress(data)} isFavorite={fav} />

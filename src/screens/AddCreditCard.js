@@ -193,8 +193,7 @@ const styles = StyleSheet.create({
   },
   bottomButton: {
     height: 60,
-    marginTop: 30,
-    marginBottom: 20,
+    marginTop: 150,
   },
   cardDetail: {
     flex: 1,

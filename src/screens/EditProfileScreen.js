@@ -47,7 +47,7 @@ const EditProfileScreen = () => {
         const data = documentSnapshot.data();
         setFullname(data.fullname || '');
         setPhoneNumber(data.phoneNumber || '');
-        if (data?.address.length) {
+        if (data?.address?.length) {
           const userAddress = data.address.split(', ');
           setCity(userAddress[2]);
           setRegion(userAddress[1]);

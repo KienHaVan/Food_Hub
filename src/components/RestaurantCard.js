@@ -60,10 +60,17 @@ const RestaurantCard = ({ data, isFavorite = false, isFullWidth = false }) => {
       console.log(error);
     }
   };
-
+  const handlePressOn = () => {
+    if (!auth().currentUser.email) {
+      navigation.navigate('Welcome');
+      return;
+    } else {
+      navigation.navigate('RestaurantDetail', { data: data, isFavorite: fav });
+    }
+  };
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('RestaurantDetail', { data: data, isFavorite: fav })}
+      onPress={handlePressOn}
       style={[LayoutStyles.layoutShadowGrey, styles.card, isFullWidth && styles.cardFull]}
     >
       {/*Rating Label*/}
