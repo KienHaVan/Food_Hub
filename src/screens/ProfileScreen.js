@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Images } from '../../assets';
 import CornerButton from '../components/CornerButton';
 import CustomButton from '../components/CustomButton';
@@ -73,7 +73,7 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.infoContainer}>
-          <Text style={styles.name}>{currentUser.fullname}</Text>
+          <Text style={styles.name}>{fullName}</Text>
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
             <Text style={[TextStyles.textMain, styles.editInfo]}>Edit profile</Text>
           </TouchableOpacity>

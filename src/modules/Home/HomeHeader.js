@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Images } from '../../../assets';
@@ -10,7 +10,6 @@ import LayoutStyles from '../../styles/Layout';
 import TextStyles from '../../styles/TextStyles';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import GetLocation from 'react-native-get-location';
 
 const HomeHeader = ({ handleShowMenu }) => {
   const navigation = useNavigation();
@@ -18,18 +17,6 @@ const HomeHeader = ({ handleShowMenu }) => {
   const [userAddress, setUserAddress] = useState('');
   const [photoURL, setPhotoURL] = useState('');
   const id = auth()?.currentUser?.uid;
-
-  // GetLocation.getCurrentPosition({
-  //   enableHighAccuracy: true,
-  //   timeout: 15000,
-  // })
-  //   .then((location) => {
-  //     console.log(location);
-  //   })
-  //   .catch((error) => {
-  //     const { code, message } = error;
-  //     console.warn(code, message);
-  //   });
 
   useEffect(() => {
     const subscriber = firestore()
@@ -48,12 +35,14 @@ const HomeHeader = ({ handleShowMenu }) => {
   return (
     <View style={[LayoutStyles.layoutStretch, styles.header]}>
       <CornerButton sourceImage={Images.ICON.BURGER} handlePress={handleShowMenu} />
-      <TouchableOpacity style={styles.headerAddress}>
-        <Text style={TextStyles.textSmall}>
-          Deliver to <Image source={Images.ICON.ARROW_DOWN} />
-        </Text>
-        <Text style={[TextStyles.textMain, styles.addressText]}>{userAddress}</Text>
-      </TouchableOpacity>
+      {userAddress.length > 10 && (
+        <View style={styles.headerAddress}>
+          <Text style={TextStyles.textSmall}>
+            Deliver to <Image source={Images.ICON.ARROW_DOWN} />
+          </Text>
+          <Text style={[TextStyles.textMain, styles.addressText]}>{userAddress}</Text>
+        </View>
+      )}
 
       <TouchableOpacity
         style={[LayoutStyles.layoutShadowRed, styles.avatar]}
