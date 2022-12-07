@@ -26,10 +26,6 @@ const FavoriteScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (!auth().currentUser.email) {
-      navigation.navigate('Welcome');
-      return;
-    }
     const subscriber = firestore()
       .collection('users')
       .doc(id)
@@ -44,6 +40,13 @@ const FavoriteScreen = () => {
     return () => subscriber();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, isFoodItem]);
+  useEffect(() => {
+    if (!auth().currentUser.email) {
+      navigation.navigate('Welcome');
+      return;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handlePress = (item) => {
     setCurrentButon(item.id);
@@ -79,7 +82,7 @@ const FavoriteScreen = () => {
         />
         <Text style={TextStyles.h3}>Favorites</Text>
         <Image
-          source={{ uri: photoURL || currentUserFirestoreData.photoURL }}
+          source={{ uri: photoURL || currentUserFirestoreData?.photoURL }}
           style={styles.avatar}
         />
       </View>

@@ -68,12 +68,12 @@ const Menu = ({ isMenuShown, handleShowMenu }) => {
         <LogoutConfirm onCancel={() => setIsPopupVisible(false)} onLogout={onLogout} />
       </Popup>
       <View style={LayoutStyles.layoutShadowRed}>
-        <Image source={{ uri: currentUser.photoURL }} style={styles.avatar} />
+        <Image source={{ uri: currentUser?.photoURL }} style={styles.avatar} />
       </View>
       <Text style={TextStyles.h2} numberOfLines={2}>
-        {currentUser.fullname}
+        {currentUser?.fullname}
       </Text>
-      <Text style={TextStyles.textMain}>{currentUser.email}</Text>
+      <Text style={TextStyles.textMain}>{currentUser?.email}</Text>
 
       <View style={styles.menuItemGroup}>{MenuItems.map((item) => renderItem(item))}</View>
 
