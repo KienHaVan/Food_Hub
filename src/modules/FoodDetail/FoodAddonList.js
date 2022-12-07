@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
 import TextStyles from '../../styles/TextStyles';
 import Sizes from '../../constants/Size';
@@ -9,28 +9,46 @@ import LayoutStyles from '../../styles/Layout';
 import Counter from '../../components/Counter';
 import { formatPrice } from '../../utils/formatter';
 
-const FoodAddonItem = ({ addon }) => {
+const FoodAddonItem = ({ addon, currentAddon, onSelect }) => {
   return (
-    <View style={[styles.item, LayoutStyles.layoutStretch]}>
+    <TouchableOpacity
+      style={[styles.item, LayoutStyles.layoutStretch]}
+      onPress={() => onSelect(addon)}
+    >
+      <Text style={[TextStyles.textMain, styles.itemName]}>More {addon.name}</Text>
       <View style={styles.itemContent}>
-        <Text style={[TextStyles.textMain, styles.itemName]}>More {addon.name}</Text>
         <Text style={[TextStyles.textSmall, styles.itemPrice]}>+${formatPrice(addon.price)}</Text>
+        <View style={[styles.radioWrapper, LayoutStyles.layoutCenter]}>
+          {currentAddon?.name === addon.name ? <View style={styles.radio} /> : null}
+        </View>
       </View>
-      <Counter defaultValue={0} allowZero />
-    </View>
+    </TouchableOpacity>
   );
 };
 
-const FoodAddonList = ({ data }) => {
+const FoodAddonList = ({ data, currentAddon, onSelect }) => {
   if (!data) return null;
 
   return (
     <View style={styles.container}>
-      <Text style={TextStyles.h3}>
-        {data.length} Choice{data.length === 1 ? '' : 's'} of Add On
-      </Text>
+      <View style={[LayoutStyles.layoutStretch, styles.heading]}>
+        <Text style={TextStyles.h3}>
+          {data.length} Choice{data.length === 1 ? '' : 's'} of Add On
+        </Text>
+        <TouchableOpacity onPress={() => onSelect(null)}>
+          <Text style={[TextStyles.textMain, styles.ratingLinkText]}>Clear All</Text>
+        </TouchableOpacity>
+      </View>
+
       {data.map((addon, index) => {
-        return <FoodAddonItem key={index} addon={addon} />;
+        return (
+          <FoodAddonItem
+            key={index}
+            currentAddon={currentAddon}
+            addon={addon}
+            onSelect={onSelect}
+          />
+        );
       })}
     </View>
   );
@@ -43,6 +61,15 @@ const styles = StyleSheet.create({
     marginTop: Sizes.sizeMassiveH,
     paddingBottom: Sizes.sizeMassiveH,
   },
+  heading: {
+    marginBottom: Sizes.sizeSmallH,
+  },
+  ratingLinkText: {
+    color: Colors.primary,
+    borderBottomWidth: 1,
+    borderColor: Colors.primary,
+    lineHeight: Sizes.sizeModerateH + Sizes.sizeTinyH,
+  },
   item: {
     marginTop: Sizes.sizeModerateH,
   },
@@ -52,10 +79,23 @@ const styles = StyleSheet.create({
   },
   itemName: {
     color: Colors.secondaryDarker,
-    marginRight: Sizes.sizeSmaller,
   },
   itemPrice: {
     color: Colors.primary,
     fontFamily: 'Poppins-SemiBold',
+    marginRight: Sizes.sizeSmaller,
+  },
+  radioWrapper: {
+    width: Sizes.sizeBigH,
+    height: Sizes.sizeBigH,
+    borderRadius: 100,
+    borderWidth: 2,
+    borderColor: Colors.primary,
+  },
+  radio: {
+    borderRadius: 100,
+    backgroundColor: Colors.primary,
+    width: Sizes.sizeBigH - Sizes.sizeSmallH,
+    height: Sizes.sizeBigH - Sizes.sizeSmallH,
   },
 });

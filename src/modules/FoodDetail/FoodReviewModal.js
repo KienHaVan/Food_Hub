@@ -1,37 +1,29 @@
 import React from 'react';
-import {
-  FlatList,
-  Image,
-  Modal,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-  StyleSheet,
-} from 'react-native';
-import { toggleModal } from '../../features/categorySlice';
+import { FlatList, Image, Modal, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import LayoutStyles from '../../styles/Layout';
 import { Images } from '../../../assets';
 import TextStyles from '../../styles/TextStyles';
 import Colors from '../../constants/Color';
 import Sizes from '../../constants/Size';
+import { formatRating, formatDate } from '../../utils/formatter';
 import { scaleSizeUI } from '../../utils/scaleSizeUI';
-import { useDispatch } from 'react-redux';
 
 const FoodReviewModal = ({ isModalShown, hideReview, data }) => {
-  const dispatch = useDispatch();
-
   const renderItem = ({ item }) => {
     return (
       <View style={styles.reviewItem}>
         <View style={styles.reviewUser}>
           <View>
             <Image source={{ uri: item.userAvatar }} style={styles.reviewUserAvatar} />
-            <View>{}</View>
+            <View style={[LayoutStyles.layoutCenter, styles.reviewUserRating]}>
+              <Text style={[TextStyles.textSmall, TextStyles.textWhite]}>
+                {formatRating(item.userRating)}
+              </Text>
+            </View>
           </View>
           <View>
             <Text style={[TextStyles.textMain, styles.reviewUserName]}>{item.userName}</Text>
-            <Text>{item.date}</Text>
+            <Text style={TextStyles.textMain}>{formatDate(item.date)}</Text>
           </View>
         </View>
 
@@ -42,25 +34,23 @@ const FoodReviewModal = ({ isModalShown, hideReview, data }) => {
 
   return (
     <Modal visible={isModalShown} transparent={true} animationType='slide'>
-      <TouchableOpacity style={styles.modalBackground} activeOpacity={1} onPressOut={hideReview}>
+      <View style={styles.modalBackground} activeOpacity={1}>
         <TouchableOpacity
           style={[LayoutStyles.layoutShadowRed, styles.modalCloseButton]}
           onPress={hideReview}
         >
           <Image source={Images.ICON.CLOSE} />
         </TouchableOpacity>
-        <TouchableWithoutFeedback>
-          <View style={[LayoutStyles.layoutShadowGrey, styles.modal]}>
-            <Text style={[TextStyles.h2, styles.modalHeading]}>All Reviews</Text>
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={data}
-              keyExtractor={(item) => item.userName}
-              renderItem={renderItem}
-            />
-          </View>
-        </TouchableWithoutFeedback>
-      </TouchableOpacity>
+        <View style={[LayoutStyles.layoutShadowGrey, styles.modal]}>
+          <Text style={[TextStyles.h2, styles.modalHeading]}>All Reviews</Text>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={data}
+            keyExtractor={(item) => item.userName}
+            renderItem={renderItem}
+          />
+        </View>
+      </View>
     </Modal>
   );
 };
@@ -111,5 +101,14 @@ const styles = StyleSheet.create({
   },
   reviewUserName: {
     color: Colors.secondaryDarker,
+  },
+  reviewUserRating: {
+    width: scaleSizeUI(24.5),
+    height: scaleSizeUI(24.5),
+    backgroundColor: Colors.yellow,
+    position: 'absolute',
+    bottom: 0,
+    right: Sizes.sizeSmaller,
+    borderRadius: Sizes.sizeModerate,
   },
 });
