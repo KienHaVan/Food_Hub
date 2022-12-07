@@ -21,7 +21,7 @@ const MealCard = ({ data, isFavorite = false }) => {
   useEffect(() => {
     const checkFavoriteFood = async () => {
       const userData = await firestore().collection('users').doc(id).get();
-      const favoriteFood = userData.data().favoriteFood;
+      const favoriteFood = userData.data()?.favoriteFood;
       if (!favoriteFood) {
         await addUserToFirebaseWithID(
           {
@@ -61,6 +61,8 @@ const MealCard = ({ data, isFavorite = false }) => {
       console.log(error);
     }
   };
+
+  console.log(fav);
 
   return (
     <TouchableOpacity
