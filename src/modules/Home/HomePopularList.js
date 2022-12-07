@@ -45,9 +45,6 @@ const HomePopularList = ({ isScreenFocused }) => {
   const renderCard = (data) => {
     const existingItem = favoriteFoodData.map((item) => item.id);
     const check = existingItem.includes(data.id);
-    // console.log(existingItem);
-    // console.log(check);
-    // console.log(existingItem.includes(data.id));
     return <MealCard key={data.id} data={data} isFavorite={!!check} />;
   };
 
@@ -64,7 +61,7 @@ const HomePopularList = ({ isScreenFocused }) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.cards}>{food.map((res) => renderCard(res))}</View>
+      {isScreenFocused && <View style={styles.cards}>{food.map((res) => renderCard(res))}</View>}
 
       <View style={styles.buttonContainer}>
         <CustomButton

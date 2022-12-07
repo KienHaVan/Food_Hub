@@ -105,6 +105,14 @@ const FavoriteScreen = () => {
           renderItem={showFood}
           ListFooterComponent={<View />}
           ListFooterComponentStyle={{ height: Sizes.sizeMassiveH * 3 }}
+          ListEmptyComponent={
+            <View style={styles.listEmpty}>
+              <Image source={Images.IMAGES.EMPTY} style={styles.listEmptyImage} />
+              <Text style={[TextStyles.textMain, styles.listEmptyText]}>
+                Such empty here. Let's choose some tasty food.
+              </Text>
+            </View>
+          }
         />
       </View>
     </View>
@@ -172,5 +180,19 @@ const styles = StyleSheet.create({
   space: {
     width: 40,
     height: 40,
+  },
+  listEmpty: {
+    alignItems: 'center',
+  },
+  listEmptyImage: {
+    width: Sizes.sizeMassive * 3,
+    height: Sizes.sizeMassive * 3,
+    opacity: 0.4,
+  },
+  listEmptyText: {
+    marginTop: Sizes.sizeModerateH,
+    width: '60%',
+    textAlign: 'center',
+    opacity: 0.6,
   },
 });
